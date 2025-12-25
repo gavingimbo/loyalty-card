@@ -308,7 +308,7 @@
                         </div>
                         <div>
                             <p class="text-[9px] font-bold uppercase text-white/40 mb-1 tracking-widest">Concierge</p>
-                            <p class="text-xs text-white leading-relaxed">"Your reservation at GATZ is confirmed for 7 PM."</p>
+                            <p class="text-xs text-white leading-relaxed">"Your reservation at Staten Bar & Grill is confirmed for 7 PM."</p>
                         </div>
                     </div>
                 </div>
@@ -359,7 +359,7 @@
     </section>
 
     <footer class="border-t border-white/10 bg-[#020202] relative z-10 pt-24 pb-20">
-        <div class="layout-container grid lg:grid-cols-4 gap-16">
+        <div class="layout-container grid lg:grid-cols-4 gap-16 mb-24">
             
             <div class="space-y-8">
                 <div>
@@ -393,12 +393,6 @@
                     <a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Diamond Access</a>
                     <a href="#" class="text-xs text-white/50 hover:text-white transition-colors mt-4">Member Login</a>
                 </nav>
-                
-                <div class="mt-16 pt-8 border-t border-white/5">
-                    <p class="text-[9px] text-white/20 tracking-[0.15em] uppercase leading-relaxed">
-                        © 2026 Cinnamon Hotels.<br>All Rights Reserved.
-                    </p>
-                </div>
             </div>
 
             <div>
@@ -412,6 +406,12 @@
                 </form>
             </div>
 
+        </div>
+
+        <div class="layout-container border-t border-white/5 pt-8">
+            <p class="text-[10px] text-white/30 tracking-wider text-left">
+                &copy; 2026 Cinnamon Life City of Dreams, Sri Lanka. All rights reserved.
+            </p>
         </div>
     </footer>
 
@@ -428,7 +428,7 @@
             });
         }
 
-        // Scroll Reveal
+        // Scroll Reveal Observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
