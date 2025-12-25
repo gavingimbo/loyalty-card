@@ -13,9 +13,12 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@1,300;1,400;1,500;1,600&display=swap');
         
         :root {
-            --bg-void: #020202;
+            --bg-void: #030304; /* Linear Dark */
+            --border-dim: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(255, 255, 255, 0.15);
             --glass-surface: rgba(255, 255, 255, 0.02);
-            --gold: #D4AF37;
+            --accent-emerald: #10b981;
+            --accent-gold: #D4AF37;
         }
 
         body {
@@ -25,497 +28,543 @@
             margin: 0;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            background-image: 
+                linear-gradient(var(--bg-void) 0%, var(--bg-void) 100%),
+                linear-gradient(var(--border-dim) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-dim) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px; /* Subtle grid background */
+            background-blend-mode: normal, overlay, overlay;
         }
 
         .serif { font-family: 'Cormorant Garamond', serif; }
 
-        /* --- GLOBAL ATMOSPHERE --- */
-        .noise-field {
-            position: fixed;
-            inset: 0;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48ZmlsdGVyIGlkPSJnoiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIwLjY1IiBudW1PY3RhdmVzPSIzIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI2cpIiBvcGFjaXR5PSIwLjAzIi8+PC9zdmc+');
-            opacity: 0.3;
-            pointer-events: none;
-            z-index: 50;
-        }
-
-        /* --- BACKGROUND FLUIDITY --- */
-        .ambient-field {
+        /* --- CONNECTOR LINES --- */
+        .guide-line-vertical {
             position: absolute;
-            inset: 0;
-            overflow: hidden;
+            top: 0; bottom: 0; left: 50%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--border-dim) 20%, var(--border-dim) 80%, transparent);
             z-index: 0;
+        }
+        
+        .connector-node {
+            width: 9px; height: 9px;
+            background: var(--bg-void);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            position: absolute;
+            left: 50%; transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        /* --- BENTO CARD SYSTEM --- */
+        .bento-card {
+            background: rgba(10, 10, 12, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-dim);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .bento-card:hover {
+            border-color: var(--border-highlight);
+            box-shadow: 0 0 0 1px var(--border-highlight), 0 20px 40px -10px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        /* Inner Glow Gradient for Cards */
+        .bento-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.5s;
             pointer-events: none;
         }
-        .bleed-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(140px);
-            opacity: 0.4;
-            mix-blend-mode: screen;
-            animation: pulse-glow 10s infinite alternate;
-        }
-        @keyframes pulse-glow {
-            0% { opacity: 0.3; transform: scale(1); }
-            100% { opacity: 0.5; transform: scale(1.1); }
-        }
+        .bento-card:hover .bento-glow { opacity: 1; }
 
-        /* --- COMPONENTS --- */
-
-        /* 1. Diffused Cards (Tiers) */
-        .diffused-card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.00) 100%);
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
-            border-radius: 32px;
-            position: relative;
-            border-top: 1px solid rgba(255,255,255,0.15);
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), background 0.6s ease;
-        }
-        .diffused-card:hover {
-            transform: translateY(-10px) scale(1.01);
-            background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
-        }
-
-        /* 2. Glass Shutters (FAQ) */
-        .faq-item {
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            transition: background 0.3s ease;
-        }
-        .faq-trigger {
-            cursor: pointer;
-            padding: 32px 0;
-            display: flex;
-            justify-content: space-between;
+        /* --- WIDGETS & BADGES --- */
+        .widget-pill {
+            display: inline-flex;
             align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: rgba(255,255,255,0.6);
         }
-        .faq-content {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            opacity: 0.5;
-        }
-        .faq-item.active .faq-content {
-            grid-template-rows: 1fr;
-            opacity: 1;
-            padding-bottom: 32px;
-        }
-        .faq-inner { overflow: hidden; }
-        .faq-icon { transition: transform 0.4s ease; }
-        .faq-item.active .faq-icon { transform: rotate(45deg); }
-
-        /* 3. Floating Layers (App) */
-        .float-layer {
-            position: absolute;
-            border-radius: 24px;
-            background: rgba(20, 20, 20, 0.6); 
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
-        }
-        .anim-float { animation: float 8s ease-in-out infinite; }
-        .anim-float-reverse { animation: float 10s ease-in-out infinite reverse; }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
+        .widget-pill.active {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: #34d399;
         }
 
-        /* Text FX */
-        .gold-shimmer {
-            background: linear-gradient(90deg, #D4AF37, #FFF5E1, #D4AF37);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 200%;
-            animation: shine 6s linear infinite;
-        }
-        @keyframes shine { to { background-position: 200%; } }
-
-        /* Nav Capsule */
+        /* --- NAV CAPSULE --- */
         .nav-capsule {
             position: fixed;
-            top: 32px; left: 50%;
+            top: 24px; left: 50%;
             transform: translateX(-50%);
-            padding: 12px 12px 12px 28px;
-            background: rgba(5, 5, 5, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.08);
+            padding: 8px 8px 8px 24px;
+            background: rgba(10, 10, 12, 0.8);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-dim);
             border-radius: 999px;
             z-index: 100;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: 90%;
-            max-width: 520px;
-            box-shadow: 0 20px 60px -20px rgba(0,0,0,0.8);
+            width: auto;
+            min-width: 320px;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.8);
         }
 
-        .input-minimal {
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            color: #fff;
-            width: 100%;
-            padding: 12px 0;
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 20px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-        .input-minimal:focus { border-color: #fff; padding-left: 10px; }
-
-        .layout-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-        @media(min-width: 1024px) { .layout-container { padding: 0 48px; } }
-        
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        /* --- ANIMATIONS --- */
+        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* Hero Spatial Orb */
-        .spatial-orb {
+        .pulse-ring {
             position: absolute;
             border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            animation: orb-float 10s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.1);
+            animation: pulse-ring 4s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
         }
-        @keyframes orb-float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, -50px) scale(1.1); }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(2); opacity: 0; }
         }
+
+        .gold-text {
+            background: linear-gradient(to bottom right, #D4AF37, #FDE68A);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Input Minimal */
+        .input-linear {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-dim);
+            border-radius: 8px;
+            color: #fff;
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .input-linear:focus { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.05); }
+
+        .layout-container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; }
     </style>
 </head>
 <body>
 
-    <div class="noise-field"></div>
+    <div class="fixed inset-0 pointer-events-none z-0 flex justify-center">
+        <div class="w-[1px] h-full bg-white/5"></div>
+    </div>
 
     <nav class="nav-capsule">
-        <div class="flex flex-col leading-none">
-            <span class="text-[9px] uppercase tracking-[0.25em] text-white/40 font-bold">Cinnamon Life</span>
-            <span class="text-sm serif italic text-white/90">City of Dreams</span>
+        <div class="flex flex-col leading-none mr-8">
+            <span class="text-[9px] uppercase tracking-[0.2em] text-white/50 font-bold">Cinnamon Life</span>
+            <span class="text-xs serif italic text-white">City of Dreams</span>
         </div>
-        <div class="flex items-center gap-8">
-            <a href="#about" class="hidden md:block text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Vision</a>
-            <a href="#collection" class="hidden md:block text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Tiers</a>
-            <button class="bg-white text-black px-6 py-2.5 rounded-full text-[9px] font-bold uppercase tracking-widest hover:scale-105 transition-transform">
+        <div class="flex items-center gap-2">
+            <a href="#vision" class="px-3 py-1.5 text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors rounded-full hover:bg-white/5">Vision</a>
+            <a href="#collection" class="px-3 py-1.5 text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors rounded-full hover:bg-white/5">Collection</a>
+            <a href="#app" class="px-3 py-1.5 text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors rounded-full hover:bg-white/5">App</a>
+            <button class="ml-2 bg-white text-black px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors">
                 Login
             </button>
         </div>
     </nav>
 
-    <header class="min-h-screen flex items-center pt-24 pb-20 relative overflow-hidden">
-        <div class="absolute inset-0 pointer-events-none z-0">
-            <div class="spatial-orb bg-emerald-900 w-[500px] h-[500px] top-1/4 right-0 lg:right-1/4 mix-blend-screen"></div>
-            <div class="spatial-orb bg-amber-900 w-[400px] h-[400px] bottom-1/4 right-10 lg:right-1/3 animation-delay-2000 mix-blend-screen"></div>
-            <div class="spatial-orb bg-indigo-950 w-[800px] h-[800px] top-0 right-0 opacity-40 mix-blend-screen"></div>
+    <header class="min-h-screen flex flex-col items-center justify-center relative pt-20">
+        
+        <div class="absolute inset-0 z-0">
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-emerald-900/20 blur-[120px] rounded-full mix-blend-screen animate-pulse"></div>
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-amber-900/10 blur-[100px] rounded-full mix-blend-screen"></div>
         </div>
 
-        <div class="layout-container w-full grid lg:grid-cols-2 gap-16 items-center relative z-10">
-            <div class="reveal order-2 lg:order-1 text-center lg:text-left">
-                <div class="inline-flex items-center gap-3 border border-white/10 rounded-full px-4 py-2 bg-white/5 backdrop-blur-md mb-10">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="text-[10px] uppercase tracking-[0.2em] text-white/80 font-bold">Membership 2026</span>
-                </div>
-                <h1 class="text-6xl md:text-8xl lg:text-9xl font-light tracking-tighter leading-[0.9] mb-10">
-                    The<br>
-                    <span class="serif italic text-white/50">Sovereign</span><br>
-                    Collection
-                </h1>
-                <p class="text-white/40 text-lg font-light max-w-lg mx-auto lg:mx-0 leading-relaxed mb-12">
-                    A curated passage into the City of Dreams. Unlock culinary mastery, sanctuary upgrades, and bespoke access through a single digital key.
-                </p>
-                <div class="flex flex-col lg:flex-row items-center gap-6">
-                    <a href="#about" class="bg-white text-black px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] hover:scale-105 transition-transform">
-                        Explore Access
-                    </a>
+        <div class="layout-container text-center relative z-10">
+            <div class="connector-node top-[-40px]"></div>
+            
+            <div class="reveal flex justify-center mb-8">
+                <div class="widget-pill active backdrop-blur-md">
+                    <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                    Membership Open 2026
                 </div>
             </div>
-            <div class="reveal order-1 lg:order-2 relative h-[50vh] lg:h-[80vh] w-full flex items-center justify-center">
-                <div class="w-[300px] h-[300px] rounded-full border border-white/10 bg-white/5 backdrop-blur-3xl animate-[spin_30s_linear_infinite] relative">
-                    <div class="absolute inset-2 rounded-full border border-white/5 border-dashed opacity-50"></div>
-                </div>
-                <div class="absolute w-[450px] h-[450px] rounded-full border border-white/5 animate-[spin_40s_linear_infinite_reverse]"></div>
-                <div class="absolute w-[600px] h-[600px] rounded-full border border-white/5 opacity-30 animate-[spin_60s_linear_infinite]"></div>
+
+            <h1 class="reveal text-7xl md:text-9xl font-semibold tracking-tighter leading-[0.9] mb-8 bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40">
+                Sovereign<br>
+                <span class="serif italic text-white/50 font-light">Collection</span>
+            </h1>
+
+            <p class="reveal text-white/50 text-lg max-w-md mx-auto leading-relaxed mb-10">
+                A programmable luxury experience. Architectural living meets digital precision in the heart of Colombo.
+            </p>
+
+            <div class="reveal flex flex-col items-center gap-4">
+                <a href="#collection" class="group relative inline-flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
+                    <span class="text-xs font-semibold tracking-widest uppercase">Explore Tiers</span>
+                    <i class="ph ph-arrow-right text-white/50 group-hover:text-white transition-colors"></i>
+                </a>
+                
+                <div class="h-16 w-[1px] bg-gradient-to-b from-white/20 to-transparent mt-2"></div>
             </div>
         </div>
     </header>
 
-    <section id="about" class="py-32 relative">
-        <div class="layout-container relative z-10">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
-                <div class="reveal space-y-8">
-                    <span class="text-[9px] font-bold tracking-[0.3em] uppercase text-white/30">The Philosophy</span>
-                    <h2 class="text-4xl md:text-5xl serif italic leading-tight text-white">
-                        Beyond hospitality.<br>
-                        <span class="text-white/40">A living ecosystem.</span>
-                    </h2>
-                    <div class="space-y-6 text-white/50 text-lg font-light leading-relaxed">
-                        <p>
-                            Cinnamon Life City of Dreams is not merely a structure; it is an architectural symphony. The Sovereign Collection was conceived as the conductor of this experience—a membership that transcends traditional loyalty.
-                        </p>
-                        <p>
-                            We believe true luxury is fluid. It is the ability to move through spaces, from the vibrancy of Staten Bar & Grill to the serenity of the Oceanscape Suites, with recognition that precedes your arrival.
-                        </p>
-                    </div>
-                    <div class="pt-8 flex items-center gap-4">
-                        <div class="w-12 h-[1px] bg-white/30"></div>
-                        <span class="text-xs serif italic text-white">Architectural Living</span>
-                    </div>
-                </div>
+    <section id="vision" class="py-24 relative">
+        <div class="layout-container">
+            <div class="connector-node top-[-20px]"></div>
+            
+            <div class="bento-card p-0 grid md:grid-cols-2 reveal group">
+                <div class="bento-glow"></div>
                 
-                <div class="reveal h-[500px] w-full relative overflow-hidden rounded-[32px] border-t border-white/10 bg-gradient-to-b from-white/5 to-transparent">
-                    <div class="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.05)_50%,transparent_75%)] bg-[length:250%_250%] animate-[gradient_15s_ease_infinite]"></div>
-                    <div class="absolute bottom-10 left-10 right-10">
-                        <p class="text-[10px] uppercase tracking-widest text-white/30 mb-2">Designed in Colombo</p>
-                        <div class="w-full h-[1px] bg-white/10"></div>
+                <div class="p-12 flex flex-col justify-center border-r border-white/5">
+                    <div class="flex gap-2 mb-6">
+                        <span class="widget-pill">Architecture</span>
+                        <span class="widget-pill">Lifestyle</span>
+                    </div>
+                    <h2 class="text-3xl serif italic text-white mb-6">The Living Ecosystem</h2>
+                    <p class="text-white/50 text-sm leading-relaxed mb-6">
+                        Cinnamon Life is not just a destination; it is a calculated masterpiece. The Sovereign Collection integrates you into this system. From the Balmond Studio architecture to the culinary precision, your membership acts as the operating system for your experience.
+                    </p>
+                    <div class="flex items-center gap-3 pt-4 border-t border-white/5">
+                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs">A</div>
+                        <div class="text-[10px] uppercase tracking-widest text-white/40">Balmond Studio<br><span class="text-white/80">Architect of Record</span></div>
+                    </div>
+                </div>
+
+                <div class="relative h-[400px] md:h-auto bg-gradient-to-br from-gray-900 to-black overflow-hidden">
+                    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle, white 1px, transparent 1px); background-size: 30px 30px;"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-40 h-40 border border-white/20 rounded-full animate-[spin_20s_linear_infinite]"></div>
+                        <div class="w-60 h-60 border border-white/10 rounded-full absolute animate-[spin_30s_linear_infinite_reverse]"></div>
+                        <div class="pulse-ring"></div>
+                    </div>
+                    <div class="absolute bottom-6 left-6 widget-pill backdrop-blur-xl border-white/20">
+                        <i class="ph-fill ph-map-pin text-white"></i> Colombo 02
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="collection" class="py-32 relative">
-        <div class="ambient-field">
-            <div class="bleed-orb bg-emerald-700/20 w-[600px] h-[600px] top-20 left-[10%]"></div>
-            <div class="bleed-orb bg-rose-700/20 w-[600px] h-[600px] top-40 left-[40%]"></div>
-            <div class="bleed-orb bg-amber-600/20 w-[600px] h-[600px] top-20 left-[60%]"></div>
-        </div>
-
-        <div class="layout-container relative z-10">
-            <div class="grid lg:grid-cols-3 gap-8">
-                <div class="diffused-card p-10 min-h-[580px] flex flex-col justify-between reveal group">
-                    <div>
-                        <div class="flex justify-between items-start mb-12">
-                            <span class="text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase">Foundation</span>
-                            <div class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.8)]"></div>
-                        </div>
-                        <h3 class="text-5xl serif italic text-emerald-200 mb-4">Emerald</h3>
-                        <p class="text-sm text-white/50 leading-relaxed font-light">The essential key to culinary preference and extended sanctuaries.</p>
-                    </div>
-                    <div class="space-y-10">
-                        <ul class="space-y-4 pt-8 border-t border-white/10">
-                            <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-emerald-500"></i> 3rd Night Complimentary</li>
-                            <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-emerald-500"></i> 50% Dining Preference</li>
-                        </ul>
-                        <div class="flex justify-between items-end">
-                            <div class="text-[9px] uppercase tracking-widest text-white/30">Annual Access</div>
-                            <div class="text-xl font-bold">50,000 LKR</div>
-                        </div>
-                        <button class="w-full py-5 border border-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors">Apply</button>
-                    </div>
-                </div>
-
-                <div class="diffused-card p-10 min-h-[580px] flex flex-col justify-between reveal group" style="transition-delay: 100ms;">
-                    <div>
-                        <div class="flex justify-between items-start mb-12">
-                            <span class="text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase">Signature</span>
-                            <div class="w-2 h-2 rounded-full bg-rose-400 shadow-[0_0_20px_rgba(251,113,133,0.8)]"></div>
-                        </div>
-                        <h3 class="text-5xl serif italic text-rose-200 mb-4">Ruby</h3>
-                        <p class="text-sm text-white/50 leading-relaxed font-light">Elevated immersion with residency credits and vital renewal therapies.</p>
-                    </div>
-                    <div class="space-y-10">
-                        <ul class="space-y-4 pt-8 border-t border-white/10">
-                            <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-rose-500"></i> LKR 10,000 Room Credit</li>
-                            <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-rose-500"></i> 60min Nature's Symphony</li>
-                        </ul>
-                        <div class="flex justify-between items-end">
-                            <div class="text-[9px] uppercase tracking-widest text-white/30">Annual Access</div>
-                            <div class="text-xl font-bold">125,000 LKR</div>
-                        </div>
-                        <button class="w-full py-5 border border-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors">Apply</button>
-                    </div>
-                </div>
-
-                <div class="diffused-card p-10 min-h-[580px] flex flex-col justify-between reveal group" style="transition-delay: 200ms;">
-                    <div>
-                        <div class="flex justify-between items-start mb-12">
-                            <span class="text-[9px] font-bold tracking-[0.2em] text-[#D4AF37] uppercase">Zenith</span>
-                            <div class="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_25px_rgba(251,191,36,0.8)]"></div>
-                        </div>
-                        <h3 class="text-5xl serif italic gold-shimmer mb-4">Diamond</h3>
-                        <p class="text-sm text-white/50 leading-relaxed font-light">The ultimate sovereign privilege. Oceanscape suites and skyward access.</p>
-                    </div>
-                    <div class="space-y-10">
-                        <ul class="space-y-4 pt-8 border-t border-white/10">
-                            <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-amber-400"></i> Oceanscape Suite Residency</li>
-                            <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-amber-400"></i> Cloud Wine Access</li>
-                        </ul>
-                        <div class="flex justify-between items-end">
-                            <div class="text-[9px] uppercase tracking-widest text-white/30">Annual Access</div>
-                            <div class="text-xl font-bold text-[#D4AF37]">425,000 LKR</div>
-                        </div>
-                        <button class="w-full py-5 bg-[#D4AF37] text-black rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-colors">Apply</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="app" class="py-40 border-t border-white/5 overflow-hidden relative">
-        <div class="layout-container grid lg:grid-cols-2 gap-24 items-center relative z-10">
-            <div class="relative h-[600px] w-full flex items-center justify-center order-2 lg:order-1 reveal">
-                <div class="absolute z-0 w-[280px] h-[440px] bg-[#080808] border border-white/5 rounded-[32px] p-8 flex flex-col justify-between transform scale-90 opacity-40 blur-[1px] transition-transform duration-1000">
-                    <div class="flex justify-between items-start"><i class="ph ph-qr-code text-4xl text-white/20"></i></div>
-                    <div><h3 class="text-4xl serif italic text-white/30 leading-none">Emerald<br>Sovereign</h3></div>
-                    <div class="pt-6 border-t border-white/5 flex justify-between text-[9px] uppercase tracking-widest text-white/20"><span>Ref: 9942</span><span>Active</span></div>
-                </div>
-                <div class="float-layer anim-float w-[260px] p-6 z-30 absolute top-10 right-0 lg:right-10">
-                    <div class="flex gap-4">
-                        <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center flex-shrink-0 border border-white/10"><i class="ph-fill ph-chat-teardrop-text text-amber-400 text-xl"></i></div>
-                        <div>
-                            <p class="text-[9px] font-bold uppercase text-white/40 mb-1 tracking-widest">Concierge</p>
-                            <p class="text-xs text-white leading-relaxed">"Your reservation at Staten Bar & Grill is confirmed for 7 PM."</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="float-layer anim-float-reverse w-[220px] p-6 z-30 absolute bottom-20 left-0 lg:left-10">
-                    <p class="text-[9px] font-bold uppercase text-white/40 mb-4 tracking-widest">Room Credit</p>
-                    <div class="h-1 w-full bg-white/10 rounded-full mb-3"><div class="h-1 w-[70%] bg-emerald-500 rounded-full shadow-[0_0_10px_#10b981]"></div></div>
-                    <div class="flex justify-between items-end"><span class="text-[9px] text-white/30">Available</span><p class="text-sm font-bold text-white">LKR 75,000</p></div>
-                </div>
-                <div class="absolute w-[500px] h-[500px] bg-emerald-900/10 rounded-full blur-[100px] animate-pulse z-0 pointer-events-none"></div>
-            </div>
-
-            <div class="order-1 lg:order-2 space-y-12 reveal text-center flex flex-col items-center">
-                <div class="inline-block"><span class="text-[9px] font-bold tracking-[0.3em] uppercase text-emerald-500">The Digital Key</span></div>
-                <h2 class="text-5xl lg:text-7xl serif italic leading-[0.9] text-white">Your world,<br><span class="text-white/40">synchronized.</span></h2>
-                <p class="text-white/50 text-lg font-light leading-relaxed max-w-md mx-auto">Seamlessly manage reservations, access your residency credits, and communicate with your dedicated lifestyle manager.</p>
-                <div class="grid grid-cols-2 gap-16 pt-8 border-t border-white/5 w-full max-w-sm mx-auto">
-                    <div class="flex flex-col items-center"><i class="ph ph-chat-centered-text text-2xl text-white mb-3"></i><h4 class="text-sm font-medium text-white mb-1">Instant</h4><p class="text-[10px] text-white/40 uppercase tracking-widest">Concierge Chat</p></div>
-                    <div class="flex flex-col items-center"><i class="ph ph-shield-check text-2xl text-white mb-3"></i><h4 class="text-sm font-medium text-white mb-1">Secure</h4><p class="text-[10px] text-white/40 uppercase tracking-widest">Digital Entry</p></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="faq" class="py-32 relative">
-        <div class="layout-container relative z-10 max-w-4xl mx-auto">
-            <div class="text-center mb-20 reveal">
-                <h2 class="text-3xl md:text-4xl serif italic text-white">Curated Inquiries</h2>
-            </div>
-
-            <div class="space-y-0 reveal">
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-trigger group">
-                        <span class="serif italic text-xl text-white/70 group-hover:text-white transition-colors">How is the membership validity calculated?</span>
-                        <i class="ph ph-plus text-white/40 faq-icon"></i>
-                    </div>
-                    <div class="faq-content">
-                        <div class="faq-inner text-white/40 font-light leading-relaxed text-sm pr-12">
-                            Membership is valid for a rolling 12-month period commencing from the date of activation. Renewal reminders are sent 30 days prior to expiration via the Sovereign App.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-trigger group">
-                        <span class="serif italic text-xl text-white/70 group-hover:text-white transition-colors">Can I upgrade my tier mid-year?</span>
-                        <i class="ph ph-plus text-white/40 faq-icon"></i>
-                    </div>
-                    <div class="faq-content">
-                        <div class="faq-inner text-white/40 font-light leading-relaxed text-sm pr-12">
-                            Yes. You may request an upgrade to Ruby or Diamond status at any time. The difference in the annual access fee will be calculated on a pro-rata basis for the remainder of your term.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-trigger group">
-                        <span class="serif italic text-xl text-white/70 group-hover:text-white transition-colors">Are the privileges transferable?</span>
-                        <i class="ph ph-plus text-white/40 faq-icon"></i>
-                    </div>
-                    <div class="faq-content">
-                        <div class="faq-inner text-white/40 font-light leading-relaxed text-sm pr-12">
-                            The primary membership is non-transferable. However, the Diamond tier includes a complimentary Spouse Card and "Member for a Day" passes for guests.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-trigger group">
-                        <span class="serif italic text-xl text-white/70 group-hover:text-white transition-colors">How do I redeem my Room Credit?</span>
-                        <i class="ph ph-plus text-white/40 faq-icon"></i>
-                    </div>
-                    <div class="faq-content">
-                        <div class="faq-inner text-white/40 font-light leading-relaxed text-sm pr-12">
-                            Room credits are automatically loaded onto your Digital Key. Simply present your app at check-out, or instruct your concierge to apply the credit to your reservation invoice.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="border-t border-white/10 bg-[#020202] relative z-10 pt-24 pb-20">
-        <div class="layout-container grid lg:grid-cols-4 gap-16 mb-24">
-            <div class="space-y-8">
+    <section id="collection" class="py-24 relative">
+        <div class="layout-container">
+            <div class="flex justify-between items-end mb-12 reveal">
                 <div>
-                    <h3 class="text-[10px] font-bold tracking-[0.3em] uppercase text-white mb-2">Cinnamon Life</h3>
-                    <p class="serif italic text-white/50 text-2xl">City of Dreams</p>
+                    <span class="text-[10px] font-bold tracking-[0.2em] text-emerald-500 uppercase mb-2 block">System Access</span>
+                    <h2 class="text-4xl text-white font-medium">Select Tier</h2>
                 </div>
-                <p class="text-xs text-white/40 leading-relaxed max-w-xs">Redefining the skyline and the standard of luxury living in Colombo.</p>
-            </div>
-            <div>
-                <h4 class="text-[9px] font-bold tracking-[0.2em] uppercase text-white/30 mb-8">Private Concierge</h4>
-                <div class="space-y-6">
-                    <div><p class="text-[9px] text-white/40 mb-1 uppercase tracking-wider">Inquiries</p><a href="#" class="text-white hover:text-emerald-400 transition-colors text-sm font-medium">+94 11 216 1111</a></div>
-                    <div><p class="text-[9px] text-white/40 mb-1 uppercase tracking-wider">Email</p><a href="#" class="text-white hover:text-emerald-400 transition-colors text-sm font-medium">concierge@cinnamonlife.com</a></div>
+                <div class="hidden md:flex gap-2">
+                    <span class="widget-pill">Monthly</span>
+                    <span class="widget-pill bg-white text-black border-white">Annual</span>
                 </div>
             </div>
-            <div>
-                <h4 class="text-[9px] font-bold tracking-[0.2em] uppercase text-white/30 mb-8">Directory</h4>
-                <nav class="flex flex-col gap-4">
-                    <a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Emerald Access</a>
-                    <a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Ruby Access</a>
-                    <a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Diamond Access</a>
-                    <a href="#" class="text-xs text-white/50 hover:text-white transition-colors mt-4">Member Login</a>
-                </nav>
-            </div>
-            <div>
-                <h4 class="text-[9px] font-bold tracking-[0.2em] uppercase text-white/30 mb-8">The Inner Circle</h4>
-                <p class="text-xs text-white/40 mb-8 leading-relaxed">Receive curated invitations to our gala events.</p>
-                <form class="relative group">
-                    <input type="email" placeholder="Email Address" class="input-minimal">
-                    <button type="button" class="absolute right-0 bottom-3 text-white/40 group-hover:text-white transition-colors"><i class="ph ph-arrow-right text-xl"></i></button>
-                </form>
+
+            <div class="grid lg:grid-cols-3 gap-6">
+                <div class="absolute top-[200px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent z-0"></div>
+
+                <div class="bento-card p-8 min-h-[480px] flex flex-col justify-between reveal hover:scale-[1.02] transition-transform duration-500">
+                    <div class="bento-glow"></div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-8">
+                            <span class="widget-pill">Level 01</span>
+                            <i class="ph-fill ph-plant text-emerald-500 text-xl"></i>
+                        </div>
+                        <h3 class="text-3xl serif italic text-emerald-400 mb-2">Emerald</h3>
+                        <p class="text-xs text-white/50 leading-relaxed">Foundation access. Culinary preference and extended sanctuary privileges.</p>
+                    </div>
+                    
+                    <div class="relative z-10 space-y-6">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between py-2 border-b border-white/5">
+                                <span class="text-xs text-white/70">Nights</span>
+                                <span class="text-xs font-mono text-emerald-400">3rd Free</span>
+                            </div>
+                            <div class="flex items-center justify-between py-2 border-b border-white/5">
+                                <span class="text-xs text-white/70">Dining</span>
+                                <span class="text-xs font-mono text-emerald-400">50% Off</span>
+                            </div>
+                        </div>
+                        <div class="pt-4">
+                            <p class="text-[10px] uppercase tracking-widest text-white/30 mb-1">Annual Fee</p>
+                            <div class="flex justify-between items-end">
+                                <span class="text-lg font-bold text-white">50,000</span>
+                                <span class="text-[10px] text-white/30">LKR</span>
+                            </div>
+                        </div>
+                        <button class="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors">Select</button>
+                    </div>
+                </div>
+
+                <div class="bento-card p-8 min-h-[480px] flex flex-col justify-between reveal hover:scale-[1.02] transition-transform duration-500 delay-75">
+                    <div class="bento-glow"></div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-8">
+                            <span class="widget-pill">Level 02</span>
+                            <i class="ph-fill ph-diamond text-rose-500 text-xl"></i>
+                        </div>
+                        <h3 class="text-3xl serif italic text-rose-400 mb-2">Ruby</h3>
+                        <p class="text-xs text-white/50 leading-relaxed">Elevated status. Residency credits and renewal therapies included.</p>
+                    </div>
+                    
+                    <div class="relative z-10 space-y-6">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between py-2 border-b border-white/5">
+                                <span class="text-xs text-white/70">Credit</span>
+                                <span class="text-xs font-mono text-rose-400">10k LKR</span>
+                            </div>
+                            <div class="flex items-center justify-between py-2 border-b border-white/5">
+                                <span class="text-xs text-white/70">Wellness</span>
+                                <span class="text-xs font-mono text-rose-400">60min</span>
+                            </div>
+                        </div>
+                        <div class="pt-4">
+                            <p class="text-[10px] uppercase tracking-widest text-white/30 mb-1">Annual Fee</p>
+                            <div class="flex justify-between items-end">
+                                <span class="text-lg font-bold text-white">125,000</span>
+                                <span class="text-[10px] text-white/30">LKR</span>
+                            </div>
+                        </div>
+                        <button class="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors">Select</button>
+                    </div>
+                </div>
+
+                <div class="bento-card p-8 min-h-[480px] flex flex-col justify-between reveal hover:scale-[1.02] transition-transform duration-500 delay-150 border-amber-500/20">
+                    <div class="bento-glow"></div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-8">
+                            <span class="widget-pill border-amber-500/30 text-amber-500">Level 03</span>
+                            <i class="ph-fill ph-crown text-amber-500 text-xl"></i>
+                        </div>
+                        <h3 class="text-3xl serif italic gold-text mb-2">Diamond</h3>
+                        <p class="text-xs text-white/50 leading-relaxed">Sovereign privilege. Oceanscape suites and skyward access.</p>
+                    </div>
+                    
+                    <div class="relative z-10 space-y-6">
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between py-2 border-b border-white/5">
+                                <span class="text-xs text-white/70">Suite</span>
+                                <span class="text-xs font-mono text-amber-400">Oceanscape</span>
+                            </div>
+                            <div class="flex items-center justify-between py-2 border-b border-white/5">
+                                <span class="text-xs text-white/70">Cloud Wine</span>
+                                <span class="text-xs font-mono text-amber-400">Access</span>
+                            </div>
+                        </div>
+                        <div class="pt-4">
+                            <p class="text-[10px] uppercase tracking-widest text-white/30 mb-1">Annual Fee</p>
+                            <div class="flex justify-between items-end">
+                                <span class="text-lg font-bold gold-text">425,000</span>
+                                <span class="text-[10px] text-white/30">LKR</span>
+                            </div>
+                        </div>
+                        <button class="w-full py-3 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 text-amber-500 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors">Select</button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="layout-container border-t border-white/5 pt-8">
-            <p class="text-[10px] text-white/30 tracking-wider text-left">© 2026 Cinnamon Life City of Dreams, Sri Lanka. All rights reserved.</p>
+    </section>
+
+    <section id="app" class="py-24 relative overflow-hidden">
+        <div class="layout-container grid lg:grid-cols-2 gap-16 items-center">
+            
+            <div class="reveal relative z-10">
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-white/50">Live System</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-semibold tracking-tight text-white mb-6">
+                    Your world,<br>
+                    <span class="text-white/40">synchronized.</span>
+                </h2>
+                <p class="text-white/50 text-sm leading-relaxed mb-8 max-w-sm">
+                    The Sovereign App is a real-time dashboard for your lifestyle. Manage reservations, view live credit balances, and chat with your concierge securely.
+                </p>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/5 cursor-default">
+                        <div class="w-8 h-8 rounded bg-emerald-500/10 flex items-center justify-center text-emerald-500"><i class="ph-fill ph-chat-text"></i></div>
+                        <div>
+                            <h4 class="text-xs font-bold text-white">Instant Concierge</h4>
+                            <p class="text-[10px] text-white/40">Average response: 2m</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/5 cursor-default">
+                        <div class="w-8 h-8 rounded bg-blue-500/10 flex items-center justify-center text-blue-500"><i class="ph-fill ph-qr-code"></i></div>
+                        <div>
+                            <h4 class="text-xs font-bold text-white">Secure Entry</h4>
+                            <p class="text-[10px] text-white/40">Dynamic QR Refresh</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal relative h-[500px] flex items-center justify-center">
+                
+                <div class="absolute inset-0 z-0">
+                    <div class="absolute top-1/2 left-0 w-full h-[1px] bg-white/5 border-t border-dashed border-white/10"></div>
+                    <div class="absolute left-1/2 top-0 h-full w-[1px] bg-white/5 border-l border-dashed border-white/10"></div>
+                </div>
+
+                <div class="bento-card w-[260px] h-[400px] absolute z-10 flex flex-col justify-between p-6 transform scale-95 opacity-50 blur-[2px] transition-all hover:blur-0 hover:opacity-100 hover:scale-100 duration-700">
+                    <div class="flex justify-between text-white/30"><i class="ph ph-qr-code text-3xl"></i></div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto bg-white/5 rounded-full mb-4 flex items-center justify-center"><i class="ph-fill ph-lock text-white/30"></i></div>
+                        <p class="text-xs text-white/40 font-mono">ENCRYPTED</p>
+                    </div>
+                    <div class="text-[10px] text-white/20 font-mono flex justify-between"><span>ID: 8821</span><span>••••</span></div>
+                </div>
+
+                <div class="bento-card w-[240px] p-4 absolute top-10 right-0 lg:right-10 z-20 shadow-2xl animate-[float_6s_ease-in-out_infinite]">
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                            <span class="text-[9px] font-bold uppercase text-white/50">Staten Bar & Grill</span>
+                        </div>
+                        <span class="text-[9px] text-white/30">Now</span>
+                    </div>
+                    <p class="text-xs text-white leading-snug">"Your table is confirmed for 7 PM. Shall we prepare the usual?"</p>
+                </div>
+
+                <div class="bento-card w-[200px] p-4 absolute bottom-20 left-0 lg:left-10 z-20 shadow-2xl animate-[float_8s_ease-in-out_infinite_reverse]">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-[9px] font-bold uppercase text-white/50">Balance</span>
+                        <i class="ph-fill ph-credit-card text-white/30"></i>
+                    </div>
+                    <div class="h-1.5 w-full bg-white/10 rounded-full mb-2 overflow-hidden">
+                        <div class="h-full w-[70%] bg-emerald-500"></div>
+                    </div>
+                    <p class="text-sm font-bold text-white text-right">75,000 <span class="text-[9px] font-normal text-white/50">LKR</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 border-t border-white/5">
+        <div class="layout-container max-w-4xl">
+            <h2 class="text-2xl font-semibold text-white mb-12 text-center reveal">Curated Inquiries</h2>
+            
+            <div class="grid gap-4 reveal">
+                <div class="bento-card px-6 py-4 cursor-pointer group hover:bg-white/5" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-white/70 group-hover:text-white transition-colors">How is validity calculated?</span>
+                        <i class="ph ph-plus text-white/40 transition-transform duration-300 group-[.active]:rotate-45"></i>
+                    </div>
+                    <div class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 group-[.active]:grid-rows-[1fr]">
+                        <div class="overflow-hidden">
+                            <p class="text-xs text-white/40 leading-relaxed pt-4">Membership is valid for a rolling 12-month period commencing from activation. Renewal reminders are sent 30 days prior via the app.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-card px-6 py-4 cursor-pointer group hover:bg-white/5" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-white/70 group-hover:text-white transition-colors">Can I upgrade tiers mid-year?</span>
+                        <i class="ph ph-plus text-white/40 transition-transform duration-300 group-[.active]:rotate-45"></i>
+                    </div>
+                    <div class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 group-[.active]:grid-rows-[1fr]">
+                        <div class="overflow-hidden">
+                            <p class="text-xs text-white/40 leading-relaxed pt-4">Yes. Upgrade to Ruby or Diamond at any time. The difference in fee is calculated pro-rata.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-card px-6 py-4 cursor-pointer group hover:bg-white/5" onclick="this.classList.toggle('active')">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-white/70 group-hover:text-white transition-colors">Are privileges transferable?</span>
+                        <i class="ph ph-plus text-white/40 transition-transform duration-300 group-[.active]:rotate-45"></i>
+                    </div>
+                    <div class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 group-[.active]:grid-rows-[1fr]">
+                        <div class="overflow-hidden">
+                            <p class="text-xs text-white/40 leading-relaxed pt-4">Primary membership is non-transferable. Diamond tier includes a Spouse Card and guest passes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-white/10 bg-[#020202] pt-20 pb-12 relative z-10">
+        <div class="layout-container grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
+            
+            <div class="col-span-2 md:col-span-1">
+                <div class="flex flex-col gap-4">
+                    <div class="w-8 h-8 rounded bg-white/10 flex items-center justify-center"><span class="font-serif italic text-white">C</span></div>
+                    <p class="text-xs text-white/40 leading-relaxed">
+                        Cinnamon Life<br>City of Dreams
+                    </p>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-6">Concierge</h4>
+                <ul class="space-y-3">
+                    <li><a href="#" class="text-xs text-white/50 hover:text-white transition-colors">+94 11 216 1111</a></li>
+                    <li><a href="#" class="text-xs text-white/50 hover:text-white transition-colors">concierge@cinnamonlife.com</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-6">Directory</h4>
+                <ul class="space-y-3">
+                    <li><a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Tiers</a></li>
+                    <li><a href="#" class="text-xs text-white/50 hover:text-white transition-colors">App Download</a></li>
+                    <li><a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Member Login</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-6">Stay Connected</h4>
+                <div class="relative">
+                    <input type="email" placeholder="Email Address" class="input-linear pr-10">
+                    <button class="absolute right-2 top-2 text-white/40 hover:text-white"><i class="ph-bold ph-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layout-container pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <p class="text-[10px] text-white/30">
+                &copy; 2026 Cinnamon Life City of Dreams, Sri Lanka. All rights reserved.
+            </p>
+            <div class="flex gap-4">
+                <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                <span class="text-[10px] text-white/30 uppercase tracking-widest">System Operational</span>
+            </div>
         </div>
     </footer>
 
     <script>
-        // Scroll Reveal
+        // Mouse Tracking for Bento Glow
+        document.querySelectorAll('.bento-card').forEach(card => {
+            card.onmousemove = e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            }
+        });
+
+        // Reveal on Scroll
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
                 }
             });
-        }, { threshold: 0.15 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }, { threshold: 0.1 });
 
-        // FAQ Toggle
-        function toggleFaq(el) {
-            // Close others
-            document.querySelectorAll('.faq-item').forEach(item => {
-                if(item !== el) item.classList.remove('active');
-            });
-            // Toggle clicked
-            el.classList.toggle('active');
-            
-            // Highlight text effect
-            const text = el.querySelector('.faq-trigger span');
-            if(el.classList.contains('active')) {
-                text.classList.add('gold-shimmer');
-                text.classList.remove('text-white/70');
-            } else {
-                text.classList.remove('gold-shimmer');
-                text.classList.add('text-white/70');
-            }
-        }
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
