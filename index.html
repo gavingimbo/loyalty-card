@@ -136,7 +136,7 @@
                 <button @click="setTab('wellness', 2)" class="relative z-10 flex-1 py-2.5 text-xs font-bold transition-colors" :class="activeTab === 'wellness' ? 'text-black' : 'text-zinc-500'">Wellness</button>
             </div>
 
-            <div class="flex items-center gap-3 mb-6 animate-pulse-slow">
+            <div class="flex items-center gap-3 mb-6">
                 <div class="p-3 rounded-xl bg-zinc-900 border border-white/10" :class="getAccentColor()">
                     <i :data-lucide="getTabIcon()" class="w-5 h-5"></i>
                 </div>
@@ -181,17 +181,16 @@
                 tabPos: 33.33,
                 activeBenefits: [],
                 
-                [span_3](start_span)[span_4](start_span)[span_5](start_span)// DATA BANK[span_3](end_span)[span_4](end_span)[span_5](end_span)
                 membershipData: {
                     emerald: {
                         price: "LKR 50,000",
-                        dining: ["Up to 50% Off Food", "10% Off Weekday Lunch @ Quizine", "20% Off Beverages", "Buffet Experience for Two", "Afternoon Tea for Two", "One Exclusive Bottle of Wine", "LKR 4,000 Wellness Credit"],
+                        dining: ["Up to 50% Off Food", "10% Off Weekday Lunch @ Quizine", "20% Off Beverages", "Buffet for Two", "Afternoon Tea for Two", "One Exclusive Bottle of Wine", "LKR 4,000 Wellness Credit"],
                         stay: ["Stay 2 nights, Get 3rd Free", "50% Off BAR for Rooms", "Upgrade: City View to Ocean View"],
                         wellness: ["20% Off Wellness Preferred Rate", "15% Off Treatments", "5% Off Retail Purchases"]
                     },
                     ruby: {
                         price: "LKR 125,000",
-                        dining: ["Up to 50% Off Food", "10% Off Weekday Lunch @ Quizine", "20% Off Beverages", "Buffet Experience for Two", "Afternoon Tea for Two", "One Exclusive Bottle of Wine", "LKR 4,000 Wellness Credit"],
+                        dining: ["Up to 50% Off Food", "10% Off Weekday Lunch @ Quizine", "20% Off Beverages", "Buffet for Two", "Afternoon Tea for Two", "One Exclusive Bottle of Wine", "LKR 4,000 Wellness Credit"],
                         stay: ["Deluxe Room + Breakfast for Two", "Unlimited Accommodation Upgrade", "Stay 2 nights, Get 3rd Free", "LKR 10,000 Room Credit", "Pool Access for Two"],
                         wellness: ["Nature's Symphony 60min Massage", "30% Off Wellness Preferred Rate", "20% Off Treatments", "15% Off Retail"]
                     },
