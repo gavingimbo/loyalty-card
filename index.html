@@ -2,636 +2,412 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Cinnamon Life | Wallet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Membership Experience | Premium Tiers</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            /* Shadcn-inspired tokens */
+            /* Shadcn-inspired Neutral Palette */
             --background: 0 0% 100%;
-            --foreground: 224 71.4% 4.1%;
+            --foreground: 222.2 84% 4.9%;
             --card: 0 0% 100%;
-            --card-foreground: 224 71.4% 4.1%;
+            --card-foreground: 222.2 84% 4.9%;
             --popover: 0 0% 100%;
-            --popover-foreground: 224 71.4% 4.1%;
-            --primary: 220.9 39.3% 11%;
-            --primary-foreground: 210 20% 98%;
-            --secondary: 220 14.3% 95.9%;
-            --secondary-foreground: 220.9 39.3% 11%;
-            --muted: 220 14.3% 95.9%;
-            --muted-foreground: 220 8.9% 46.1%;
-            --accent: 220 14.3% 95.9%;
-            --accent-foreground: 220.9 39.3% 11%;
-            --destructive: 0 84.2% 60.2%;
-            --destructive-foreground: 210 20% 98%;
-            --border: 220 13% 91%;
-            --input: 220 13% 91%;
-            --ring: 224 71.4% 4.1%;
-            --radius: 1rem;
+            --popover-foreground: 222.2 84% 4.9%;
+            --primary: 222.2 47.4% 11.2%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96.1%;
+            --secondary-foreground: 222.2 47.4% 11.2%;
+            --muted: 210 40% 96.1%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96.1%;
+            --accent-foreground: 222.2 47.4% 11.2%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 222.2 84% 4.9%;
+            --radius: 0.75rem;
 
-            /* Membership Specifics */
-            --emerald: 161 94% 30%;
+            /* Tier Colors */
+            --emerald: 160 84% 39%;
             --ruby: 346 84% 61%;
             --diamond: 199 89% 48%;
-
-            /* Wallet Layout constants */
-            --safe-top: env(safe-area-inset-top, 20px);
-            --safe-bottom: env(safe-area-inset-bottom, 20px);
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --background: 224 71.4% 4.1%;
-                --foreground: 210 20% 98%;
-                --card: 224 71.4% 4.1%;
-                --card-foreground: 210 20% 98%;
-                --popover: 224 71.4% 4.1%;
-                --popover-foreground: 210 20% 98%;
-                --primary: 210 20% 98%;
-                --primary-foreground: 220.9 39.3% 11%;
-                --secondary: 215 27.9% 16.9%;
-                --secondary-foreground: 210 20% 98%;
-                --muted: 215 27.9% 16.9%;
-                --muted-foreground: 217.9 10.6% 64.9%;
-                --accent: 215 27.9% 16.9%;
-                --accent-foreground: 210 20% 98%;
-                --destructive: 0 62.8% 30.6%;
-                --destructive-foreground: 210 20% 98%;
-                --border: 215 27.9% 16.9%;
-                --input: 215 27.9% 16.9%;
-                --ring: 216 12.2% 83.9%;
+                --background: 222.2 84% 4.9%;
+                --foreground: 210 40% 98%;
+                --card: 222.2 84% 4.9%;
+                --card-foreground: 210 40% 98%;
+                --popover: 222.2 84% 4.9%;
+                --popover-foreground: 210 40% 98%;
+                --primary: 210 40% 98%;
+                --primary-foreground: 222.2 47.4% 11.2%;
+                --secondary: 217.2 32.6% 17.5%;
+                --secondary-foreground: 210 40% 98%;
+                --muted: 217.2 32.6% 17.5%;
+                --muted-foreground: 215 20.2% 65.1%;
+                --accent: 217.2 32.6% 17.5%;
+                --accent-foreground: 210 40% 98%;
+                --border: 217.2 32.6% 17.5%;
+                --input: 217.2 32.6% 17.5%;
+                --ring: 212.7 26.8% 83.9%;
             }
         }
 
         * {
             box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            margin: 0;
-            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background-color: hsl(var(--background));
             color: hsl(var(--foreground));
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            font-size: 16px;
-            overflow: hidden; /* Controlled by app state */
-            height: 100vh;
-            height: -webkit-fill-available;
+            margin: 0;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 1.5rem;
         }
 
         /* Typography */
-        h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.02em; }
-        .text-muted { color: hsl(var(--muted-foreground)); }
-        .text-xs { font-size: 0.75rem; }
-        .text-sm { font-size: 0.875rem; }
-        .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        h1 { font-size: 1.875rem; font-weight: 700; letter-spacing: -0.025em; margin-bottom: 0.5rem; }
+        p.subtitle { color: hsl(var(--muted-foreground)); margin-bottom: 2rem; }
 
-        /* App Structure */
-        #app {
+        /* Tabs Component */
+        .tabs-list {
             display: flex;
-            flex-direction: column;
-            height: 100%;
-            padding: var(--safe-top) 1.25rem var(--safe-bottom);
-            overflow-y: auto;
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        header {
-            margin-top: 1rem;
-            margin-bottom: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Wallet Stack */
-        .wallet-stack {
-            position: relative;
-            padding-bottom: 2rem;
-        }
-
-        /* Membership Card */
-        .card-container {
-            position: relative;
-            margin-bottom: -120px; /* Overlap effect */
-            transition: margin 0.3s cubic-bezier(0.2, 0, 0, 1);
-            perspective: 1000px;
-        }
-
-        .card-container:last-child {
-            margin-bottom: 0;
-        }
-
-        .card {
-            width: 100%;
-            height: 220px;
+            background: hsl(var(--muted));
+            padding: 0.25rem;
             border-radius: var(--radius);
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.2s ease, height 0.4s cubic-bezier(0.2, 0, 0, 1);
-        }
-
-        .card:active {
-            transform: scale(0.98);
-        }
-
-        .card.expanded {
-            height: 380px;
-            z-index: 50;
-        }
-
-        .card-bg-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.05) 100%);
-            z-index: 0;
-        }
-
-        .card-content {
-            position: relative;
-            z-index: 1;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .card-brand {
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            opacity: 0.9;
-        }
-
-        .card-tier-label {
-            padding: 0.25rem 0.5rem;
-            background: rgba(255,255,255,0.2);
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
-
-        .card-center {
-            margin-top: auto;
-            margin-bottom: auto;
-        }
-
-        .card-points-value {
-            font-size: 2.25rem;
-            font-weight: 700;
-            line-height: 1;
-        }
-
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-
-        /* Expanded Details Area */
-        .expanded-details {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(255,255,255,0.15);
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-            pointer-events: none;
-        }
-
-        .expanded .expanded-details {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-
-        .quick-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
-        }
-
-        .btn-glass {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-            padding: 0.75rem;
-            border-radius: 0.75rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-align: center;
-            text-decoration: none;
-        }
-
-        /* Specific Tier Styles */
-        .tier-emerald { background-color: hsl(var(--emerald)); color: white; }
-        .tier-ruby { background-color: hsl(var(--ruby)); color: white; }
-        .tier-diamond { background-color: hsl(var(--diamond)); color: white; }
-
-        /* Bottom Sheet */
-        .sheet-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 100;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .sheet-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .bottom-sheet {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: hsl(var(--card));
-            border-radius: 1.5rem 1.5rem 0 0;
-            z-index: 101;
-            transform: translateY(100%);
-            transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
-            max-height: 90vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .bottom-sheet.active {
-            transform: translateY(0);
-        }
-
-        .sheet-handle {
-            width: 40px;
-            height: 4px;
-            background: hsl(var(--muted));
-            border-radius: 2px;
-            margin: 0.75rem auto;
-            flex-shrink: 0;
-        }
-
-        .sheet-content {
-            padding: 0 1.5rem 2rem;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .sheet-header {
             margin-bottom: 1.5rem;
+            gap: 0.25rem;
         }
 
-        /* Detail Components */
-        .list-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-            border-bottom: 1px solid hsl(var(--border));
-        }
-
-        .list-row:last-child {
-            border-bottom: none;
-        }
-
-        .benefit-card {
-            background: hsl(var(--muted));
-            border-radius: 0.75rem;
-            padding: 1rem;
-            margin-bottom: 0.75rem;
-        }
-
-        /* Toast Notifications */
-        .toast {
-            position: fixed;
-            top: calc(var(--safe-top) + 1rem);
-            left: 50%;
-            transform: translateX(-50%) translateY(-100px);
-            background: hsl(var(--primary));
-            color: hsl(var(--primary-foreground));
-            padding: 0.75rem 1.25rem;
-            border-radius: 999px;
+        .tab-trigger {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            background: transparent;
+            color: hsl(var(--muted-foreground));
             font-size: 0.875rem;
             font-weight: 500;
-            z-index: 1000;
-            transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: calc(var(--radius) - 0.25rem);
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .toast.visible {
-            transform: translateX(-50%) translateY(0);
+        .tab-trigger.active {
+            background: hsl(var(--card));
+            color: hsl(var(--foreground));
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        /* Utilities */
-        .skeleton {
-            background: hsl(var(--muted));
-            animation: pulse 1.5s infinite ease-in-out;
-            border-radius: 4px;
+        /* Card Component */
+        .tier-card {
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            background: hsl(var(--card));
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s ease;
         }
 
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
+        .price-tag {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0.5rem 0 1.5rem 0;
         }
 
-        .hidden { display: none !important; }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-emerald { background: hsla(var(--emerald), 0.1); color: hsl(var(--emerald)); }
+        .badge-ruby { background: hsla(var(--ruby), 0.1); color: hsl(var(--ruby)); }
+        .badge-diamond { background: hsla(var(--diamond), 0.1); color: hsl(var(--diamond)); }
+
+        /* Sections */
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: hsl(var(--muted-foreground));
+            letter-spacing: 0.1em;
+            margin: 1.5rem 0 0.75rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: hsl(var(--border));
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid hsl(var(--border));
+            font-size: 0.9375rem;
+        }
+
+        .benefit-item:last-child { border-bottom: none; }
+
+        .benefit-icon {
+            color: hsl(var(--primary));
+            flex-shrink: 0;
+            margin-top: 0.125rem;
+        }
+
+        /* Actions */
+        .btn {
+            width: 100%;
+            padding: 0.875rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        .btn-primary:active { opacity: 0.9; transform: scale(0.98); }
+
+        /* Transitions */
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden { display: none; }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+        #toast.visible { opacity: 1; transform: translateX(-50%) translateY(-10px); }
     </style>
 </head>
 <body>
 
-    <div id="toast" class="toast">Action completed</div>
-
-    <div id="app">
+    <div class="container">
         <header>
-            <div>
-                <h2 class="text-sm text-muted">Welcome back,</h2>
-                [span_0](start_span)<h1>Johnathan Doe[span_0](end_span)</h1>
-            </div>
-            <div style="width: 40px; height: 40px; border-radius: 50%; background: hsl(var(--muted)); display: flex; align-items: center; justify-content: center;">
-                <span class="text-xs font-mono">JD</span>
-            </div>
+            <h1>Memberships</h1>
+            <p class="subtitle">Select a tier to view exclusive benefits and privileges.</p>
         </header>
 
-        <div class="wallet-stack" id="walletStack">
+        <div class="tabs-list" role="tablist">
+            <button class="tab-trigger active" onclick="switchTier('emerald')" data-tier="emerald">Emerald</button>
+            <button class="tab-trigger" onclick="switchTier('ruby')" data-tier="ruby">Ruby</button>
+            <button class="tab-trigger" onclick="switchTier('diamond')" data-tier="diamond">Diamond</button>
+        </div>
+
+        <div id="content-area" class="fade-in">
             </div>
 
-        <section style="margin-top: 1rem;">
-            <h3 class="text-sm text-muted" style="margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">Recent Activity</h3>
-            <div id="activityList">
-                </div>
-        </section>
+        <button class="btn btn-primary" onclick="showToast('Initiating registration...')">
+            Purchase Membership
+        </button>
     </div>
 
-    <div id="sheetOverlay" class="sheet-overlay"></div>
-    <div id="bottomSheet" class="bottom-sheet">
-        <div class="sheet-handle"></div>
-        <div class="sheet-content" id="sheetContent">
-            </div>
-    </div>
+    <div id="toast">Request Received</div>
 
     <script>
-        /**
-         * [span_1](start_span)CINNAMON LIFE - LIFE MEMBERSHIP DATA[span_1](end_span)
-         */
-        const MEMBERSHIP_DATA = [
-            {
-                id: 'mem_1',
-                tier: 'Emerald',
-                colorClass: 'tier-emerald',
-                memberId: 'CL-8829-2024',
-                points: '12,450',
-                [span_2](start_span)price: '50,000/-',[span_2](end_span)
-                benefits: [
-                    [span_3](start_span)"Up to 50% off food[span_3](end_span)",
-                    [span_4](start_span)"10% Off Weekday Lunch @ Quizine[span_4](end_span)",
-                    [span_5](start_span)"20% off Beverages[span_5](end_span)",
-                    [span_6](start_span)"Stay 2 nights and get 3rd free[span_6](end_span)",
-                    [span_7](start_span)"Complimentary Upgrade: City to Ocean View[span_7](end_span)",
-                    [span_8](start_span)"4,000 F&B Wellness Credit[span_8](end_span)"
+        const membershipData = {
+            emerald: {
+                name: "Emerald",
+                price: "LKR 50,000",
+                colorClass: "badge-emerald",
+                dining: [
+                    "Up to 50% off food",
+                    "10% Off Weekday Lunch @ Quizine",
+                    "20% off Beverages",
+                    "Buffet Experience for Two",
+                    "Afternoon Tea Experience for Two",
+                    "One Exclusive Bottle of Selected Wine",
+                    "\"Member for a Day\" Pass",
+                    "4,000 F&B Wellness Credit"
                 ],
-                history: [
-                    { title: 'Dinner @ Quizine', date: 'Oct 24', value: '-2,100 pts' },
-                    { title: 'Points Accrual', date: 'Oct 20', value: '+500 pts' }
+                accommodation: [
+                    "Stay 2 nights and get the 3rd night free",
+                    "50% off BAR for Rooms",
+                    "Complimentary Upgrade (City View to Ocean View)"
+                ],
+                other: [
+                    "25% Off Laundry & Dry Cleaning",
+                    "20% off Wellness Preferred Rate",
+                    "15% Off for Wellness Treatments for Two",
+                    "5% off Wellness Retail Purchases",
+                    "Complimentary Spouse Card"
                 ]
             },
-            {
-                id: 'mem_2',
-                tier: 'Ruby',
-                colorClass: 'tier-ruby',
-                memberId: 'CL-1102-2024',
-                points: '42,000',
-                [span_9](start_span)price: '125,000/-',[span_9](end_span)
-                benefits: [
-                    [span_10](start_span)"LKR 10,000 Room Credit[span_10](end_span)",
-                    [span_11](start_span)"30% off Wellness Preferred Rate[span_11](end_span)",
-                    [span_12](start_span)"Nature's Symphony 60min massage[span_12](end_span)",
-                    [span_13](start_span)"Unlimited Accommodation Upgrade[span_13](end_span)",
-                    [span_14](start_span)"Pool access for Two[span_14](end_span)"
+            ruby: {
+                name: "Ruby",
+                price: "LKR 125,000",
+                colorClass: "badge-ruby",
+                dining: [
+                    "Up to 50% off food",
+                    "10% Off Weekday Lunch @ Quizine",
+                    "20% off Beverages",
+                    "Buffet Experience for Two",
+                    "Afternoon Tea Experience for Two",
+                    "One Exclusive Bottle of Selected Wine",
+                    "\"Member for a Day\" Pass",
+                    "4,000 F&B Wellness Credit"
                 ],
-                history: [
-                    { title: 'Spa Treatment', date: 'Oct 15', value: '-4,500 pts' },
-                    { title: 'Room Upgrade', date: 'Oct 12', value: 'Complimentary' }
+                accommodation: [
+                    "Deluxe room and breakfast for Two",
+                    "Unlimited Accommodation Upgrade",
+                    "Stay 2 nights and get the 3rd night free",
+                    "50% off BAR for Rooms",
+                    "Nature's Symphony 60min massage",
+                    "LKR 10,000 Room Credit",
+                    "Pool access for Two"
+                ],
+                other: [
+                    "25% Off Laundry & Dry Cleaning",
+                    "30% off Wellness Preferred Rate",
+                    "20% Off for Wellness Treatments for Two",
+                    "15% off Wellness Retail Purchases",
+                    "Complimentary Spouse Card"
                 ]
             },
-            {
-                id: 'mem_3',
-                tier: 'Diamond',
-                colorClass: 'tier-diamond',
-                memberId: 'CL-0001-2024',
-                points: '185,200',
-                [span_15](start_span)price: '425,000/-',[span_15](end_span)
-                benefits: [
-                    [span_16](start_span)"Complimentary Oceanscape Suite[span_16](end_span)",
-                    [span_17](start_span)"20% Off F&B at Cloud Wine[span_17](end_span)",
-                    [span_18](start_span)"Party Voucher Included[span_18](end_span)",
-                    [span_19](start_span)"Premier Life to Suite Upgrade[span_19](end_span)",
-                    [span_20](start_span)"Afternoon Tea at GATZ[span_20](end_span)"
+            diamond: {
+                name: "Diamond",
+                price: "LKR 425,000",
+                colorClass: "badge-diamond",
+                dining: [
+                    "Up to 50% off food",
+                    "10% Off Weekday Lunch @ Quizine",
+                    "20% off Beverages",
+                    "20% Off F&B at Cloud Wine",
+                    "Buffet Experience for Two",
+                    "Afternoon Tea Experience at GATZ",
+                    "One Exclusive Bottle of Selected Wine",
+                    "\"Member for a Day\" Pass",
+                    "Exclusive Party Voucher"
                 ],
-                history: [
-                    { title: 'Executive Suite Stay', date: 'Sep 30', value: 'Redeemed' },
-                    { title: 'Cloud Wine Social', date: 'Sep 25', value: '-8,000 pts' }
+                accommodation: [
+                    "Complimentary Oceanscape Suite + Breakfast",
+                    "Stay 2 nights and get the 3rd night free",
+                    "50% off BAR for Rooms",
+                    "Upgrade: City View to Ocean View",
+                    "Premier Life Ocean View to Suite (1-3 nights)"
+                ],
+                other: [
+                    "Full Concierge Service",
+                    "Priority Reservations",
+                    "All Lower Tier Amenities Included"
                 ]
             }
-        ];
-
-        const state = {
-            expandedCardId: null,
-            isSheetOpen: false
         };
 
-        // --- Core UI Logic ---
+        function switchTier(tierKey) {
+            // Update UI Tabs
+            document.querySelectorAll('.tab-trigger').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.tier === tierKey);
+            });
 
-        function init() {
-            renderCards();
-            renderActivity();
-            setupEventListeners();
-        }
-
-        function renderCards() {
-            const container = document.getElementById('walletStack');
-            container.innerHTML = MEMBERSHIP_DATA.map(item => `
-                <div class="card-container" id="container-${item.id}">
-                    <div class="card ${item.colorClass}" onclick="toggleCard('${item.id}')" id="card-${item.id}">
-                        <div class="card-bg-overlay"></div>
-                        <div class="card-content">
-                            <div class="card-header">
-                                <span class="card-brand">Cinnamon Life</span>
-                                <span class="card-tier-label">${item.tier}</span>
-                            </div>
-                            <div class="card-center">
-                                <div class="text-xs opacity-70">Points Balance</div>
-                                <div class="card-points-value">${item.points}</div>
-                            </div>
-                            <div class="card-footer">
-                                <div>
-                                    <div class="text-xs opacity-70">Member ID</div>
-                                    <div class="text-sm font-mono">${item.memberId}</div>
-                                </div>
-                                <div class="text-xs font-mono">VAL 12/26</div>
-                            </div>
-                            
-                            <div class="expanded-details">
-                                <div class="text-xs opacity-70" style="margin-bottom:0.5rem">Tier Privileges</div>
-                                <div class="text-sm">${item.benefits[0]} & More...</div>
-                                <div class="quick-actions">
-                                    <button class="btn-glass" onclick="event.stopPropagation(); openDetails('${item.id}')">View Details</button>
-                                    <button class="btn-glass" onclick="event.stopPropagation(); triggerToast('QR Code Generated')">Show QR</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderActivity() {
-            const list = document.getElementById('activityList');
-            // Sample mixed activity
-            const allActivity = MEMBERSHIP_DATA[0].history;
-            list.innerHTML = allActivity.map(act => `
-                <div class="list-row">
-                    <div>
-                        <div class="text-sm" style="font-weight:500">${act.title}</div>
-                        <div class="text-xs text-muted">${act.date}</div>
-                    </div>
-                    <div class="text-sm font-mono" style="font-weight:600">${act.value}</div>
-                </div>
-            `).join('');
-        }
-
-        function toggleCard(id) {
-            const card = document.getElementById(`card-${id}`);
-            const containers = document.querySelectorAll('.card-container');
+            const tier = membershipData[tierKey];
+            const contentArea = document.getElementById('content-area');
             
-            if (state.expandedCardId === id) {
-                // Collapse
-                card.classList.remove('expanded');
-                containers.forEach(c => c.style.marginBottom = '-120px');
-                state.expandedCardId = null;
-            } else {
-                // Expand
-                document.querySelectorAll('.card').forEach(c => c.classList.remove('expanded'));
-                card.classList.add('expanded');
-                
-                // Adjust margins to prevent overlap of expanded content
-                containers.forEach(c => {
-                    if (c.id === `container-${id}`) {
-                        c.style.marginBottom = '20px';
-                    } else {
-                        c.style.marginBottom = '-120px';
-                    }
-                });
-                state.expandedCardId = id;
-                
-                // Haptic feedback simulation
-                if (window.navigator.vibrate) window.navigator.vibrate(10);
-            }
-        }
-
-        function openDetails(id) {
-            const data = MEMBERSHIP_DATA.find(d => d.id === id);
-            const content = document.getElementById('sheetContent');
-            
-            content.innerHTML = `
-                <div class="sheet-header">
-                    <h2 style="font-size: 1.5rem">${data.tier} Benefits</h2>
-                    <p class="text-sm text-muted">Membership Tier Details & Rewards</p>
-                </div>
-                
-                <div style="margin-bottom: 2rem;">
-                    <h3 class="text-xs text-muted" style="text-transform: uppercase; margin-bottom: 0.75rem;">Core Benefits</h3>
-                    ${data.benefits.map(b => `
-                        <div class="benefit-card">
-                            <div class="text-sm" style="font-weight: 500">${b}</div>
+            // Generate HTML
+            let html = `
+                <div class="tier-card">
+                    <span class="badge ${tier.colorClass}">${tier.name}</span>
+                    <div class="price-tag">${tier.price}</div>
+                    
+                    <div class="section-title">Dining & Drinks</div>
+                    ${tier.dining.map(item => `
+                        <div class="benefit-item">
+                            <span class="benefit-icon">◈</span>
+                            <span>${item}</span>
                         </div>
                     `).join('')}
-                </div>
 
-                <div>
-                    <h3 class="text-xs text-muted" style="text-transform: uppercase; margin-bottom: 0.75rem;">Usage History</h3>
-                    ${data.history.map(h => `
-                        <div class="list-row">
-                            <div class="text-sm">${h.title}</div>
-                            <div class="text-sm font-mono">${h.value}</div>
+                    <div class="section-title">Accommodation</div>
+                    ${tier.accommodation.map(item => `
+                        <div class="benefit-item">
+                            <span class="benefit-icon">◈</span>
+                            <span>${item}</span>
                         </div>
                     `).join('')}
-                </div>
 
-                <div style="margin-top: 2rem;">
-                    <button class="btn-glass" style="width:100%; background:hsl(var(--primary)); color:hsl(var(--primary-foreground))" onclick="closeSheet()">
-                        Done
-                    </button>
+                    <div class="section-title">Lifestyle & Wellness</div>
+                    ${tier.other.map(item => `
+                        <div class="benefit-item">
+                            <span class="benefit-icon">◈</span>
+                            <span>${item}</span>
+                        </div>
+                    `).join('')}
                 </div>
             `;
 
-            document.getElementById('sheetOverlay').classList.add('active');
-            document.getElementById('bottomSheet').classList.add('active');
-            state.isSheetOpen = true;
+            // Reset animation
+            contentArea.classList.remove('fade-in');
+            void contentArea.offsetWidth; // Trigger reflow
+            contentArea.innerHTML = html;
+            contentArea.classList.add('fade-in');
         }
 
-        function closeSheet() {
-            document.getElementById('sheetOverlay').classList.remove('active');
-            document.getElementById('bottomSheet').classList.remove('active');
-            state.isSheetOpen = false;
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('visible');
+            setTimeout(() => {
+                toast.classList.remove('visible');
+            }, 3000);
         }
 
-        function triggerToast(msg) {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.classList.add('visible');
-            setTimeout(() => t.classList.remove('visible'), 3000);
-        }
-
-        function setupEventListeners() {
-            // Dismiss sheet on overlay click
-            document.getElementById('sheetOverlay').addEventListener('click', closeSheet);
-
-            // Simple swipe-down detection for sheet
-            let touchStartY = 0;
-            const sheet = document.getElementById('bottomSheet');
-            
-            sheet.addEventListener('touchstart', e => {
-                touchStartY = e.touches[0].clientY;
-            }, { passive: true });
-
-            sheet.addEventListener('touchmove', e => {
-                const touchY = e.touches[0].clientY;
-                const diff = touchY - touchStartY;
-                if (diff > 100 && sheet.scrollTop <= 0) {
-                    closeSheet();
-                }
-            }, { passive: true });
-        }
-
-        // Run app
-        init();
+        // Initialize
+        window.onload = () => switchTier('emerald');
     </script>
 </body>
 </html>
