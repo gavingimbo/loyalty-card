@@ -14,8 +14,7 @@
         
         :root {
             --bg-void: #020202;
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-surface: rgba(255, 255, 255, 0.03);
+            --glass-surface: rgba(255, 255, 255, 0.02);
             --gold: #D4AF37;
         }
 
@@ -30,125 +29,96 @@
 
         .serif { font-family: 'Cormorant Garamond', serif; }
 
-        /* --- GLOBAL FX --- */
+        /* --- GLOBAL ATMOSPHERE --- */
         .noise-field {
             position: fixed;
             inset: 0;
             background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48ZmlsdGVyIGlkPSJnoiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIwLjY1IiBudW1PY3RhdmVzPSIzIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI2cpIiBvcGFjaXR5PSIwLjAzIi8+PC9zdmc+');
-            opacity: 0.35;
-            pointer-events: none;
-            z-index: 50; /* Texture above everything */
-        }
-
-        /* --- SECTION 1 BACKGROUND: THE NEBULA --- */
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-            z-index: 0;
-        }
-        .nebula-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.4;
-            mix-blend-mode: screen;
-            animation: breathe 15s infinite alternate ease-in-out;
-        }
-        @keyframes breathe {
-            0% { transform: scale(1) translate(0,0); opacity: 0.3; }
-            100% { transform: scale(1.2) translate(20px, -20px); opacity: 0.5; }
-        }
-
-        /* --- SECTION 2 BACKGROUND: THE PRISM --- */
-        .prism-bg {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
             opacity: 0.3;
-            background: 
-                radial-gradient(circle at 0% 0%, rgba(52, 199, 89, 0.1), transparent 50%),
-                radial-gradient(circle at 100% 0%, rgba(255, 59, 48, 0.1), transparent 50%),
-                radial-gradient(circle at 50% 100%, rgba(212, 175, 55, 0.1), transparent 50%);
-            filter: blur(60px);
-        }
-        /* Moving Light Beams */
-        .light-beam {
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: conic-gradient(from 0deg, transparent 0deg, rgba(255,255,255,0.03) 20deg, transparent 40deg);
-            animation: rotate-beam 20s linear infinite;
-        }
-        @keyframes rotate-beam { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        /* --- SECTION 3 BACKGROUND: THE DATA GRID --- */
-        .app-bg {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            perspective: 1000px;
-            overflow: hidden;
-        }
-        .grid-plane {
-            position: absolute;
-            width: 200%; height: 200%;
-            left: -50%; top: -50%;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            transform: rotateX(60deg) translateY(-100px) translateZ(-200px);
-            animation: grid-move 20s linear infinite;
-            mask-image: radial-gradient(circle, black 30%, transparent 70%);
-        }
-        @keyframes grid-move {
-            0% { transform: rotateX(60deg) translateY(0px) translateZ(-200px); }
-            100% { transform: rotateX(60deg) translateY(60px) translateZ(-200px); }
+            pointer-events: none;
+            z-index: 50;
         }
 
-        /* --- COMPONENTS --- */
-
-        /* 3D Tilt Card */
-        .spatial-card {
-            background: var(--glass-surface);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
+        /* --- DIFFUSED CARD SYSTEM --- */
+        
+        /* The Card Container (Lens) */
+        .diffused-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.00) 100%);
+            backdrop-filter: blur(2px); /* Low blur to see the color bleed */
+            -webkit-backdrop-filter: blur(2px);
+            border-radius: 32px;
             position: relative;
-            transition: transform 0.1s ease, box-shadow 0.4s ease, border-color 0.4s ease;
-            transform-style: preserve-3d;
+            /* Only a top light, no full border */
+            border-top: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), background 0.6s ease;
             overflow: hidden;
-            z-index: 10;
         }
         
-        .spatial-card:hover {
-            border-color: rgba(255,255,255,0.2);
-            box-shadow: 0 30px 60px -10px rgba(0,0,0,0.6);
+        .diffused-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
         }
 
-        .card-content { transform: translateZ(20px); }
+        /* The Ambient Background Layer (Behind the cards) */
+        .ambient-field {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
 
-        /* Floating Layers */
+        /* The Color Bleeds */
+        .bleed-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.5;
+            mix-blend-mode: screen;
+            transition: all 1s ease;
+        }
+
+        /* --- APP SECTION FLOATING WIDGETS --- */
         .float-layer {
             position: absolute;
-            border-radius: 20px;
-            background: rgba(18, 18, 18, 0.7); 
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255,255,255,0.15);
-            box-shadow: 0 40px 80px -12px rgba(0,0,0,0.9);
+            border-radius: 24px;
+            /* Soft glass, no hard border */
+            background: rgba(20, 20, 20, 0.6); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
         }
 
         /* Animations */
-        .anim-float { animation: float 7s ease-in-out infinite; }
-        .anim-float-reverse { animation: float 9s ease-in-out infinite reverse; }
+        .anim-float { animation: float 8s ease-in-out infinite; }
+        .anim-float-reverse { animation: float 10s ease-in-out infinite reverse; }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
+            50% { transform: translateY(-15px); }
         }
 
-        /* Text FX */
+        /* --- NAV CAPSULE --- */
+        .nav-capsule {
+            position: fixed;
+            top: 32px; left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 12px 12px 28px;
+            background: rgba(5, 5, 5, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 999px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 90%;
+            max-width: 520px;
+            box-shadow: 0 20px 60px -20px rgba(0,0,0,0.8);
+        }
+
+        /* Typography & Layout */
         .gold-shimmer {
             background: linear-gradient(90deg, #D4AF37, #FFF5E1, #D4AF37);
             -webkit-background-clip: text;
@@ -158,11 +128,10 @@
         }
         @keyframes shine { to { background-position: 200%; } }
 
-        /* Input */
         .input-minimal {
             background: transparent;
             border: none;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             color: #fff;
             width: 100%;
             padding: 12px 0;
@@ -174,31 +143,23 @@
         }
         .input-minimal:focus { border-color: #fff; padding-left: 10px; }
 
-        /* Layout Standards */
         .layout-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
         @media(min-width: 1024px) { .layout-container { padding: 0 48px; } }
         
         .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* Nav Capsule */
-        .nav-capsule {
-            position: fixed;
-            top: 32px; left: 50%;
-            transform: translateX(-50%);
-            padding: 12px 12px 12px 28px;
-            background: rgba(10, 10, 10, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 999px;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 90%;
-            max-width: 520px;
-            box-shadow: 0 20px 50px -10px rgba(0,0,0,0.8);
+        /* Hero Spatial Orb */
+        .spatial-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: orb-float 10s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes orb-float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, -50px) scale(1.1); }
         }
     </style>
 </head>
@@ -222,30 +183,26 @@
 
     <header class="min-h-screen flex items-center pt-24 pb-20 relative overflow-hidden">
         
-        <div class="hero-bg">
-            <div class="nebula-orb bg-emerald-900 w-[500px] h-[500px] top-[-100px] left-[20%]"></div>
-            <div class="nebula-orb bg-amber-800 w-[600px] h-[600px] bottom-[-100px] right-[10%] animation-delay-2000"></div>
-            <div class="nebula-orb bg-indigo-950 w-[800px] h-[800px] top-[20%] right-[30%] opacity-20"></div>
+        <div class="absolute inset-0 pointer-events-none z-0">
+            <div class="spatial-orb bg-emerald-900 w-[500px] h-[500px] top-1/4 right-0 lg:right-1/4 mix-blend-screen"></div>
+            <div class="spatial-orb bg-amber-900 w-[400px] h-[400px] bottom-1/4 right-10 lg:right-1/3 animation-delay-2000 mix-blend-screen"></div>
+            <div class="spatial-orb bg-indigo-950 w-[800px] h-[800px] top-0 right-0 opacity-40 mix-blend-screen"></div>
         </div>
 
         <div class="layout-container w-full grid lg:grid-cols-2 gap-16 items-center relative z-10">
-            
             <div class="reveal order-2 lg:order-1 text-center lg:text-left">
                 <div class="inline-flex items-center gap-3 border border-white/10 rounded-full px-4 py-2 bg-white/5 backdrop-blur-md mb-10">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span class="text-[10px] uppercase tracking-[0.2em] text-white/80 font-bold">Membership 2026</span>
                 </div>
-                
                 <h1 class="text-6xl md:text-8xl lg:text-9xl font-light tracking-tighter leading-[0.9] mb-10">
                     The<br>
                     <span class="serif italic text-white/50">Sovereign</span><br>
                     Collection
                 </h1>
-                
                 <p class="text-white/40 text-lg font-light max-w-lg mx-auto lg:mx-0 leading-relaxed mb-12">
                     A curated passage into the City of Dreams. Unlock culinary mastery, sanctuary upgrades, and bespoke access through a single digital key.
                 </p>
-
                 <div class="flex flex-col lg:flex-row items-center gap-6">
                     <a href="#collection" class="bg-white text-black px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] hover:scale-105 transition-transform">
                         Explore Access
@@ -260,30 +217,31 @@
                 <div class="absolute w-[450px] h-[450px] rounded-full border border-white/5 animate-[spin_40s_linear_infinite_reverse]"></div>
                 <div class="absolute w-[600px] h-[600px] rounded-full border border-white/5 opacity-30 animate-[spin_60s_linear_infinite]"></div>
             </div>
-
         </div>
     </header>
 
-    <section id="collection" class="py-32 relative overflow-hidden">
+    <section id="collection" class="py-32 relative">
         
-        <div class="prism-bg">
-            <div class="light-beam"></div>
+        <div class="ambient-field">
+            <div class="bleed-orb bg-emerald-700/20 w-[600px] h-[600px] top-20 left-[10%]"></div>
+            <div class="bleed-orb bg-rose-700/20 w-[600px] h-[600px] top-40 left-[40%]"></div>
+            <div class="bleed-orb bg-amber-600/20 w-[600px] h-[600px] top-20 left-[60%]"></div>
         </div>
 
         <div class="layout-container relative z-10">
-            <div class="grid lg:grid-cols-3 gap-8 perspective-container">
+            <div class="grid lg:grid-cols-3 gap-8">
                 
-                <div class="spatial-card p-10 min-h-[580px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="3">
-                    <div class="card-content">
+                <div class="diffused-card p-10 min-h-[580px] flex flex-col justify-between reveal group">
+                    <div>
                         <div class="flex justify-between items-start mb-12">
                             <span class="text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase">Foundation</span>
-                            <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]"></div>
+                            <div class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.8)]"></div>
                         </div>
-                        <h3 class="text-5xl serif italic text-emerald-400 mb-4">Emerald</h3>
-                        <p class="text-sm text-white/40 leading-relaxed font-light">The essential key to culinary preference and extended sanctuaries.</p>
+                        <h3 class="text-5xl serif italic text-emerald-200 mb-4">Emerald</h3>
+                        <p class="text-sm text-white/50 leading-relaxed font-light">The essential key to culinary preference and extended sanctuaries.</p>
                     </div>
-                    <div class="card-content space-y-10">
-                        <ul class="space-y-4 pt-8 border-t border-white/5">
+                    <div class="space-y-10">
+                        <ul class="space-y-4 pt-8 border-t border-white/10">
                             <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-emerald-500"></i> 3rd Night Complimentary</li>
                             <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-emerald-500"></i> 50% Dining Preference</li>
                         </ul>
@@ -295,17 +253,17 @@
                     </div>
                 </div>
 
-                <div class="spatial-card p-10 min-h-[580px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="3" style="transition-delay: 100ms;">
-                    <div class="card-content">
+                <div class="diffused-card p-10 min-h-[580px] flex flex-col justify-between reveal group" style="transition-delay: 100ms;">
+                    <div>
                         <div class="flex justify-between items-start mb-12">
                             <span class="text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase">Signature</span>
-                            <div class="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_15px_rgba(225,29,72,0.6)]"></div>
+                            <div class="w-2 h-2 rounded-full bg-rose-400 shadow-[0_0_20px_rgba(251,113,133,0.8)]"></div>
                         </div>
-                        <h3 class="text-5xl serif italic text-rose-400 mb-4">Ruby</h3>
-                        <p class="text-sm text-white/40 leading-relaxed font-light">Elevated immersion with residency credits and vital renewal therapies.</p>
+                        <h3 class="text-5xl serif italic text-rose-200 mb-4">Ruby</h3>
+                        <p class="text-sm text-white/50 leading-relaxed font-light">Elevated immersion with residency credits and vital renewal therapies.</p>
                     </div>
-                    <div class="card-content space-y-10">
-                        <ul class="space-y-4 pt-8 border-t border-white/5">
+                    <div class="space-y-10">
+                        <ul class="space-y-4 pt-8 border-t border-white/10">
                             <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-rose-500"></i> LKR 10,000 Room Credit</li>
                             <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-rose-500"></i> 60min Nature's Symphony</li>
                         </ul>
@@ -317,17 +275,17 @@
                     </div>
                 </div>
 
-                <div class="spatial-card p-10 min-h-[580px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="3" style="transition-delay: 200ms;">
-                    <div class="card-content">
+                <div class="diffused-card p-10 min-h-[580px] flex flex-col justify-between reveal group" style="transition-delay: 200ms;">
+                    <div>
                         <div class="flex justify-between items-start mb-12">
                             <span class="text-[9px] font-bold tracking-[0.2em] text-[#D4AF37] uppercase">Zenith</span>
-                            <div class="w-2 h-2 rounded-full bg-[#D4AF37] shadow-[0_0_20px_#D4AF37]"></div>
+                            <div class="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_25px_rgba(251,191,36,0.8)]"></div>
                         </div>
                         <h3 class="text-5xl serif italic gold-shimmer mb-4">Diamond</h3>
-                        <p class="text-sm text-white/40 leading-relaxed font-light">The ultimate sovereign privilege. Oceanscape suites and skyward access.</p>
+                        <p class="text-sm text-white/50 leading-relaxed font-light">The ultimate sovereign privilege. Oceanscape suites and skyward access.</p>
                     </div>
-                    <div class="card-content space-y-10">
-                        <ul class="space-y-4 pt-8 border-t border-white/5">
+                    <div class="space-y-10">
+                        <ul class="space-y-4 pt-8 border-t border-white/10">
                             <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-amber-400"></i> Oceanscape Suite Residency</li>
                             <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-amber-400"></i> Cloud Wine Access</li>
                         </ul>
@@ -343,17 +301,12 @@
         </div>
     </section>
 
-    <section id="app" class="py-40 border-t border-white/5 relative overflow-hidden">
-        
-        <div class="app-bg">
-            <div class="grid-plane"></div>
-        </div>
-
+    <section id="app" class="py-40 border-t border-white/5 overflow-hidden">
         <div class="layout-container grid lg:grid-cols-2 gap-24 items-center relative z-10">
             
             <div class="relative h-[600px] w-full flex items-center justify-center order-2 lg:order-1 reveal">
                 
-                <div class="absolute z-0 w-[280px] h-[440px] bg-[#050505] border border-white/10 rounded-[24px] p-8 flex flex-col justify-between transform scale-90 opacity-40 blur-[1px] transition-transform duration-1000">
+                <div class="absolute z-0 w-[280px] h-[440px] bg-[#080808] border border-white/5 rounded-[32px] p-8 flex flex-col justify-between transform scale-90 opacity-40 blur-[1px] transition-transform duration-1000">
                     <div class="flex justify-between items-start">
                         <i class="ph ph-qr-code text-4xl text-white/20"></i>
                     </div>
@@ -389,23 +342,20 @@
                     </div>
                 </div>
                 
-                <div class="absolute w-[400px] h-[400px] bg-emerald-900/10 rounded-full blur-[80px] animate-pulse z-0 pointer-events-none"></div>
+                <div class="absolute w-[500px] h-[500px] bg-emerald-900/10 rounded-full blur-[100px] animate-pulse z-0 pointer-events-none"></div>
             </div>
 
             <div class="order-1 lg:order-2 space-y-12 reveal text-center flex flex-col items-center">
                 <div class="inline-block">
                     <span class="text-[9px] font-bold tracking-[0.3em] uppercase text-emerald-500">The Digital Key</span>
                 </div>
-                
                 <h2 class="text-5xl lg:text-7xl serif italic leading-[0.9] text-white">
                     Your world,<br>
                     <span class="text-white/40">synchronized.</span>
                 </h2>
-                
                 <p class="text-white/50 text-lg font-light leading-relaxed max-w-md mx-auto">
                     Seamlessly manage reservations, access your residency credits, and communicate with your dedicated lifestyle manager—all from a single, encrypted interface designed for the modern sovereign.
                 </p>
-                
                 <div class="grid grid-cols-2 gap-16 pt-8 border-t border-white/5 w-full max-w-sm mx-auto">
                     <div class="flex flex-col items-center">
                         <i class="ph ph-chat-centered-text text-2xl text-white mb-3"></i>
@@ -480,20 +430,8 @@
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
     <script>
-        // Init Tilt (Desktop Only)
-        if (window.matchMedia("(min-width: 1024px)").matches) {
-            VanillaTilt.init(document.querySelectorAll(".spatial-card"), {
-                max: 3,
-                speed: 1000,
-                glare: true,
-                "max-glare": 0.05,
-                scale: 1.01
-            });
-        }
-
-        // Scroll Reveal Observer
+        // Scroll Reveal
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
