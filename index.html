@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>LIFE Membership | Cinnamon Life City of Dreams</title>
+    <title>Cinnamon Life | LIFE Membership</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -14,9 +14,9 @@
                     colors: {
                         background: "#050505", 
                         surface: "#0F0F0F",
-                        emerald: { DEFAULT: "#10b981", glow: "rgba(16, 185, 129, 0.4)" },
-                        ruby: { DEFAULT: "#f43f5e", glow: "rgba(244, 63, 94, 0.4)" },
-                        diamond: { DEFAULT: "#38bdf8", glow: "rgba(56, 189, 248, 0.4)" }
+                        emerald: { DEFAULT: "#10b981" },
+                        ruby: { DEFAULT: "#f43f5e" },
+                        diamond: { DEFAULT: "#38bdf8" }
                     },
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
                     aspectRatio: { 'card': '1.586 / 1' }
@@ -27,37 +27,35 @@
     
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .snap-x-mandatory { scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
-        
-        .card-container { transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .card-carousel { scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
         .holo-sheen::after {
             content: ""; position: absolute; inset: 0;
-            background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.12) 50%, transparent 70%);
-            background-size: 200% 100%; animation: sheen 5s infinite linear; pointer-events: none;
+            background: linear-gradient(110deg, transparent 40%, rgba(255,255,255,0.2) 50%, transparent 60%);
+            background-size: 200% 100%; animation: sheen 8s infinite linear; pointer-events: none;
         }
-        @keyframes sheen { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+        @keyframes sheen { from { background-position: 150% 0; } to { background-position: -150% 0; } }
     </style>
 </head>
 <body class="bg-background text-white antialiased font-sans overflow-hidden">
 
-    <div x-data="lifeApp()" x-init="init()" class="max-w-[430px] mx-auto h-screen flex flex-col relative">
+    <div x-data="lifeApp()" x-init="init()" class="max-w-[430px] mx-auto h-screen flex flex-col relative overflow-hidden">
         
         <header class="pt-14 px-8 pb-4 z-30">
-            <p class="text-[10px] font-extrabold tracking-[0.4em] text-zinc-500 uppercase mb-1">City of Dreams</p>
-            <h1 class="text-3xl font-extrabold tracking-tight leading-none">LIFE Membership</h1>
+            <p class="text-[10px] font-bold tracking-[0.25em] text-zinc-500 uppercase">City of Dreams</p>
+            <h1 class="text-3xl font-extrabold tracking-tight">LIFE Membership</h1>
         </header>
 
         <div class="relative w-full z-20 overflow-visible">
             <div x-ref="carousel" @scroll.debounce.10ms="handleScroll" 
-                 class="snap-x-mandatory flex gap-4 px-8 pb-8 overflow-x-auto no-scrollbar">
+                 class="card-carousel flex gap-4 px-8 pb-8 overflow-x-auto no-scrollbar">
                 
-                <div class="snap-center shrink-0 w-[86%] card-container" :class="activeIdx === 0 ? 'scale-100' : 'scale-[0.93] opacity-30 grayscale'">
-                    <div class="aspect-card rounded-[24px] p-8 relative overflow-hidden border border-white/10 shadow-2xl bg-gradient-to-br from-emerald-950 via-zinc-950 to-black holo-sheen">
+                <div class="snap-center shrink-0 w-[86%] transition-all duration-500" :class="activeIdx === 0 ? 'scale-100' : 'scale-[0.93] opacity-30 grayscale'">
+                    <div class="aspect-card rounded-[24px] p-8 relative overflow-hidden border border-white/10 shadow-2xl bg-gradient-to-br from-emerald-900 via-zinc-950 to-black holo-sheen">
                         <div class="relative z-10 flex flex-col h-full justify-between">
                             <div class="flex justify-between items-start">
                                 <span class="px-3 py-1 bg-emerald-500/10 rounded-lg text-[9px] font-bold text-emerald-400 tracking-widest border border-emerald-500/20 uppercase">Emerald</span>
@@ -68,8 +66,8 @@
                     </div>
                 </div>
 
-                <div class="snap-center shrink-0 w-[86%] card-container" :class="activeIdx === 1 ? 'scale-100' : 'scale-[0.93] opacity-30 grayscale'">
-                    <div class="aspect-card rounded-[24px] p-8 relative overflow-hidden border border-white/10 shadow-2xl bg-gradient-to-br from-rose-950 via-zinc-950 to-black holo-sheen">
+                <div class="snap-center shrink-0 w-[86%] transition-all duration-500" :class="activeIdx === 1 ? 'scale-100' : 'scale-[0.93] opacity-30 grayscale'">
+                    <div class="aspect-card rounded-[24px] p-8 relative overflow-hidden border border-white/10 shadow-2xl bg-gradient-to-br from-rose-900 via-zinc-950 to-black holo-sheen">
                         <div class="relative z-10 flex flex-col h-full justify-between">
                             <div class="flex justify-between items-start">
                                 <span class="px-3 py-1 bg-rose-500/10 rounded-lg text-[9px] font-bold text-rose-400 tracking-widest border border-rose-500/20 uppercase">Ruby</span>
@@ -80,8 +78,8 @@
                     </div>
                 </div>
 
-                <div class="snap-center shrink-0 w-[86%] card-container" :class="activeIdx === 2 ? 'scale-100' : 'scale-[0.93] opacity-30 grayscale'">
-                    <div class="aspect-card rounded-[24px] p-8 relative overflow-hidden border border-white/10 shadow-2xl bg-gradient-to-br from-sky-950 via-zinc-950 to-black holo-sheen">
+                <div class="snap-center shrink-0 w-[86%] transition-all duration-500" :class="activeIdx === 2 ? 'scale-100' : 'scale-[0.93] opacity-30 grayscale'">
+                    <div class="aspect-card rounded-[24px] p-8 relative overflow-hidden border border-white/10 shadow-2xl bg-gradient-to-br from-sky-900 via-zinc-950 to-black holo-sheen">
                         <div class="relative z-10 flex flex-col h-full justify-between">
                             <div class="flex justify-between items-start">
                                 <span class="px-3 py-1 bg-sky-500/10 rounded-lg text-[9px] font-bold text-sky-400 tracking-widest border border-sky-500/20 uppercase">Diamond</span>
@@ -94,44 +92,36 @@
             </div>
         </div>
 
-        <div class="flex-1 bg-surface rounded-t-[48px] border-t border-white/[0.08] shadow-[0_-20px_60px_rgba(0,0,0,0.8)] px-8 pt-4 pb-44 overflow-y-auto no-scrollbar">
-            
-            <nav class="flex bg-black p-1.5 rounded-2xl border border-white/[0.05] mb-8 sticky top-0 z-40 backdrop-blur-md">
-                <button @click="setTab('dining', 0)" class="flex-1 py-3 text-[11px] font-bold tracking-wider transition-all rounded-xl" :class="activeTab === 'dining' ? 'bg-white text-black shadow-lg' : 'text-zinc-500'">DINING</button>
-                <button @click="setTab('stay', 1)" class="flex-1 py-3 text-[11px] font-bold tracking-wider transition-all rounded-xl" :class="activeTab === 'stay' ? 'bg-white text-black shadow-lg' : 'text-zinc-500'">STAY</button>
-                <button @click="setTab('wellness', 2)" class="flex-1 py-3 text-[11px] font-bold tracking-wider transition-all rounded-xl" :class="activeTab === 'wellness' ? 'bg-white text-black shadow-lg' : 'text-zinc-500'">WELLNESS</button>
+        <div class="flex-1 bg-surface rounded-t-[48px] border-t border-white/[0.08] px-8 pt-4 pb-44 overflow-y-auto no-scrollbar shadow-2xl">
+            <nav class="flex bg-black p-1.5 rounded-2xl border border-white/[0.05] my-6 sticky top-0 z-40 backdrop-blur-md">
+                <button @click="setTab('dining', 0)" class="flex-1 py-3 text-xs font-bold transition-all rounded-xl" :class="activeTab === 'dining' ? 'bg-white text-black' : 'text-zinc-500'">Dining</button>
+                <button @click="setTab('stay', 1)" class="flex-1 py-3 text-xs font-bold transition-all rounded-xl" :class="activeTab === 'stay' ? 'bg-white text-black' : 'text-zinc-500'">Stay</button>
+                <button @click="setTab('wellness', 2)" class="flex-1 py-3 text-xs font-bold transition-all rounded-xl" :class="activeTab === 'wellness' ? 'bg-white text-black' : 'text-zinc-500'">Wellness</button>
             </nav>
 
-            <div class="flex items-center gap-5 mb-8">
-                <div class="p-4 rounded-2xl bg-zinc-900/50 border border-white/[0.1]" :class="getAccentColor()">
-                    <i :data-lucide="getTabIcon()" class="w-6 h-6"></i>
+            <div class="flex items-center gap-4 mb-8">
+                <div class="p-3.5 rounded-2xl bg-zinc-900 border border-white/[0.1]" :class="getAccentColor()">
+                    <i :data-lucide="getTabIcon()" class="w-5 h-5"></i>
                 </div>
-                <div class="space-y-1">
-                    <p class="text-[10px] text-zinc-500 font-bold uppercase tracking-[0.2em]">Tier Privileges</p>
-                    <h3 class="text-xl font-bold" x-text="getTabName()"></h3>
-                </div>
+                <h3 class="text-xl font-bold" x-text="getTabName()"></h3>
             </div>
 
-            <div class="space-y-5 pb-10">
+            <div class="space-y-4">
                 <template x-for="(benefit, i) in currentBenefits" :key="benefit">
-                    <div class="flex items-start gap-5 transition-all" x-transition:enter="opacity-0 translate-y-3" :style="`transition-delay: ${i * 60}ms`">
-                        <div class="mt-1.5 shrink-0 p-0.5 rounded-full border border-white/10" :class="getAccentColor()">
-                            <i data-lucide="check" class="w-3 h-3"></i>
-                        </div>
-                        <span class="text-[14px] font-medium text-zinc-300 leading-relaxed" x-text="benefit"></span>
+                    <div class="flex items-start gap-4 p-4 bg-black/40 border border-white/5 rounded-2xl transition-all" x-transition:enter="opacity-0 translate-y-4">
+                        <i data-lucide="check" class="w-4 h-4 mt-0.5" :class="getAccentColor()"></i>
+                        <span class="text-[14px] text-zinc-300 font-medium leading-relaxed" x-text="benefit"></span>
                     </div>
                 </template>
-                <div class="pt-6 border-t border-white/5 text-center">
-                    [span_4](start_span)[span_5](start_span)[span_6](start_span)<p class="text-[11px] text-zinc-600 font-medium">All tiers include 25% Off Laundry & Complimentary Spouse Card[span_4](end_span)[span_5](end_span)[span_6](end_span)</p>
-                </div>
+                <p class="text-center text-[11px] text-zinc-600 pt-6">All tiers include 25% Off Laundry & Complimentary Spouse Card</p>
             </div>
         </div>
 
-        <div class="fixed bottom-0 left-0 right-0 p-8 pt-4 bg-gradient-to-t from-black via-black/98 to-transparent z-50 max-w-[430px] mx-auto">
-            <div class="flex justify-between items-end mb-6 px-1">
+        <div class="fixed bottom-0 left-0 right-0 p-8 pt-4 bg-gradient-to-t from-black via-black/95 to-transparent z-50 max-w-[430px] mx-auto">
+            <div class="flex justify-between items-end mb-5 px-1">
                 <div class="space-y-0.5">
                     <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Investment</p>
-                    <p class="text-2xl font-black tracking-tighter tabular-nums" x-text="getTierPrice()"></p>
+                    <p class="text-2xl font-black tracking-tighter" x-text="getTierPrice()"></p>
                 </div>
                 <div class="flex gap-2 mb-2">
                     <template x-for="i in 3">
@@ -139,7 +129,7 @@
                     </template>
                 </div>
             </div>
-            <button @click="vibrate(15)" class="w-full h-16 rounded-2xl font-bold text-[15px] flex items-center justify-center gap-3 transition-all active:scale-[0.96] shadow-2xl" :class="getButtonClass()">
+            <button class="w-full h-16 rounded-[22px] font-bold text-[15px] flex items-center justify-center gap-3 transition-all active:scale-[0.96] shadow-xl" :class="getButtonClass()">
                 Apply for Membership
                 <i data-lucide="arrow-right" class="w-5 h-5"></i>
             </button>
@@ -152,33 +142,33 @@
                 activeIdx: 1, activeTab: 'dining', currentBenefits: [],
                 membershipData: {
                     emerald: {
-                        price: "LKR 50,000/-",
-                        [span_7](start_span)dining: ["Up to 50% off food[span_7](end_span)[span_8](start_span)", "10% Off Weekday Lunch @ Quizine[span_8](end_span)[span_9](start_span)", "20% off Beverages[span_9](end_span)[span_10](start_span)", "Buffet Experience for Two[span_10](end_span)[span_11](start_span)", "Afternoon Tea Experience for Two[span_11](end_span)[span_12](start_span)", "One Exclusive Bottle of Selected Wine[span_12](end_span)[span_13](start_span)", "LKR 4,000 F&B Wellness Credit[span_13](end_span)"],
-                        [span_14](start_span)stay: ["Stay 2 nights, get the 3rd free[span_14](end_span)[span_15](start_span)", "50% off BAR for Rooms[span_15](end_span)[span_16](start_span)", "Upgrade: Standard City View to Ocean View[span_16](end_span)"],
-                        [span_17](start_span)wellness: ["20% off Wellness Preferred Rate[span_17](end_span)[span_18](start_span)", "15% Off Wellness Treatments for Two[span_18](end_span)[span_19](start_span)", "5% off Wellness Retail Purchases[span_19](end_span)"]
+                        [span_0](start_span)price: "LKR 50,000/-[span_0](end_span)",
+                        [span_1](start_span)dining: ["Up to 50% off food[span_1](end_span)[span_2](start_span)", "10% Off Weekday Lunch @ Quizine[span_2](end_span)[span_3](start_span)", "Buffet Experience for Two[span_3](end_span)[span_4](start_span)", "Afternoon Tea Experience for Two[span_4](end_span)[span_5](start_span)", "4,000 F&B Wellness Credit[span_5](end_span)"],
+                        [span_6](start_span)stay: ["Stay 2 nights and get the 3rd night free[span_6](end_span)[span_7](start_span)", "50% off BAR for Rooms[span_7](end_span)[span_8](start_span)", "City View to Ocean View Upgrade[span_8](end_span)"],
+                        [span_9](start_span)wellness: ["20% off Wellness Preferred Rate[span_9](end_span)[span_10](start_span)", "15% Off for Wellness Treatments for Two[span_10](end_span)[span_11](start_span)", "Complimentary Spouse Card[span_11](end_span)"]
                     },
                     ruby: {
-                        price: "LKR 125,000/-",
-                        [span_20](start_span)dining: ["Up to 50% off food[span_20](end_span)[span_21](start_span)", "10% Off Weekday Lunch @ Quizine[span_21](end_span)[span_22](start_span)", "20% off Beverages[span_22](end_span)", "Buffet for Two | [span_23](start_span)Afternoon Tea for Two[span_23](end_span)[span_24](start_span)", "Exclusive Bottle of Selected Wine[span_24](end_span)[span_25](start_span)", "LKR 4,000 F&B Wellness Credit[span_25](end_span)"],
-                        [span_26](start_span)stay: ["Deluxe Room & Breakfast for Two[span_26](end_span)[span_27](start_span)", "Unlimited Accommodation Upgrade[span_27](end_span)[span_28](start_span)", "Stay 2 nights, get the 3rd free[span_28](end_span)[span_29](start_span)", "LKR 10,000 Room Credit[span_29](end_span)[span_30](start_span)", "Pool access for Two[span_30](end_span)"],
-                        [span_31](start_span)wellness: ["Nature's Symphony 60min massage[span_31](end_span)[span_32](start_span)", "30% off Wellness Preferred Rate[span_32](end_span)[span_33](start_span)", "20% Off Wellness Treatments for Two[span_33](end_span)[span_34](start_span)", "15% off Wellness Retail Purchases[span_34](end_span)"]
+                        [span_12](start_span)price: "LKR 125,000/-[span_12](end_span)",
+                        [span_13](start_span)dining: ["20% off Beverages[span_13](end_span)[span_14](start_span)", "Exclusive Bottle of Selected Wine[span_14](end_span)[span_15](start_span)", "4,000 F&B Wellness Credit[span_15](end_span)"],
+                        [span_16](start_span)stay: ["Stay 2 nights and get the 3rd free[span_16](end_span)[span_17](start_span)", "LKR 10,000 Room Credit[span_17](end_span)[span_18](start_span)", "Nature's Symphony 60min massage[span_18](end_span)"],
+                        [span_19](start_span)wellness: ["30% off Wellness Preferred Rate[span_19](end_span)[span_20](start_span)", "20% Off Wellness Treatments for Two[span_20](end_span)[span_21](start_span)", "Complimentary Spouse Card[span_21](end_span)"]
                     },
                     diamond: {
-                        price: "LKR 425,000/-",
-                        [span_35](start_span)dining: ["Up to 50% off food[span_35](end_span)[span_36](start_span)", "20% Off at Cloud Wine[span_36](end_span)[span_37](start_span)", "Afternoon Tea at GATZ[span_37](end_span)[span_38](start_span)", "One Exclusive Bottle of Selected Wine[span_38](end_span)[span_39](start_span)", "Party Voucher[span_39](end_span)[span_40](start_span)", "Member for a Day Pass[span_40](end_span)"],
-                        [span_41](start_span)stay: ["Complimentary Oceanscape Suite + Breakfast[span_41](end_span)[span_42](start_span)", "Stay 2 nights, get the 3rd free[span_42](end_span)[span_43](start_span)", "Premier Life Ocean View to Suite Upgrade[span_43](end_span)[span_44](start_span)", "50% off BAR for Rooms[span_44](end_span)[span_45](start_span)", "City View to Ocean View Upgrade[span_45](end_span)"],
-                        [span_46](start_span)wellness: ["Priority Booking Status[span_46](end_span)[span_47](start_span)", "Full Spa Privileges[span_47](end_span)[span_48](start_span)", "Spouse Card Included[span_48](end_span)"]
+                        [span_22](start_span)price: "LKR 425,000/-[span_22](end_span)",
+                        [span_23](start_span)dining: ["20% Off at Cloud Wine[span_23](end_span)[span_24](start_span)", "Exclusive Bottle of Selected Wine[span_24](end_span)[span_25](start_span)", "Party Voucher[span_25](end_span)"],
+                        stay: ["Comp. [span_26](start_span)Oceanscape Suite + Breakfast[span_26](end_span)[span_27](start_span)", "Premier Life Ocean View to Suite Upgrade[span_27](end_span)[span_28](start_span)", "Stay 2 nights and get the 3rd free[span_28](end_span)"],
+                        [span_29](start_span)wellness: ["Full Spa Privileges[span_29](end_span)[span_30](start_span)", "Complimentary Spouse Card[span_30](end_span)"]
                     }
                 },
                 init() { lucide.createIcons(); this.updateBenefits(); setTimeout(() => this.scrollTo(1), 200); },
                 handleScroll(e) {
-                    const index = Math.round(e.target.scrollLeft / (e.target.offsetWidth * 0.86));
-                    if (this.activeIdx !== index && index >= 0 && index <= 2) {
-                        this.activeIdx = index; this.updateBenefits(); this.vibrate(12);
+                    const idx = Math.round(e.target.scrollLeft / (e.target.offsetWidth * 0.86));
+                    if (this.activeIdx !== idx && idx >= 0 && idx <= 2) {
+                        this.activeIdx = idx; this.updateBenefits(); if (navigator.vibrate) navigator.vibrate(8);
                     }
                 },
                 scrollTo(idx) { this.$refs.carousel.scrollTo({ left: this.$refs.carousel.children[idx].offsetLeft - 32, behavior: 'smooth' }); },
-                setTab(tab) { this.activeTab = tab; this.updateBenefits(); this.vibrate(8); },
+                setTab(tab) { this.activeTab = tab; this.updateBenefits(); },
                 updateBenefits() {
                     const tier = ['emerald', 'ruby', 'diamond'][this.activeIdx];
                     this.currentBenefits = this.membershipData[tier][this.activeTab];
@@ -189,11 +179,10 @@
                 getTabIcon() { return {dining: 'utensils-crossed', stay: 'bed-double', wellness: 'sparkles'}[this.activeTab]; },
                 getAccentColor() { return this.activeIdx === 0 ? 'text-emerald-400' : this.activeIdx === 1 ? 'text-rose-400' : 'text-sky-400'; },
                 getButtonClass() {
-                    if (this.activeIdx === 0) return 'bg-emerald-400 text-black shadow-lg';
-                    if (this.activeIdx === 1) return 'bg-rose-400 text-black shadow-lg';
-                    return 'bg-sky-400 text-black shadow-lg';
-                },
-                vibrate(ms) { if (navigator.vibrate) navigator.vibrate(ms); }
+                    if (this.activeIdx === 0) return 'bg-emerald-400 text-black';
+                    if (this.activeIdx === 1) return 'bg-rose-400 text-black shadow-rose-900/20';
+                    return 'bg-sky-400 text-black shadow-sky-900/20';
+                }
             }
         }
     </script>
