@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Cinnamon Life Membership</title>
+  <title>Cinnamon Life | LIFE Membership</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -13,16 +13,19 @@
         extend: {
           colors: {
             background: "#000000",
-            surface: "#0C0C0C",
             emerald: "#10b981",
             ruby: "#f43f5e",
-            diamond: "#38bdf8"
-          }
+            diamond: "#38bdf8",
+            zinc: { 950: "#09090b" }
+          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          borderRadius: { 'apple': '2.5rem' }
         }
       }
     }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -31,37 +34,66 @@
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .snap-x { scroll-snap-type: x mandatory; }
     .snap-center { scroll-snap-align: center; }
-    .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    
+    /* Premium Glassmorphism */
+    .glass-panel {
+      background: rgba(15, 15, 15, 0.7);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Subtle Animated Glow */
+    .glow-bg {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 150%; height: 50%;
+      background: radial-gradient(circle, var(--tw-gradient-from) 0%, transparent 70%);
+      opacity: 0.15;
+      filter: blur(80px);
+      z-index: 0;
+      transition: all 1s ease;
+    }
   </style>
 </head>
 
-<body class="bg-black text-white font-sans antialiased overflow-hidden">
+<body class="bg-black text-white antialiased overflow-hidden">
 
-<div x-data="lifeApp()" x-cloak class="max-w-[430px] mx-auto h-screen flex flex-col relative">
+<div x-data="lifeApp()" x-cloak class="max-w-[430px] mx-auto h-screen flex flex-col relative bg-zinc-950">
+  
+  <div class="glow-bg" :class="tiers[activeIdx].glowClass"></div>
 
-  <header class="pt-16 px-8 pb-6 space-y-1">
-    <p class="text-[10px] font-bold tracking-[0.3em] text-zinc-500 uppercase">City of Dreams</p>
-    <h1 class="text-3xl font-extrabold tracking-tight">LIFE Membership</h1>
+  <header class="relative z-10 pt-16 px-8 pb-4 flex justify-between items-end">
+    <div class="space-y-1">
+      <p class="text-[10px] font-bold tracking-[0.4em] text-zinc-500 uppercase">City of Dreams</p>
+      <h1 class="text-3xl font-black tracking-tight">LIFE <span class="text-zinc-500 font-light">Membership</span></h1>
+    </div>
+    <div class="h-10 w-10 rounded-full border border-white/10 bg-white/5 flex items-center justify-center">
+      <i data-lucide="bell" class="w-5 h-5 text-zinc-400"></i>
+    </div>
   </header>
 
-  <div class="relative overflow-visible mb-4">
+  <div class="relative z-10 py-4">
     <div x-ref="carousel" @scroll.debounce.10ms="handleScroll"
-      class="flex gap-4 px-8 pb-4 overflow-x-auto no-scrollbar snap-x">
+      class="flex gap-4 px-8 pb-6 overflow-x-auto no-scrollbar snap-x">
       
       <template x-for="(tier, index) in tiers" :key="tier.name">
-        <div class="snap-center shrink-0 w-[85%]">
-          <div :class="activeIdx === index ? 'opacity-100 scale-100 border-white/20' : 'opacity-40 scale-95 border-white/5'" 
-               class="transition-all duration-500 aspect-[1.586/1] rounded-[32px] p-8 relative overflow-hidden border bg-gradient-to-br from-zinc-900 to-black shadow-2xl">
+        <div class="snap-center shrink-0 w-[86%]">
+          <div :class="activeIdx === index ? 'scale-100 border-white/20' : 'scale-90 opacity-30 grayscale border-transparent'" 
+               class="transition-all duration-700 aspect-[1.586/1] rounded-[32px] p-8 relative overflow-hidden border bg-gradient-to-br from-zinc-900 to-black shadow-2xl">
             
             <div class="flex justify-between items-start mb-12">
-              <div class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-white/5 border border-white/10"
-                   :class="tier.colorClass" x-text="tier.name"></div>
-              <i :data-lucide="tier.icon" class="w-6 h-6" :class="tier.colorClass"></i>
+              <div class="flex flex-col">
+                <span class="text-[9px] font-black tracking-[0.2em] text-zinc-500 uppercase mb-1">Status Tier</span>
+                <span class="text-lg font-bold uppercase tracking-widest" :class="tier.textClass" x-text="tier.name"></span>
+              </div>
+              <i :data-lucide="tier.icon" class="w-8 h-8" :class="tier.textClass"></i>
             </div>
             
             <div class="mt-auto">
-              <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Annual Investment</p>
-              <p class="text-3xl font-extrabold tracking-tighter" x-text="tier.price"></p>
+              <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-0.5">Investment</p>
+              <p class="text-3xl font-black tracking-tighter" x-text="'LKR ' + tier.price"></p>
             </div>
           </div>
         </div>
@@ -69,37 +101,43 @@
     </div>
   </div>
 
-  <div class="flex-1 bg-surface rounded-t-[48px] border-t border-white/10 px-8 pt-8 overflow-y-auto no-scrollbar pb-40">
+  <div class="flex-1 glass-panel rounded-t-apple relative z-20 px-8 pt-8 overflow-y-auto no-scrollbar pb-44">
     
-    <div class="flex p-1 bg-black rounded-2xl mb-8 border border-white/5">
+    <nav class="flex p-1 bg-black/50 rounded-2xl mb-8 border border-white/5">
       <template x-for="tab in ['Dining','Stay','More']">
         <button @click="activeTab = tab" 
-          :class="activeTab === tab ? 'bg-zinc-800 text-white' : 'text-zinc-500'"
-          class="flex-1 py-3 text-xs font-bold rounded-xl transition-all"
+          :class="activeTab === tab ? 'bg-white text-black shadow-lg scale-[1.02]' : 'text-zinc-500'"
+          class="flex-1 py-3 text-[11px] font-black uppercase tracking-widest rounded-xl transition-all duration-500"
           x-text="tab"></button>
       </template>
-    </div>
+    </nav>
 
-    <div class="space-y-3">
-      <template x-for="item in activeBenefits" :key="item">
-        <div class="flex gap-4 p-4 rounded-2xl glass transition-all active:scale-[0.98]">
-          <i data-lucide="check" class="w-4 h-4 mt-0.5 shrink-0" :class="tiers[activeIdx].colorClass"></i>
-          <p class="text-[14px] text-zinc-300 font-medium leading-relaxed" x-text="item"></p>
+    <div class="space-y-4">
+      <template x-for="benefit in activeBenefits" :key="benefit">
+        <div class="group flex gap-5 p-5 rounded-[24px] bg-white/[0.03] border border-white/5 hover:bg-white/[0.06] transition-all">
+          <div class="mt-1 flex-shrink-0">
+            <div class="w-6 h-6 rounded-full border border-white/10 flex items-center justify-center">
+                <i data-lucide="check" class="w-3 h-3" :class="tiers[activeIdx].textClass"></i>
+            </div>
+          </div>
+          <p class="text-[14px] text-zinc-200 font-medium leading-relaxed group-hover:text-white transition-colors" x-text="benefit"></p>
         </div>
       </template>
     </div>
 
-    <p class="mt-10 text-center text-[11px] text-zinc-600 font-bold uppercase tracking-tighter leading-relaxed">
-      [span_0](start_span)[span_1](start_span)[span_2](start_span)Includes 25% Off Laundry & Dry Cleaning[span_0](end_span)[span_1](end_span)[span_2](end_span)<br>
-      [span_3](start_span)[span_4](start_span)Complimentary Spouse Card Included[span_3](end_span)[span_4](end_span)
-    </p>
+    <div class="mt-10 p-6 rounded-3xl bg-zinc-900/50 border border-zinc-800/50 text-center">
+        <p class="text-[10px] text-zinc-500 font-black uppercase tracking-[0.2em] mb-3">Universal Lifestyle Privileges</p>
+        <p class="text-[12px] text-zinc-400 font-medium leading-relaxed">
+            25% OFF LAUNDRY & DRY CLEANING • COMPLIMENTARY SPOUSE CARD • EXCLUSIVE ACCESS TO CITY OF DREAMS EVENTS
+        </p>
+    </div>
   </div>
 
-  <footer class="fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto px-8 pb-10 pt-6 bg-gradient-to-t from-black via-black/90 to-transparent">
-    <button class="w-full h-16 rounded-[24px] font-bold text-[16px] transition-all active:scale-95 flex items-center justify-center gap-2 shadow-2xl"
+  <footer class="fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto px-8 pb-12 pt-6 glass-panel z-30">
+    <button class="w-full h-16 rounded-[22px] font-bold text-[15px] flex items-center justify-center gap-3 transition-all active:scale-[0.96] shadow-2xl"
       :class="tiers[activeIdx].btnClass">
-      Apply for Membership
-      <i data-lucide="chevron-right" class="w-5 h-5"></i>
+      Apply for <span x-text="tiers[activeIdx].name"></span> Membership
+      <i data-lucide="arrow-right" class="w-5 h-5"></i>
     </button>
   </footer>
 
@@ -115,31 +153,34 @@ function lifeApp() {
         name: 'Emerald',
         price: '50,000/-',
         icon: 'gem',
-        colorClass: 'text-emerald',
+        textClass: 'text-emerald',
         btnClass: 'bg-emerald text-black',
-        [span_5](start_span)Dining: ["Up to 50% off food[span_5](end_span)[span_6](start_span)", "10% Off Weekday Lunch @ Quizine[span_6](end_span)[span_7](start_span)", "20% off Beverages[span_7](end_span)[span_8](start_span)", "Buffet Experience for Two[span_8](end_span)[span_9](start_span)", "Afternoon Tea for Two[span_9](end_span)[span_10](start_span)", "4,000 F&B Wellness Credit[span_10](end_span)"],
-        [span_11](start_span)Stay: ["Stay 2 nights, get 3rd free[span_11](end_span)[span_12](start_span)", "50% off BAR for Rooms[span_12](end_span)[span_13](start_span)", "Upgrade: City to Ocean View[span_13](end_span)"],
-        [span_14](start_span)More: ["25% Off Laundry[span_14](end_span)[span_15](start_span)", "20% off Wellness Rates[span_15](end_span)[span_16](start_span)", "15% Off Wellness Treatments[span_16](end_span)"]
+        glowClass: 'from-emerald',
+        Dining: ["Up to 50% off food", "10% Off Weekday Lunch @ Quizine", "20% off Beverages", "Buffet Experience for Two", "Afternoon Tea for Two", "One Bottle of Selected Wine", "4,000 F&B Wellness Credit", "\"Member for a Day\" Pass"],
+        Stay: ["Stay 2 nights, get 3rd free", "50% off BAR for Rooms", "Upgrade: City to Ocean View"],
+        More: ["20% off Wellness Rates", "15% Off Wellness Treatments", "5% off Wellness Retail"]
       },
       {
         name: 'Ruby',
         price: '125,000/-',
         icon: 'crown',
-        colorClass: 'text-ruby',
+        textClass: 'text-ruby',
         btnClass: 'bg-ruby text-white',
-        [span_17](start_span)Dining: ["Up to 50% off food[span_17](end_span)[span_18](start_span)", "20% off Beverages[span_18](end_span)[span_19](start_span)", "Exclusive Wine Bottle[span_19](end_span)[span_20](start_span)", "4,000 F&B Wellness Credit[span_20](end_span)"],
-        [span_21](start_span)Stay: ["Deluxe Room & Breakfast for Two[span_21](end_span)[span_22](start_span)", "60min Nature's Symphony Massage[span_22](end_span)[span_23](start_span)", "LKR 10,000 Room Credit[span_23](end_span)[span_24](start_span)", "Pool Access for Two[span_24](end_span)"],
-        [span_25](start_span)More: ["30% off Wellness Rates[span_25](end_span)[span_26](start_span)", "20% Off Wellness Treatments[span_26](end_span)[span_27](start_span)", "Complimentary Spouse Card[span_27](end_span)"]
+        glowClass: 'from-ruby',
+        Dining: ["Up to 50% off food", "20% off Beverages", "Exclusive Wine Bottle", "Buffet & Afternoon Tea for Two", "4,000 F&B Wellness Credit", "\"Member for a Day\" Pass"],
+        Stay: ["Deluxe Room & Breakfast for Two", "LKR 10,000 Room Credit", "Nature's Symphony 60min Massage", "Pool Access for Two", "Unlimited Upgrade Option"],
+        More: ["30% off Wellness Rates", "20% Off Wellness Treatments", "15% off Wellness Retail"]
       },
       {
         name: 'Diamond',
         price: '425,000/-',
         icon: 'sparkles',
-        colorClass: 'text-diamond',
+        textClass: 'text-diamond',
         btnClass: 'bg-diamond text-black',
-        [span_28](start_span)Dining: ["20% Off F&B at Cloud Wine[span_28](end_span)[span_29](start_span)", "Afternoon Tea @ GATZ[span_29](end_span)[span_30](start_span)", "Exclusive Party Voucher[span_30](end_span)"],
-        [span_31](start_span)Stay: ["Oceanscape Suite & Breakfast[span_31](end_span)[span_32](start_span)", "Premier Life Ocean View to Suite Upgrade[span_32](end_span)[span_33](start_span)", "Stay 2 nights, get 3rd free[span_33](end_span)"],
-        More: ["Full VIP Lifestyle Concierge", "Complimentary Spouse Card", "25% Off Laundry"]
+        glowClass: 'from-diamond',
+        Dining: ["20% Off F&B at Cloud Wine", "Party Voucher included", "Afternoon Tea at GATZ", "Up to 50% off food", "Buffet for Two", "Exclusive Wine Bottle"],
+        Stay: ["Complimentary Oceanscape Suite", "Premier Life Ocean View to Suite Upgrade", "City to Ocean View Upgrade", "Stay 2 nights, get 3rd free", "50% off BAR for Rooms"],
+        More: ["VIP Lifestyle Concierge", "Full Wellness Access", "Priority Booking Priority"]
       }
     ],
     get activeBenefits() { return this.tiers[this.activeIdx][this.activeTab]; },
