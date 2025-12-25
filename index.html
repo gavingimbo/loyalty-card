@@ -45,9 +45,10 @@
             top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: -1;
             background: 
-                radial-gradient(circle at 15% 50%, rgba(20, 83, 45, 0.1), transparent 40%), 
-                radial-gradient(circle at 85% 30%, rgba(120, 53, 15, 0.08), transparent 40%);
-            filter: blur(100px);
+                radial-gradient(circle at 10% 20%, rgba(20, 83, 45, 0.08), transparent 40%), 
+                radial-gradient(circle at 90% 60%, rgba(120, 53, 15, 0.06), transparent 40%);
+            filter: blur(120px);
+            transition: opacity 1s ease;
         }
 
         /* --- COMPONENTS --- */
@@ -65,7 +66,7 @@
         
         .spatial-card:hover {
             border-color: rgba(255,255,255,0.2);
-            box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5);
+            box-shadow: 0 30px 60px -10px rgba(0,0,0,0.6);
         }
 
         .card-content { transform: translateZ(20px); }
@@ -74,12 +75,12 @@
         .float-layer {
             position: absolute;
             border-radius: 20px;
-            /* High Blur for "Front" feel */
-            background: rgba(15, 15, 15, 0.7); 
+            /* Heavy Blur for "Front" feel */
+            background: rgba(18, 18, 18, 0.85); 
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255,255,255,0.15);
-            box-shadow: 0 40px 80px -12px rgba(0,0,0,0.9);
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 40px 80px -12px rgba(0,0,0,1);
         }
 
         /* Animations */
@@ -89,7 +90,19 @@
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
+            50% { transform: translateY(-12px); }
+        }
+
+        /* Image Masking */
+        .hero-mask {
+            mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+        }
+        @media(min-width: 1024px) {
+            .hero-mask {
+                mask-image: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
+                -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
+            }
         }
 
         /* Text FX */
@@ -98,7 +111,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-size: 200%;
-            animation: shine 5s linear infinite;
+            animation: shine 6s linear infinite;
         }
         @keyframes shine { to { background-position: 200%; } }
 
@@ -118,9 +131,11 @@
         }
         .input-minimal:focus { border-color: #fff; padding-left: 10px; }
 
-        .max-w-grid { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        /* Layout Standards */
+        .layout-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        @media(min-width: 1024px) { .layout-container { padding: 0 48px; } }
         
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
         /* Nav Capsule */
@@ -128,8 +143,8 @@
             position: fixed;
             top: 32px; left: 50%;
             transform: translateX(-50%);
-            padding: 10px 10px 10px 24px;
-            background: rgba(10, 10, 10, 0.7);
+            padding: 12px 12px 12px 28px;
+            background: rgba(10, 10, 10, 0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255,255,255,0.1);
@@ -140,7 +155,7 @@
             justify-content: space-between;
             width: 90%;
             max-width: 520px;
-            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.8);
+            box-shadow: 0 20px 50px -10px rgba(0,0,0,0.8);
         }
     </style>
 </head>
@@ -151,112 +166,128 @@
 
     <nav class="nav-capsule">
         <div class="flex flex-col leading-none">
-            <span class="text-[9px] uppercase tracking-[0.2em] text-white/40 font-bold">Cinnamon Life</span>
+            <span class="text-[9px] uppercase tracking-[0.25em] text-white/40 font-bold">Cinnamon Life</span>
             <span class="text-sm serif italic text-white/90">City of Dreams</span>
         </div>
-        <div class="flex items-center gap-6">
+        <div class="flex items-center gap-8">
             <a href="#collection" class="hidden md:block text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Tiers</a>
             <a href="#app" class="hidden md:block text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">App</a>
-            <button class="bg-white text-black px-5 py-2.5 rounded-full text-[9px] font-bold uppercase tracking-widest hover:scale-105 transition-transform">
+            <button class="bg-white text-black px-6 py-2.5 rounded-full text-[9px] font-bold uppercase tracking-widest hover:scale-105 transition-transform">
                 Login
             </button>
         </div>
     </nav>
 
-    <header class="min-h-screen flex items-center justify-center relative overflow-hidden">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] border border-white/5 rounded-full opacity-30 animate-[spin_60s_linear_infinite]"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[40vw] border border-white/5 rounded-full opacity-20 animate-[spin_40s_linear_infinite_reverse]"></div>
+    <header class="min-h-screen flex items-center pt-24 pb-20 relative overflow-hidden">
+        <div class="layout-container w-full grid lg:grid-cols-2 gap-16 items-center">
+            
+            <div class="reveal relative z-10 order-2 lg:order-1 text-center lg:text-left">
+                <div class="inline-flex items-center gap-3 border border-white/10 rounded-full px-4 py-2 bg-white/5 backdrop-blur-md mb-10">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-white/80 font-bold">Membership 2025</span>
+                </div>
+                
+                <h1 class="text-6xl md:text-8xl lg:text-9xl font-light tracking-tighter leading-[0.9] mb-10">
+                    The<br>
+                    <span class="serif italic text-white/50">Sovereign</span><br>
+                    Collection
+                </h1>
+                
+                <p class="text-white/40 text-lg font-light max-w-lg mx-auto lg:mx-0 leading-relaxed mb-12">
+                    A curated passage into the City of Dreams. Unlock culinary mastery, sanctuary upgrades, and bespoke access through a single digital key.
+                </p>
 
-        <div class="max-w-grid text-center relative z-10 reveal">
-            <div class="inline-flex items-center gap-2 border border-white/10 rounded-full px-4 py-1.5 bg-white/5 backdrop-blur-md mb-8">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="text-[9px] uppercase tracking-widest text-white/80 font-semibold">Membership 2025</span>
+                <div class="flex flex-col lg:flex-row items-center gap-6">
+                    <a href="#collection" class="bg-white text-black px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] hover:scale-105 transition-transform">
+                        Explore Access
+                    </a>
+                </div>
             </div>
-            
-            <h1 class="text-6xl md:text-9xl font-light tracking-tighter leading-[0.9] mb-8">
-                The<br>
-                <span class="serif italic text-white/50">Sovereign</span><br>
-                Collection
-            </h1>
-            
-            <p class="text-white/40 text-lg font-light max-w-lg mx-auto leading-relaxed mb-12">
-                A curated passage into the City of Dreams. Unlock culinary mastery, sanctuary upgrades, and bespoke access through a single digital key.
-            </p>
 
-            <a href="#collection" class="group inline-flex flex-col items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-white/50 hover:text-white transition-colors">
-                <span>Explore Access</span>
-                <i class="ph ph-arrow-down text-lg group-hover:translate-y-2 transition-transform"></i>
-            </a>
+            <div class="reveal order-1 lg:order-2 relative h-[50vh] lg:h-[80vh] w-full flex items-center justify-center">
+                <div class="absolute inset-0 bg-gradient-to-tr from-emerald-900/20 to-transparent rounded-full blur-[100px]"></div>
+                
+                <div class="relative w-full h-full max-w-md lg:max-w-full hero-mask overflow-hidden rounded-[40px] border border-white/5 opacity-80">
+                    <img 
+                        src="https://images.unsplash.com/photo-1485627941502-d2e6429fa2b0?q=80&w=2070&auto=format&fit=crop" 
+                        alt="Architectural Abstract" 
+                        class="w-full h-full object-cover scale-110 animate-[pulse_10s_ease-in-out_infinite]"
+                        style="filter: grayscale(100%) contrast(120%) brightness(0.8);"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#020202] via-transparent to-transparent"></div>
+                </div>
+            </div>
+
         </div>
     </header>
 
     <section id="collection" class="py-32 relative z-10">
-        <div class="max-w-grid">
+        <div class="layout-container">
             <div class="grid lg:grid-cols-3 gap-8 perspective-container">
                 
-                <div class="spatial-card p-10 min-h-[550px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="5">
+                <div class="spatial-card p-10 min-h-[580px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="3">
                     <div class="card-content">
                         <div class="flex justify-between items-start mb-12">
                             <span class="text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase">Foundation</span>
-                            <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
+                            <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.6)]"></div>
                         </div>
                         <h3 class="text-5xl serif italic text-emerald-400 mb-4">Emerald</h3>
                         <p class="text-sm text-white/40 leading-relaxed font-light">The essential key to culinary preference and extended sanctuaries.</p>
                     </div>
-                    <div class="card-content space-y-8">
+                    <div class="card-content space-y-10">
                         <ul class="space-y-4 pt-8 border-t border-white/5">
-                            <li class="flex items-center gap-3 text-xs text-white/70"><i class="ph-fill ph-check-circle text-emerald-500"></i> 3rd Night Complimentary</li>
-                            <li class="flex items-center gap-3 text-xs text-white/70"><i class="ph-fill ph-check-circle text-emerald-500"></i> 50% Dining Preference</li>
+                            <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-emerald-500"></i> 3rd Night Complimentary</li>
+                            <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-emerald-500"></i> 50% Dining Preference</li>
                         </ul>
                         <div class="flex justify-between items-end">
                             <div class="text-[9px] uppercase tracking-widest text-white/30">Annual Access</div>
                             <div class="text-xl font-bold">50,000 LKR</div>
                         </div>
-                        <button class="w-full py-4 border border-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors">Apply</button>
+                        <button class="w-full py-5 border border-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors">Apply</button>
                     </div>
                 </div>
 
-                <div class="spatial-card p-10 min-h-[550px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="5" style="transition-delay: 100ms;">
+                <div class="spatial-card p-10 min-h-[580px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="3" style="transition-delay: 100ms;">
                     <div class="card-content">
                         <div class="flex justify-between items-start mb-12">
                             <span class="text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase">Signature</span>
-                            <div class="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_10px_rgba(225,29,72,0.5)]"></div>
+                            <div class="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_15px_rgba(225,29,72,0.6)]"></div>
                         </div>
                         <h3 class="text-5xl serif italic text-rose-400 mb-4">Ruby</h3>
                         <p class="text-sm text-white/40 leading-relaxed font-light">Elevated immersion with residency credits and vital renewal therapies.</p>
                     </div>
-                    <div class="card-content space-y-8">
+                    <div class="card-content space-y-10">
                         <ul class="space-y-4 pt-8 border-t border-white/5">
-                            <li class="flex items-center gap-3 text-xs text-white/70"><i class="ph-fill ph-check-circle text-rose-500"></i> LKR 10,000 Room Credit</li>
-                            <li class="flex items-center gap-3 text-xs text-white/70"><i class="ph-fill ph-check-circle text-rose-500"></i> 60min Nature's Symphony</li>
+                            <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-rose-500"></i> LKR 10,000 Room Credit</li>
+                            <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-rose-500"></i> 60min Nature's Symphony</li>
                         </ul>
                         <div class="flex justify-between items-end">
                             <div class="text-[9px] uppercase tracking-widest text-white/30">Annual Access</div>
                             <div class="text-xl font-bold">125,000 LKR</div>
                         </div>
-                        <button class="w-full py-4 border border-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors">Apply</button>
+                        <button class="w-full py-5 border border-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors">Apply</button>
                     </div>
                 </div>
 
-                <div class="spatial-card p-10 min-h-[550px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="5" style="transition-delay: 200ms;">
+                <div class="spatial-card p-10 min-h-[580px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="3" style="transition-delay: 200ms;">
                     <div class="card-content">
                         <div class="flex justify-between items-start mb-12">
                             <span class="text-[9px] font-bold tracking-[0.2em] text-[#D4AF37] uppercase">Zenith</span>
-                            <div class="w-2 h-2 rounded-full bg-[#D4AF37] shadow-[0_0_15px_#D4AF37]"></div>
+                            <div class="w-2 h-2 rounded-full bg-[#D4AF37] shadow-[0_0_20px_#D4AF37]"></div>
                         </div>
                         <h3 class="text-5xl serif italic gold-shimmer mb-4">Diamond</h3>
                         <p class="text-sm text-white/40 leading-relaxed font-light">The ultimate sovereign privilege. Oceanscape suites and skyward access.</p>
                     </div>
-                    <div class="card-content space-y-8">
+                    <div class="card-content space-y-10">
                         <ul class="space-y-4 pt-8 border-t border-white/5">
-                            <li class="flex items-center gap-3 text-xs text-white/70"><i class="ph-fill ph-check-circle text-amber-400"></i> Oceanscape Suite Residency</li>
-                            <li class="flex items-center gap-3 text-xs text-white/70"><i class="ph-fill ph-check-circle text-amber-400"></i> Cloud Wine Access</li>
+                            <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-amber-400"></i> Oceanscape Suite Residency</li>
+                            <li class="flex items-center gap-4 text-xs text-white/70"><i class="ph-fill ph-check-circle text-amber-400"></i> Cloud Wine Access</li>
                         </ul>
                         <div class="flex justify-between items-end">
                             <div class="text-[9px] uppercase tracking-widest text-white/30">Annual Access</div>
                             <div class="text-xl font-bold text-[#D4AF37]">425,000 LKR</div>
                         </div>
-                        <button class="w-full py-4 bg-[#D4AF37] text-black rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-colors">Apply</button>
+                        <button class="w-full py-5 bg-[#D4AF37] text-black rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-colors">Apply</button>
                     </div>
                 </div>
 
@@ -264,17 +295,17 @@
         </div>
     </section>
 
-    <section id="app" class="py-32 border-t border-white/5 overflow-hidden">
-        <div class="max-w-grid grid lg:grid-cols-2 gap-20 items-center">
+    <section id="app" class="py-40 border-t border-white/5 overflow-hidden">
+        <div class="layout-container grid lg:grid-cols-2 gap-24 items-center">
             
             <div class="relative h-[600px] w-full flex items-center justify-center order-2 lg:order-1 reveal">
                 
-                <div class="absolute z-10 w-[260px] h-[400px] bg-black/40 border border-white/10 rounded-[24px] p-8 flex flex-col justify-between" style="transform: scale(0.95);">
+                <div class="absolute z-10 w-[280px] h-[440px] bg-[#0a0a0a] border border-white/10 rounded-[24px] p-8 flex flex-col justify-between transform scale-90 opacity-60 brightness-75 transition-transform duration-1000 hover:scale-95">
                     <div class="flex justify-between items-start">
                         <i class="ph ph-qr-code text-4xl text-white/20"></i>
                     </div>
                     <div>
-                        <h3 class="text-3xl serif italic text-white/30 leading-none">Emerald<br>Sovereign</h3>
+                        <h3 class="text-4xl serif italic text-white/30 leading-none">Emerald<br>Sovereign</h3>
                     </div>
                     <div class="pt-6 border-t border-white/5 flex justify-between text-[9px] uppercase tracking-widest text-white/20">
                         <span>Ref: 9942</span>
@@ -282,46 +313,56 @@
                     </div>
                 </div>
 
-                <div class="float-layer anim-float w-[240px] p-5 z-30 absolute top-10 right-0 lg:right-16">
+                <div class="float-layer anim-float w-[260px] p-6 z-30 absolute top-0 right-0 lg:right-10">
                     <div class="flex gap-4">
-                        <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center flex-shrink-0">
-                            <i class="ph-fill ph-chat-teardrop-text text-amber-400"></i>
+                        <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center flex-shrink-0 border border-white/10">
+                            <i class="ph-fill ph-chat-teardrop-text text-amber-400 text-xl"></i>
                         </div>
                         <div>
-                            <p class="text-[9px] font-bold uppercase text-white/40 mb-1">Concierge</p>
-                            <p class="text-xs text-white leading-snug">"Your reservation at GATZ is confirmed for 7 PM."</p>
+                            <p class="text-[9px] font-bold uppercase text-white/40 mb-1 tracking-widest">Concierge</p>
+                            <p class="text-xs text-white leading-relaxed">"Your reservation at GATZ is confirmed for 7 PM."</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="float-layer anim-float-reverse w-[200px] p-5 z-30 absolute bottom-32 left-0 lg:left-16">
-                    <p class="text-[9px] font-bold uppercase text-white/40 mb-3">Room Credit</p>
-                    <div class="h-1 w-full bg-white/10 rounded-full mb-2">
-                        <div class="h-1 w-[70%] bg-white rounded-full"></div>
+                <div class="float-layer anim-float-reverse w-[220px] p-6 z-30 absolute bottom-20 left-0 lg:left-10">
+                    <p class="text-[9px] font-bold uppercase text-white/40 mb-4 tracking-widest">Room Credit</p>
+                    <div class="h-1 w-full bg-white/10 rounded-full mb-3">
+                        <div class="h-1 w-[70%] bg-emerald-500 rounded-full shadow-[0_0_10px_#10b981]"></div>
                     </div>
-                    <p class="text-xs text-white text-right">LKR 75,000</p>
+                    <div class="flex justify-between items-end">
+                        <span class="text-[9px] text-white/30">Available</span>
+                        <p class="text-sm font-bold text-white">LKR 75,000</p>
+                    </div>
                 </div>
                 
-                <div class="absolute w-[300px] h-[300px] bg-emerald-900/20 rounded-full blur-3xl animate-pulse z-0"></div>
+                <div class="absolute w-[400px] h-[400px] bg-emerald-900/20 rounded-full blur-[80px] animate-pulse z-0"></div>
             </div>
 
-            <div class="order-1 lg:order-2 space-y-10 reveal text-center flex flex-col items-center">
-                <span class="text-[9px] font-bold tracking-[0.3em] uppercase text-emerald-500">The Digital Key</span>
+            <div class="order-1 lg:order-2 space-y-12 reveal text-center flex flex-col items-center">
+                <div class="inline-block">
+                    <span class="text-[9px] font-bold tracking-[0.3em] uppercase text-emerald-500">The Digital Key</span>
+                </div>
+                
                 <h2 class="text-5xl lg:text-7xl serif italic leading-[0.9] text-white">
                     Your world,<br>
                     <span class="text-white/40">synchronized.</span>
                 </h2>
+                
                 <p class="text-white/50 text-lg font-light leading-relaxed max-w-md mx-auto">
                     Seamlessly manage reservations, access your residency credits, and communicate with your dedicated lifestyle manager—all from a single, encrypted interface designed for the modern sovereign.
                 </p>
-                <div class="grid grid-cols-2 gap-12 pt-6 border-t border-white/5 w-full max-w-sm mx-auto">
-                    <div>
-                        <h4 class="text-lg text-white font-medium mb-1">Instant</h4>
-                        <p class="text-[10px] text-white/40 uppercase tracking-widest">Concierge Chat</p>
+                
+                <div class="grid grid-cols-2 gap-16 pt-8 border-t border-white/5 w-full max-w-sm mx-auto">
+                    <div class="flex flex-col items-center">
+                        <i class="ph ph-chat-centered-text text-2xl text-white mb-3"></i>
+                        <h4 class="text-sm font-medium text-white mb-1">Instant</h4>
+                        <p class="text-[9px] text-white/40 uppercase tracking-widest">Concierge Chat</p>
                     </div>
-                    <div>
-                        <h4 class="text-lg text-white font-medium mb-1">Secure</h4>
-                        <p class="text-[10px] text-white/40 uppercase tracking-widest">Digital Entry</p>
+                    <div class="flex flex-col items-center">
+                        <i class="ph ph-shield-check text-2xl text-white mb-3"></i>
+                        <h4 class="text-sm font-medium text-white mb-1">Secure</h4>
+                        <p class="text-[9px] text-white/40 uppercase tracking-widest">Digital Entry</p>
                     </div>
                 </div>
             </div>
@@ -329,10 +370,10 @@
         </div>
     </section>
 
-    <footer class="border-t border-white/10 bg-[#020202] relative z-10 pt-24 pb-12">
-        <div class="max-w-grid grid lg:grid-cols-4 gap-16 mb-12">
+    <footer class="border-t border-white/10 bg-[#020202] relative z-10 pt-24 pb-20">
+        <div class="layout-container grid lg:grid-cols-4 gap-16">
             
-            <div class="space-y-6">
+            <div class="space-y-8">
                 <div>
                     <h3 class="text-[10px] font-bold tracking-[0.3em] uppercase text-white mb-2">Cinnamon Life</h3>
                     <p class="serif italic text-white/50 text-2xl">City of Dreams</p>
@@ -346,12 +387,12 @@
                 <h4 class="text-[9px] font-bold tracking-[0.2em] uppercase text-white/30 mb-8">Private Concierge</h4>
                 <div class="space-y-6">
                     <div>
-                        <p class="text-[10px] text-white/40 mb-1 uppercase tracking-wider">Inquiries</p>
-                        <a href="#" class="text-white hover:text-emerald-400 transition-colors text-sm">+94 11 216 1111</a>
+                        <p class="text-[9px] text-white/40 mb-1 uppercase tracking-wider">Inquiries</p>
+                        <a href="#" class="text-white hover:text-emerald-400 transition-colors text-sm font-medium">+94 11 216 1111</a>
                     </div>
                     <div>
-                        <p class="text-[10px] text-white/40 mb-1 uppercase tracking-wider">Email</p>
-                        <a href="#" class="text-white hover:text-emerald-400 transition-colors text-sm">concierge@cinnamonlife.com</a>
+                        <p class="text-[9px] text-white/40 mb-1 uppercase tracking-wider">Email</p>
+                        <a href="#" class="text-white hover:text-emerald-400 transition-colors text-sm font-medium">concierge@cinnamonlife.com</a>
                     </div>
                 </div>
             </div>
@@ -364,16 +405,17 @@
                     <a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Diamond Access</a>
                     <a href="#" class="text-xs text-white/50 hover:text-white transition-colors mt-4">Member Login</a>
                 </nav>
-                <div class="mt-12 pt-8 border-t border-white/5">
-                    <p class="text-[9px] text-white/20 tracking-[0.2em] uppercase font-medium">
-                        © 2024 Cinnamon Hotels & Resorts.<br>All Rights Reserved.
+                
+                <div class="mt-16 pt-8 border-t border-white/5">
+                    <p class="text-[9px] text-white/20 tracking-[0.15em] uppercase leading-relaxed">
+                        © 2024 Cinnamon Hotels.<br>All Rights Reserved.
                     </p>
                 </div>
             </div>
 
             <div>
                 <h4 class="text-[9px] font-bold tracking-[0.2em] uppercase text-white/30 mb-8">The Inner Circle</h4>
-                <p class="text-xs text-white/40 mb-6 leading-relaxed">Receive curated invitations to our gala events and private viewings.</p>
+                <p class="text-xs text-white/40 mb-8 leading-relaxed">Receive curated invitations to our gala events and private viewings.</p>
                 <form class="relative group">
                     <input type="email" placeholder="Email Address" class="input-minimal">
                     <button type="button" class="absolute right-0 bottom-3 text-white/40 group-hover:text-white transition-colors">
@@ -387,29 +429,29 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
     <script>
-        // Init Tilt (Desktop Only)
+        // Init Tilt (Desktop Only for Performance)
         if (window.matchMedia("(min-width: 1024px)").matches) {
             VanillaTilt.init(document.querySelectorAll(".spatial-card"), {
-                max: 5,
-                speed: 400,
+                max: 3,
+                speed: 1000,
                 glare: true,
-                "max-glare": 0.1,
-                scale: 1.02
+                "max-glare": 0.05,
+                scale: 1.01
             });
         }
 
-        // Scroll Reveal
+        // Scroll Reveal Observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
                 }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.15 });
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Aurora shift
+        // Parallax / Aurora Effect
         window.addEventListener('scroll', () => {
             const aurora = document.getElementById('aurora');
             if (window.scrollY > 800) {
