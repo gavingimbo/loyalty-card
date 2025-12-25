@@ -30,9 +30,7 @@
 
         .serif { font-family: 'Cormorant Garamond', serif; }
 
-        /* --- SPATIAL ENVIRONMENT --- */
-        
-        /* 1. Cinematic Noise */
+        /* --- VISUAL FX --- */
         .noise-field {
             position: fixed;
             inset: 0;
@@ -42,7 +40,6 @@
             z-index: 0;
         }
 
-        /* 2. Deep Space Aurora */
         .aurora-layer {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -51,12 +48,11 @@
                 radial-gradient(circle at 15% 50%, rgba(20, 83, 45, 0.1), transparent 40%), 
                 radial-gradient(circle at 85% 30%, rgba(120, 53, 15, 0.08), transparent 40%);
             filter: blur(100px);
-            transition: background 2s ease;
         }
 
-        /* --- SPATIAL COMPONENTS --- */
+        /* --- COMPONENTS --- */
 
-        /* 3D Tilt Card (Desktop) */
+        /* 3D Tilt Card */
         .spatial-card {
             background: var(--glass-surface);
             border: 1px solid var(--glass-border);
@@ -69,14 +65,63 @@
         
         .spatial-card:hover {
             border-color: rgba(255,255,255,0.2);
-            box-shadow: 
-                0 20px 50px -10px rgba(0,0,0,0.5),
-                0 0 20px rgba(255,255,255,0.05);
+            box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5);
         }
 
-        .card-content {
-            transform: translateZ(20px); /* Lifts content off the card */
+        .card-content { transform: translateZ(20px); }
+
+        /* Floating Layers (The Spatial Stack) */
+        .float-layer {
+            position: absolute;
+            border-radius: 20px;
+            /* High Blur for "Front" feel */
+            background: rgba(15, 15, 15, 0.7); 
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 40px 80px -12px rgba(0,0,0,0.9);
         }
+
+        /* Animations */
+        .anim-float { animation: float 7s ease-in-out infinite; }
+        .anim-float-reverse { animation: float 9s ease-in-out infinite reverse; }
+        .anim-float-delayed { animation: float 8s ease-in-out infinite 1s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Text FX */
+        .gold-shimmer {
+            background: linear-gradient(90deg, #D4AF37, #FFF5E1, #D4AF37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200%;
+            animation: shine 5s linear infinite;
+        }
+        @keyframes shine { to { background-position: 200%; } }
+
+        /* Input */
+        .input-minimal {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            width: 100%;
+            padding: 12px 0;
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 20px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .input-minimal:focus { border-color: #fff; padding-left: 10px; }
+
+        .max-w-grid { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
         /* Nav Capsule */
         .nav-capsule {
@@ -97,57 +142,6 @@
             max-width: 520px;
             box-shadow: 0 20px 40px -10px rgba(0,0,0,0.8);
         }
-
-        /* Floating Elements Animation */
-        .float-layer {
-            position: absolute;
-            border-radius: 20px;
-            background: rgba(20, 20, 20, 0.6);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.8);
-        }
-
-        .anim-float { animation: float 6s ease-in-out infinite; }
-        .anim-float-delay { animation: float 7s ease-in-out infinite 1s; }
-        .anim-float-reverse { animation: float 8s ease-in-out infinite reverse; }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(0.5deg); }
-        }
-
-        /* Text FX */
-        .gold-shimmer {
-            background: linear-gradient(90deg, #D4AF37, #FFF5E1, #D4AF37);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 200%;
-            animation: shine 5s linear infinite;
-        }
-        @keyframes shine { to { background-position: 200%; } }
-
-        /* Input Editorial */
-        .input-minimal {
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            color: #fff;
-            width: 100%;
-            padding: 12px 0;
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            font-size: 20px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-        .input-minimal:focus { border-color: #fff; padding-left: 10px; }
-
-        /* Grid Layout */
-        .max-w-grid { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-        
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
@@ -200,7 +194,7 @@
         <div class="max-w-grid">
             <div class="grid lg:grid-cols-3 gap-8 perspective-container">
                 
-                <div class="spatial-card p-10 min-h-[550px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
+                <div class="spatial-card p-10 min-h-[550px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="5">
                     <div class="card-content">
                         <div class="flex justify-between items-start mb-12">
                             <span class="text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase">Foundation</span>
@@ -222,7 +216,7 @@
                     </div>
                 </div>
 
-                <div class="spatial-card p-10 min-h-[550px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2" style="transition-delay: 100ms;">
+                <div class="spatial-card p-10 min-h-[550px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="5" style="transition-delay: 100ms;">
                     <div class="card-content">
                         <div class="flex justify-between items-start mb-12">
                             <span class="text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase">Signature</span>
@@ -244,7 +238,7 @@
                     </div>
                 </div>
 
-                <div class="spatial-card p-10 min-h-[550px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2" style="transition-delay: 200ms;">
+                <div class="spatial-card p-10 min-h-[550px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="5" style="transition-delay: 200ms;">
                     <div class="card-content">
                         <div class="flex justify-between items-start mb-12">
                             <span class="text-[9px] font-bold tracking-[0.2em] text-[#D4AF37] uppercase">Zenith</span>
@@ -275,24 +269,20 @@
             
             <div class="relative h-[600px] w-full flex items-center justify-center order-2 lg:order-1 reveal">
                 
-                <div class="float-layer anim-float w-[280px] h-[420px] z-20 p-8 flex flex-col justify-between">
+                <div class="absolute z-10 w-[260px] h-[400px] bg-black/40 border border-white/10 rounded-[24px] p-8 flex flex-col justify-between" style="transform: scale(0.95);">
                     <div class="flex justify-between items-start">
-                        <i class="ph ph-qr-code text-4xl text-white/70"></i>
-                        <span class="text-[9px] font-bold uppercase tracking-widest text-white/30">Live Pass</span>
+                        <i class="ph ph-qr-code text-4xl text-white/20"></i>
                     </div>
                     <div>
-                        <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center mb-4">
-                            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                        </div>
-                        <h3 class="text-3xl serif italic text-white leading-none">Emerald<br>Sovereign</h3>
+                        <h3 class="text-3xl serif italic text-white/30 leading-none">Emerald<br>Sovereign</h3>
                     </div>
-                    <div class="pt-6 border-t border-white/10 flex justify-between text-[9px] uppercase tracking-widest text-white/50">
+                    <div class="pt-6 border-t border-white/5 flex justify-between text-[9px] uppercase tracking-widest text-white/20">
                         <span>Ref: 9942</span>
                         <span>Active</span>
                     </div>
                 </div>
 
-                <div class="float-layer anim-float-delay w-[240px] p-5 z-10 absolute top-20 right-0 lg:right-10">
+                <div class="float-layer anim-float w-[240px] p-5 z-30 absolute top-10 right-0 lg:right-16">
                     <div class="flex gap-4">
                         <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center flex-shrink-0">
                             <i class="ph-fill ph-chat-teardrop-text text-amber-400"></i>
@@ -304,25 +294,27 @@
                     </div>
                 </div>
 
-                <div class="float-layer anim-float-reverse w-[200px] p-5 z-30 absolute bottom-32 left-0 lg:left-10">
+                <div class="float-layer anim-float-reverse w-[200px] p-5 z-30 absolute bottom-32 left-0 lg:left-16">
                     <p class="text-[9px] font-bold uppercase text-white/40 mb-3">Room Credit</p>
                     <div class="h-1 w-full bg-white/10 rounded-full mb-2">
                         <div class="h-1 w-[70%] bg-white rounded-full"></div>
                     </div>
                     <p class="text-xs text-white text-right">LKR 75,000</p>
                 </div>
+                
+                <div class="absolute w-[300px] h-[300px] bg-emerald-900/20 rounded-full blur-3xl animate-pulse z-0"></div>
             </div>
 
-            <div class="order-1 lg:order-2 space-y-10 reveal">
+            <div class="order-1 lg:order-2 space-y-10 reveal text-center flex flex-col items-center">
                 <span class="text-[9px] font-bold tracking-[0.3em] uppercase text-emerald-500">The Digital Key</span>
                 <h2 class="text-5xl lg:text-7xl serif italic leading-[0.9] text-white">
                     Your world,<br>
                     <span class="text-white/40">synchronized.</span>
                 </h2>
-                <p class="text-white/50 text-lg font-light leading-relaxed max-w-md">
+                <p class="text-white/50 text-lg font-light leading-relaxed max-w-md mx-auto">
                     Seamlessly manage reservations, access your residency credits, and communicate with your dedicated lifestyle manager—all from a single, encrypted interface designed for the modern sovereign.
                 </p>
-                <div class="grid grid-cols-2 gap-8 pt-6 border-t border-white/5">
+                <div class="grid grid-cols-2 gap-12 pt-6 border-t border-white/5 w-full max-w-sm mx-auto">
                     <div>
                         <h4 class="text-lg text-white font-medium mb-1">Instant</h4>
                         <p class="text-[10px] text-white/40 uppercase tracking-widest">Concierge Chat</p>
@@ -338,7 +330,7 @@
     </section>
 
     <footer class="border-t border-white/10 bg-[#020202] relative z-10 pt-24 pb-12">
-        <div class="max-w-grid grid lg:grid-cols-4 gap-16 mb-24">
+        <div class="max-w-grid grid lg:grid-cols-4 gap-16 mb-12">
             
             <div class="space-y-6">
                 <div>
@@ -372,6 +364,11 @@
                     <a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Diamond Access</a>
                     <a href="#" class="text-xs text-white/50 hover:text-white transition-colors mt-4">Member Login</a>
                 </nav>
+                <div class="mt-12 pt-8 border-t border-white/5">
+                    <p class="text-[9px] text-white/20 tracking-[0.2em] uppercase font-medium">
+                        © 2024 Cinnamon Hotels & Resorts.<br>All Rights Reserved.
+                    </p>
+                </div>
             </div>
 
             <div>
@@ -386,17 +383,11 @@
             </div>
 
         </div>
-
-        <div class="border-t border-white/5 pt-8 text-center">
-            <p class="text-[9px] text-white/20 tracking-[0.2em] uppercase font-medium">
-                © 2024 Cinnamon Hotels & Resorts. All Rights Reserved.
-            </p>
-        </div>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
     <script>
-        // Init Tilt for Desktop only to save battery/performance on mobile
+        // Init Tilt (Desktop Only)
         if (window.matchMedia("(min-width: 1024px)").matches) {
             VanillaTilt.init(document.querySelectorAll(".spatial-card"), {
                 max: 5,
@@ -418,13 +409,11 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Background Aurora Shift based on Scroll
+        // Aurora shift
         window.addEventListener('scroll', () => {
-            const scrolled = window.scrollY;
             const aurora = document.getElementById('aurora');
-            // Subtle color shift
-            if (scrolled > 500 && scrolled < 1500) {
-                aurora.style.opacity = '0.5'; // Dim for content
+            if (window.scrollY > 800) {
+                aurora.style.opacity = '0.4';
             } else {
                 aurora.style.opacity = '1';
             }
