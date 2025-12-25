@@ -30,27 +30,81 @@
 
         .serif { font-family: 'Cormorant Garamond', serif; }
 
-        /* --- VISUAL FX --- */
+        /* --- GLOBAL FX --- */
         .noise-field {
             position: fixed;
             inset: 0;
             background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48ZmlsdGVyIGlkPSJnoiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIwLjY1IiBudW1PY3RhdmVzPSIzIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI2cpIiBvcGFjaXR5PSIwLjAzIi8+PC9zdmc+');
             opacity: 0.35;
             pointer-events: none;
-            z-index: 0;
+            z-index: 50; /* Texture above everything */
         }
 
-        /* Hero Spatial Orb Animation */
-        .spatial-orb {
+        /* --- SECTION 1 BACKGROUND: THE NEBULA --- */
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .nebula-orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            animation: orb-float 10s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+            filter: blur(100px);
+            opacity: 0.4;
+            mix-blend-mode: screen;
+            animation: breathe 15s infinite alternate ease-in-out;
         }
-        @keyframes orb-float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, -50px) scale(1.1); }
+        @keyframes breathe {
+            0% { transform: scale(1) translate(0,0); opacity: 0.3; }
+            100% { transform: scale(1.2) translate(20px, -20px); opacity: 0.5; }
+        }
+
+        /* --- SECTION 2 BACKGROUND: THE PRISM --- */
+        .prism-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            opacity: 0.3;
+            background: 
+                radial-gradient(circle at 0% 0%, rgba(52, 199, 89, 0.1), transparent 50%),
+                radial-gradient(circle at 100% 0%, rgba(255, 59, 48, 0.1), transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(212, 175, 55, 0.1), transparent 50%);
+            filter: blur(60px);
+        }
+        /* Moving Light Beams */
+        .light-beam {
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent 0deg, rgba(255,255,255,0.03) 20deg, transparent 40deg);
+            animation: rotate-beam 20s linear infinite;
+        }
+        @keyframes rotate-beam { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* --- SECTION 3 BACKGROUND: THE DATA GRID --- */
+        .app-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            perspective: 1000px;
+            overflow: hidden;
+        }
+        .grid-plane {
+            position: absolute;
+            width: 200%; height: 200%;
+            left: -50%; top: -50%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            transform: rotateX(60deg) translateY(-100px) translateZ(-200px);
+            animation: grid-move 20s linear infinite;
+            mask-image: radial-gradient(circle, black 30%, transparent 70%);
+        }
+        @keyframes grid-move {
+            0% { transform: rotateX(60deg) translateY(0px) translateZ(-200px); }
+            100% { transform: rotateX(60deg) translateY(60px) translateZ(-200px); }
         }
 
         /* --- COMPONENTS --- */
@@ -64,6 +118,7 @@
             transition: transform 0.1s ease, box-shadow 0.4s ease, border-color 0.4s ease;
             transform-style: preserve-3d;
             overflow: hidden;
+            z-index: 10;
         }
         
         .spatial-card:hover {
@@ -73,7 +128,7 @@
 
         .card-content { transform: translateZ(20px); }
 
-        /* Floating Layers (The Spatial Stack) */
+        /* Floating Layers */
         .float-layer {
             position: absolute;
             border-radius: 20px;
@@ -167,10 +222,10 @@
 
     <header class="min-h-screen flex items-center pt-24 pb-20 relative overflow-hidden">
         
-        <div class="absolute inset-0 pointer-events-none z-0">
-            <div class="spatial-orb bg-emerald-900 w-[500px] h-[500px] top-1/4 right-0 lg:right-1/4 mix-blend-screen"></div>
-            <div class="spatial-orb bg-amber-900 w-[400px] h-[400px] bottom-1/4 right-10 lg:right-1/3 animation-delay-2000 mix-blend-screen"></div>
-            <div class="spatial-orb bg-indigo-950 w-[600px] h-[600px] top-0 right-0 opacity-40 mix-blend-screen"></div>
+        <div class="hero-bg">
+            <div class="nebula-orb bg-emerald-900 w-[500px] h-[500px] top-[-100px] left-[20%]"></div>
+            <div class="nebula-orb bg-amber-800 w-[600px] h-[600px] bottom-[-100px] right-[10%] animation-delay-2000"></div>
+            <div class="nebula-orb bg-indigo-950 w-[800px] h-[800px] top-[20%] right-[30%] opacity-20"></div>
         </div>
 
         <div class="layout-container w-full grid lg:grid-cols-2 gap-16 items-center relative z-10">
@@ -209,8 +264,13 @@
         </div>
     </header>
 
-    <section id="collection" class="py-32 relative z-10">
-        <div class="layout-container">
+    <section id="collection" class="py-32 relative overflow-hidden">
+        
+        <div class="prism-bg">
+            <div class="light-beam"></div>
+        </div>
+
+        <div class="layout-container relative z-10">
             <div class="grid lg:grid-cols-3 gap-8 perspective-container">
                 
                 <div class="spatial-card p-10 min-h-[580px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="3">
@@ -283,8 +343,13 @@
         </div>
     </section>
 
-    <section id="app" class="py-40 border-t border-white/5 overflow-hidden">
-        <div class="layout-container grid lg:grid-cols-2 gap-24 items-center">
+    <section id="app" class="py-40 border-t border-white/5 relative overflow-hidden">
+        
+        <div class="app-bg">
+            <div class="grid-plane"></div>
+        </div>
+
+        <div class="layout-container grid lg:grid-cols-2 gap-24 items-center relative z-10">
             
             <div class="relative h-[600px] w-full flex items-center justify-center order-2 lg:order-1 reveal">
                 
@@ -410,7 +475,7 @@
 
         <div class="layout-container border-t border-white/5 pt-8">
             <p class="text-[10px] text-white/30 tracking-wider text-left">
-                &copy; 2026 Cinnamon Life City of Dreams, Sri Lanka. All rights reserved.
+                © 2026 Cinnamon Life City of Dreams, Sri Lanka. All rights reserved.
             </p>
         </div>
     </footer>
