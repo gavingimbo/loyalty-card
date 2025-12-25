@@ -3,48 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Cinnamon Life | The Elite Collection</title>
+    <title>The Privilege Collection | Cinnamon Life</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide-react"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,500;1,600&family=Plus+Jakarta+Sans:wght@200;300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,500;1,600&family=Inter:wght@200;300;400;600&display=swap');
         
         body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #030303; 
+            font-family: 'Inter', sans-serif; 
+            background-color: #000; 
             color: #fff; 
             margin: 0; 
             -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
         }
         .serif { font-family: 'Cormorant Garamond', serif; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* The Aura Effect */
-        .aura-emerald { background: radial-gradient(circle at 50% 30%, rgba(16, 185, 129, 0.08) 0%, transparent 70%); }
-        .aura-ruby { background: radial-gradient(circle at 50% 30%, rgba(225, 29, 72, 0.08) 0%, transparent 70%); }
-        .aura-diamond { background: radial-gradient(circle at 50% 30%, rgba(186, 155, 100, 0.12) 0%, transparent 70%); }
-
-        /* Structural Glass */
-        .premium-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(50px);
-            -webkit-backdrop-filter: blur(50px);
-            border-radius: 40px;
-            position: relative;
+        /* Shadcn-style Glass & Border logic */
+        .shad-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
         }
 
-        .gold-label {
-            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728);
+        /* Amex Black Card / Platinum Lustre */
+        .platinum-gradient {
+            background: linear-gradient(135deg, #e5e7eb 0%, #9ca3af 50%, #4b5563 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-entrance { animation: slideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .diamond-gradient {
+            background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
 <body>
@@ -52,34 +48,76 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
+        const { ChevronRight, Crown, Wine, BedDouble, Sparkles, MapPin } = lucide;
 
         const TIERS = [
             {
                 id: 'emerald',
-                title: 'Emerald',
+                name: 'Emerald',
                 price: '50,000',
-                aura: 'aura-emerald',
-                accent: '#10b981',
-                tagline: 'The Foundation',
-                topPerks: ['50% Culinary Preference', 'Ocean View Upgrades', '3rd Night Complimentary']
+                theme: 'emerald',
+                tagline: 'The Entry to Excellence',
+                color: '#10b981',
+                highlights: ['50% Culinary Preference', 'Ocean View Enhancements', 'The Gift of Time: 3rd Night Free'],
+                details: {
+                    epicurean: [
+                        'Up to 50% preference on dining [cite: 2]',
+                        '10% Weekday Lunch preference @ Quizine [cite: 3]',
+                        'Buffet and Afternoon Tea for two [cite: 5]',
+                        'Sommelier’s selection: Complimentary wine [cite: 6]'
+                    ],
+                    sanctuary: [
+                        'Complimentary 3rd night stay [cite: 8]',
+                        'Guaranteed Ocean View upgrade [cite: 10]',
+                        '50% off Best Available Rates [cite: 9]'
+                    ]
+                }
             },
             {
                 id: 'ruby',
-                title: 'Ruby',
+                name: 'Ruby',
                 price: '125,000',
-                aura: 'aura-ruby',
-                accent: '#e11d48',
-                tagline: 'The Signature',
-                topPerks: ['Deluxe Suite Overnight', 'LKR 10,000 Room Credit', '60m Nature’s Symphony']
+                theme: 'ruby',
+                tagline: 'The Signature Standard',
+                color: '#e11d48',
+                highlights: ['Deluxe Suite Overnight', 'LKR 10,000 Residency Credit', 'Bespoke Wellness Therapy'],
+                details: {
+                    epicurean: [
+                        'Complimentary Buffet & Afternoon Tea [cite: 19]',
+                        'LKR 4,000 Wellness F&B credit [cite: 20]',
+                        '20% preference on all beverages [cite: 17]'
+                    ],
+                    sanctuary: [
+                        'Complimentary Deluxe Room with Breakfast [cite: 22]',
+                        'Unlimited Category Upgrades [cite: 22]',
+                        'LKR 10,000 in-residence credit '
+                    ],
+                    vitality: [
+                        '60-minute Nature’s Symphony massage [cite: 23]',
+                        'Complimentary pool access for two '
+                    ]
+                }
             },
             {
                 id: 'diamond',
-                title: 'Diamond',
+                name: 'Diamond',
                 price: '425,000',
-                aura: 'aura-diamond',
-                accent: '#ba9b64',
-                tagline: 'The Masterpiece',
-                topPerks: ['Oceanscape Suite Retreat', 'Cloud Wine Exclusives', 'Private Party Vouchers']
+                theme: 'diamond',
+                tagline: 'The Zenith of Privilege',
+                color: '#fde047',
+                highlights: ['The Oceanscape Suite Annual Retreat', 'Cloud Wine Exclusivity', 'Bespoke Gala Celebration Access'],
+                details: {
+                    epicurean: [
+                        '20% exclusive access @ Cloud Wine [cite: 31]',
+                        'Traditional Afternoon Tea at GATZ [cite: 33]',
+                        'Dedicated Celebration Party Voucher [cite: 34]'
+                    ],
+                    sanctuary: [
+                        'Annual Oceanscape Suite Retreat ',
+                        'Premier Life to Suite upgrades ',
+                        'Spouse Card for shared prestige [cite: 27]'
+                    ]
+                }
             }
         ];
 
@@ -89,60 +127,58 @@
 
             const handleScroll = () => {
                 if (scrollRef.current) {
-                    const index = Math.round(scrollRef.current.scrollLeft / (window.innerWidth * 0.85));
+                    const index = Math.round(scrollRef.current.scrollLeft / (window.innerWidth * 0.88));
                     if (index !== active && index < TIERS.length) setActive(index);
                 }
             };
 
             return (
-                <div className={`min-h-screen transition-all duration-1000 ${TIERS[active].aura}`}>
-                    {/* Minimal Navigation */}
-                    <div className="pt-20 px-10 flex justify-between items-end animate-entrance">
-                        <div>
-                            <h1 className="text-3xl serif italic text-white/90">The Privilege Collection</h1>
-                            <p className="text-[8px] tracking-[0.5em] text-white/30 uppercase mt-2 font-bold">Cinnamon Life | City of Dreams</p>
+                <div className="min-h-screen bg-[#050505] pb-40">
+                    {/* Header: Minimalist Shadcn Navigation */}
+                    <nav className="pt-16 px-8 flex justify-between items-center animate-pulse">
+                        <div className="space-y-1">
+                            <p className="text-[10px] tracking-[0.4em] uppercase text-white/30 font-semibold">Cinnamon Life</p>
+                            <h1 className="text-xl font-light serif italic">The Privilege Collection</h1>
                         </div>
-                    </div>
+                        <div className="h-10 w-10 rounded-full border border-white/10 flex items-center justify-center bg-white/5">
+                            <Crown size={16} className="text-white/50" />
+                        </div>
+                    </nav>
 
-                    {/* Architectural Gallery */}
+                    {/* Shadcn-Inspired Swiper */}
                     <div 
                         ref={scrollRef}
                         onScroll={handleScroll}
-                        className="flex overflow-x-auto snap-x hide-scrollbar px-6 gap-6 my-16"
+                        className="flex overflow-x-auto snap-x hide-scrollbar px-6 gap-6 my-12"
                     >
                         {TIERS.map((t, i) => (
                             <div key={t.id} className="min-w-[85vw] snap-center">
-                                <div className={`premium-card p-10 h-[520px] flex flex-col justify-between transition-all duration-700 ${i === active ? 'opacity-100' : 'opacity-20 scale-95'}`}>
-                                    
-                                    {/* Card Header: Tier & Tagline */}
-                                    <div className="space-y-2">
-                                        <div className="flex items-center gap-3 mb-4">
-                                            <div className="h-px w-6 bg-white/20" />
-                                            <span className="text-[9px] tracking-[0.3em] uppercase text-white/40">{t.tagline}</span>
+                                <div className={`shad-card rounded-[32px] p-8 h-[480px] flex flex-col justify-between transition-all duration-700 ${i === active ? 'opacity-100 ring-1 ring-white/20 shadow-[0_40px_80px_-15px_rgba(0,0,0,0.8)]' : 'opacity-20 scale-95'}`}>
+                                    <div className="space-y-6">
+                                        <div className="flex items-center gap-2">
+                                            <div className="h-1.5 w-1.5 rounded-full" style={{backgroundColor: t.color}} />
+                                            <span className="text-[10px] tracking-[0.2em] uppercase text-white/40 font-bold">{t.tagline}</span>
                                         </div>
-                                        <h2 className={`text-6xl font-light tracking-tighter serif italic ${t.id === 'diamond' ? 'gold-label' : ''}`}>{t.title}</h2>
+                                        <h2 className={`text-6xl font-light tracking-tighter serif italic ${t.id === 'diamond' ? 'diamond-gradient' : (t.id === 'ruby' ? 'text-white' : 'platinum-gradient')}`}>
+                                            {t.name}
+                                        </h2>
+                                        
+                                        <div className="grid gap-3 pt-4">
+                                            {t.highlights.map((h, hi) => (
+                                                <div key={hi} className="flex items-center gap-3">
+                                                    <Sparkles size={12} className="text-white/20" />
+                                                    <p className="text-[13px] text-white/60 font-light">{h}</p>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
 
-                                    {/* High-Level Feature Grid */}
-                                    <div className="grid gap-6">
-                                        {t.topPerks.map((perk, pi) => (
-                                            <div key={pi} className="flex items-center gap-4">
-                                                <div className="h-1 w-1 rounded-full opacity-40" style={{backgroundColor: t.accent}} />
-                                                <p className="text-[13px] font-light text-white/60 tracking-wide">{perk}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    {/* Card Action Area */}
-                                    <div className="pt-10 flex items-center justify-between border-t border-white/5">
+                                    <div className="pt-8 border-t border-white/5 flex items-end justify-between">
                                         <div>
-                                            <p className="text-[8px] text-white/20 uppercase tracking-widest mb-1">Annual Investment</p>
-                                            <div className="flex items-baseline gap-1">
-                                                <span className="text-[10px] text-white/40">LKR</span>
-                                                <span className="text-2xl font-light">{t.price}</span>
-                                            </div>
+                                            <p className="text-[9px] text-white/20 uppercase tracking-widest mb-1">Annual Tier</p>
+                                            <p className="text-3xl font-light tracking-tight">LKR {t.price}</p>
                                         </div>
-                                        <button className="px-10 py-4 rounded-full bg-white text-black text-[10px] tracking-[0.3em] uppercase font-bold active:scale-90 transition-transform">
+                                        <button className="h-14 px-10 rounded-full bg-white text-black text-[10px] tracking-[0.2em] uppercase font-bold active:scale-95 transition-all shadow-xl">
                                             Apply
                                         </button>
                                     </div>
@@ -151,55 +187,46 @@
                         ))}
                     </div>
 
-                    {/* Tier Depth Sections */}
-                    <div className="px-10 pb-40 space-y-16 animate-entrance">
-                        <div className="flex items-center gap-4 opacity-20">
-                            <div className="h-px grow bg-white" />
-                            <span className="text-[8px] tracking-[0.5em] uppercase font-bold">Privilege Details</span>
-                            <div className="h-px grow bg-white" />
+                    {/* Detailed Accordion Section */}
+                    <div className="px-10 space-y-16">
+                        <div className="flex items-center gap-4">
+                            <div className="h-[1px] grow bg-white/5" />
+                            <span className="text-[9px] tracking-[0.5em] uppercase text-white/20 font-bold">The Compendium</span>
+                            <div className="h-[1px] grow bg-white/5" />
                         </div>
 
+                        {/* Dynamic Category Mapping */}
                         <div className="space-y-12">
-                            {/* Detailed Benefits mapping directly from user document */}
-                            <div className="space-y-6">
-                                <h4 className="text-[11px] font-bold tracking-[0.2em] text-white/30 uppercase italic serif">Epicurean Life</h4>
-                                <div className="space-y-8">
-                                    <div className="flex gap-6">
-                                        <span className="text-[10px] text-white/20 mt-1">01</span>
-                                        <p className="text-sm font-light leading-relaxed text-white/60">
-                                            <span className="text-white block font-medium mb-1">Culinary Preference</span>
-                                            Up to 50% off food and 20% off beverages across signature dining venues. Includes Buffet and Afternoon Tea experiences for two.
-                                        </p>
+                            {Object.entries(TIERS[active].details).map(([key, items], idx) => (
+                                <div key={idx} className="space-y-6">
+                                    <div className="flex items-center gap-3">
+                                        {key === 'epicurean' ? <Wine size={16} className="text-white/30" /> : <BedDouble size={16} className="text-white/30" />}
+                                        <h3 className="text-[11px] font-bold tracking-[0.2em] text-white/40 uppercase italic serif">
+                                            {key === 'epicurean' ? 'Epicurean Excellence' : (key === 'sanctuary' ? 'Residency & Suites' : 'Wellness & Vitality')}
+                                        </h3>
                                     </div>
-                                    <div className="flex gap-6">
-                                        <span className="text-[10px] text-white/20 mt-1">02</span>
-                                        <p className="text-sm font-light leading-relaxed text-white/60">
-                                            <span className="text-white block font-medium mb-1">Sommelier Selection</span>
-                                            One exclusive bottle of selected wine and LKR 4,000 F&B wellness credit to personalize your journey.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="space-y-6">
-                                <h4 className="text-[11px] font-bold tracking-[0.2em] text-white/30 uppercase italic serif">Residency Privileges</h4>
-                                <div className="space-y-8">
-                                    <div className="flex gap-6">
-                                        <span className="text-[10px] text-white/20 mt-1">03</span>
-                                        <p className="text-sm font-light leading-relaxed text-white/60">
-                                            <span className="text-white block font-medium mb-1">The Gift of Time</span>
-                                            Stay 2 nights and receive the 3rd evening with our compliments. Includes complimentary Ocean View and Suite room upgrades.
-                                        </p>
+                                    <div className="grid gap-4">
+                                        {items.map((item, ii) => (
+                                            <div key={ii} className="group p-6 rounded-2xl bg-white/[0.02] border border-white/[0.04] flex items-center justify-between active:bg-white/[0.05] transition-all">
+                                                <p className="text-sm font-light text-white/60 group-hover:text-white transition-colors leading-relaxed pr-4">
+                                                    {item}
+                                                </p>
+                                                <ChevronRight size={14} className="text-white/10 shrink-0" />
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
-                            </div>
+                            ))}
                         </div>
                     </div>
 
-                    {/* Minimal Fixed Navigation */}
+                    {/* Floating Tier Navigation */}
                     <div className="fixed bottom-12 left-0 right-0 flex justify-center items-center gap-4 pointer-events-none">
                         {TIERS.map((_, i) => (
-                            <div key={i} className={`h-1 transition-all duration-700 ${i === active ? 'w-10 bg-white' : 'w-2 bg-white/10'}`} />
+                            <div 
+                                key={i} 
+                                className={`h-[1px] transition-all duration-700 ${i === active ? 'w-12 bg-white' : 'w-3 bg-white/10'}`} 
+                            />
                         ))}
                     </div>
                 </div>
