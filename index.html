@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Cinnamon Life | The Sovereign Collection</title>
+    <title>Cinnamon Life | The Sovereign Collection 2026</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -40,15 +40,17 @@
             z-index: 0;
         }
 
-        .aurora-layer {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(20, 83, 45, 0.08), transparent 40%), 
-                radial-gradient(circle at 90% 60%, rgba(120, 53, 15, 0.06), transparent 40%);
-            filter: blur(120px);
-            transition: opacity 1s ease;
+        /* Hero Spatial Orb Animation */
+        .spatial-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: orb-float 10s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes orb-float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, -50px) scale(1.1); }
         }
 
         /* --- COMPONENTS --- */
@@ -75,34 +77,20 @@
         .float-layer {
             position: absolute;
             border-radius: 20px;
-            /* Heavy Blur for "Front" feel */
-            background: rgba(18, 18, 18, 0.85); 
+            background: rgba(18, 18, 18, 0.7); 
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 40px 80px -12px rgba(0,0,0,1);
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 40px 80px -12px rgba(0,0,0,0.9);
         }
 
         /* Animations */
         .anim-float { animation: float 7s ease-in-out infinite; }
         .anim-float-reverse { animation: float 9s ease-in-out infinite reverse; }
-        .anim-float-delayed { animation: float 8s ease-in-out infinite 1s; }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-12px); }
-        }
-
-        /* Image Masking */
-        .hero-mask {
-            mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-        }
-        @media(min-width: 1024px) {
-            .hero-mask {
-                mask-image: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
-                -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
-            }
         }
 
         /* Text FX */
@@ -162,7 +150,6 @@
 <body>
 
     <div class="noise-field"></div>
-    <div class="aurora-layer" id="aurora"></div>
 
     <nav class="nav-capsule">
         <div class="flex flex-col leading-none">
@@ -179,12 +166,19 @@
     </nav>
 
     <header class="min-h-screen flex items-center pt-24 pb-20 relative overflow-hidden">
-        <div class="layout-container w-full grid lg:grid-cols-2 gap-16 items-center">
+        
+        <div class="absolute inset-0 pointer-events-none z-0">
+            <div class="spatial-orb bg-emerald-900 w-[500px] h-[500px] top-1/4 right-0 lg:right-1/4 mix-blend-screen"></div>
+            <div class="spatial-orb bg-amber-900 w-[400px] h-[400px] bottom-1/4 right-10 lg:right-1/3 animation-delay-2000 mix-blend-screen"></div>
+            <div class="spatial-orb bg-indigo-950 w-[600px] h-[600px] top-0 right-0 opacity-40 mix-blend-screen"></div>
+        </div>
+
+        <div class="layout-container w-full grid lg:grid-cols-2 gap-16 items-center relative z-10">
             
-            <div class="reveal relative z-10 order-2 lg:order-1 text-center lg:text-left">
+            <div class="reveal order-2 lg:order-1 text-center lg:text-left">
                 <div class="inline-flex items-center gap-3 border border-white/10 rounded-full px-4 py-2 bg-white/5 backdrop-blur-md mb-10">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="text-[10px] uppercase tracking-[0.2em] text-white/80 font-bold">Membership 2025</span>
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-white/80 font-bold">Membership 2026</span>
                 </div>
                 
                 <h1 class="text-6xl md:text-8xl lg:text-9xl font-light tracking-tighter leading-[0.9] mb-10">
@@ -205,17 +199,11 @@
             </div>
 
             <div class="reveal order-1 lg:order-2 relative h-[50vh] lg:h-[80vh] w-full flex items-center justify-center">
-                <div class="absolute inset-0 bg-gradient-to-tr from-emerald-900/20 to-transparent rounded-full blur-[100px]"></div>
-                
-                <div class="relative w-full h-full max-w-md lg:max-w-full hero-mask overflow-hidden rounded-[40px] border border-white/5 opacity-80">
-                    <img 
-                        src="https://images.unsplash.com/photo-1485627941502-d2e6429fa2b0?q=80&w=2070&auto=format&fit=crop" 
-                        alt="Architectural Abstract" 
-                        class="w-full h-full object-cover scale-110 animate-[pulse_10s_ease-in-out_infinite]"
-                        style="filter: grayscale(100%) contrast(120%) brightness(0.8);"
-                    >
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#020202] via-transparent to-transparent"></div>
+                <div class="w-[300px] h-[300px] rounded-full border border-white/10 bg-white/5 backdrop-blur-3xl animate-[spin_30s_linear_infinite] relative">
+                    <div class="absolute inset-2 rounded-full border border-white/5 border-dashed opacity-50"></div>
                 </div>
+                <div class="absolute w-[450px] h-[450px] rounded-full border border-white/5 animate-[spin_40s_linear_infinite_reverse]"></div>
+                <div class="absolute w-[600px] h-[600px] rounded-full border border-white/5 opacity-30 animate-[spin_60s_linear_infinite]"></div>
             </div>
 
         </div>
@@ -300,7 +288,7 @@
             
             <div class="relative h-[600px] w-full flex items-center justify-center order-2 lg:order-1 reveal">
                 
-                <div class="absolute z-10 w-[280px] h-[440px] bg-[#0a0a0a] border border-white/10 rounded-[24px] p-8 flex flex-col justify-between transform scale-90 opacity-60 brightness-75 transition-transform duration-1000 hover:scale-95">
+                <div class="absolute z-0 w-[280px] h-[440px] bg-[#050505] border border-white/10 rounded-[24px] p-8 flex flex-col justify-between transform scale-90 opacity-40 blur-[1px] transition-transform duration-1000">
                     <div class="flex justify-between items-start">
                         <i class="ph ph-qr-code text-4xl text-white/20"></i>
                     </div>
@@ -313,7 +301,7 @@
                     </div>
                 </div>
 
-                <div class="float-layer anim-float w-[260px] p-6 z-30 absolute top-0 right-0 lg:right-10">
+                <div class="float-layer anim-float w-[260px] p-6 z-30 absolute top-10 right-0 lg:right-10">
                     <div class="flex gap-4">
                         <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center flex-shrink-0 border border-white/10">
                             <i class="ph-fill ph-chat-teardrop-text text-amber-400 text-xl"></i>
@@ -336,7 +324,7 @@
                     </div>
                 </div>
                 
-                <div class="absolute w-[400px] h-[400px] bg-emerald-900/20 rounded-full blur-[80px] animate-pulse z-0"></div>
+                <div class="absolute w-[400px] h-[400px] bg-emerald-900/10 rounded-full blur-[80px] animate-pulse z-0 pointer-events-none"></div>
             </div>
 
             <div class="order-1 lg:order-2 space-y-12 reveal text-center flex flex-col items-center">
@@ -357,12 +345,12 @@
                     <div class="flex flex-col items-center">
                         <i class="ph ph-chat-centered-text text-2xl text-white mb-3"></i>
                         <h4 class="text-sm font-medium text-white mb-1">Instant</h4>
-                        <p class="text-[9px] text-white/40 uppercase tracking-widest">Concierge Chat</p>
+                        <p class="text-[10px] text-white/40 uppercase tracking-widest">Concierge Chat</p>
                     </div>
                     <div class="flex flex-col items-center">
                         <i class="ph ph-shield-check text-2xl text-white mb-3"></i>
                         <h4 class="text-sm font-medium text-white mb-1">Secure</h4>
-                        <p class="text-[9px] text-white/40 uppercase tracking-widest">Digital Entry</p>
+                        <p class="text-[10px] text-white/40 uppercase tracking-widest">Digital Entry</p>
                     </div>
                 </div>
             </div>
@@ -408,7 +396,7 @@
                 
                 <div class="mt-16 pt-8 border-t border-white/5">
                     <p class="text-[9px] text-white/20 tracking-[0.15em] uppercase leading-relaxed">
-                        © 2024 Cinnamon Hotels.<br>All Rights Reserved.
+                        © 2026 Cinnamon Hotels.<br>All Rights Reserved.
                     </p>
                 </div>
             </div>
@@ -429,7 +417,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
     <script>
-        // Init Tilt (Desktop Only for Performance)
+        // Init Tilt (Desktop Only)
         if (window.matchMedia("(min-width: 1024px)").matches) {
             VanillaTilt.init(document.querySelectorAll(".spatial-card"), {
                 max: 3,
@@ -440,7 +428,7 @@
             });
         }
 
-        // Scroll Reveal Observer
+        // Scroll Reveal
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -450,16 +438,6 @@
         }, { threshold: 0.15 });
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // Parallax / Aurora Effect
-        window.addEventListener('scroll', () => {
-            const aurora = document.getElementById('aurora');
-            if (window.scrollY > 800) {
-                aurora.style.opacity = '0.4';
-            } else {
-                aurora.style.opacity = '1';
-            }
-        });
     </script>
 </body>
 </html>
