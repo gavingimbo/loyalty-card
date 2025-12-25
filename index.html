@@ -1,197 +1,165 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Cinnamon Life | LIFE Membership</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            background: "#000000",
-            emerald: "#10b981",
-            ruby: "#f43f5e",
-            diamond: "#38bdf8",
-          },
-          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
-        }
-      }
-    }
-  </script>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <style>
-    [x-cloak] { display: none !important; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .snap-x { scroll-snap-type: x mandatory; }
-    .snap-center { scroll-snap-align: center; }
-    
-    .glass-card {
-      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.8) 100%);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .active-indicator {
-      view-transition-name: active-tab;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Membership Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #fafafa; }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(0,0,0,0.05); }
+        .tier-emerald { border-top: 4px solid #10b981; }
+        .tier-ruby { border-top: 4px solid #e11d48; }
+        .tier-diamond { border-top: 4px solid #0ea5e9; }
+    </style>
 </head>
+<body class="pb-12">
 
-<body class="bg-black text-white antialiased overflow-hidden">
+    <header class="p-6 bg-white border-b sticky top-0 z-50">
+        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Luxury Memberships</h1>
+        <p class="text-sm text-gray-500">Select a tier to view exclusive benefits</p>
+    </header>
 
-<div x-data="{ activeIdx: 0, activeTab: 'dining' }" class="max-w-[430px] mx-auto h-screen flex flex-col relative bg-black">
-  
-  <header class="pt-16 px-8 pb-6 flex justify-between items-center">
-    <div class="space-y-0.5">
-      <p class="text-[10px] font-bold tracking-[0.4em] text-zinc-500 uppercase">City of Dreams</p>
-      <h1 class="text-3xl font-black tracking-tight italic">LIFE <span class="text-zinc-600 not-italic">Member</span></h1>
-    </div>
-    <div class="h-11 w-11 rounded-full border border-white/10 bg-zinc-900 flex items-center justify-center shadow-inner">
-      <i data-lucide="bell" class="w-5 h-5 text-zinc-400"></i>
-    </div>
-  </header>
+    <main class="max-w-md mx-auto p-4 space-y-6">
 
-  <div class="relative overflow-visible mb-2">
-    <div x-ref="carousel" 
-      @scroll.debounce.10ms="activeIdx = Math.round($el.scrollLeft / ($el.offsetWidth * 0.85))"
-      class="flex gap-4 px-8 pb-8 overflow-x-auto no-scrollbar snap-x">
-      
-      <div class="snap-center shrink-0 w-[85%]">
-        <div :class="activeIdx === 0 ? 'scale-100 opacity-100 ring-1 ring-emerald/30' : 'scale-90 opacity-40 grayscale'" 
-             class="transition-all duration-500 aspect-[1.586/1] rounded-[32px] p-8 glass-card relative overflow-hidden shadow-2xl">
-          <div class="flex justify-between items-start mb-10">
-            <div class="flex flex-col">
-              <span class="text-[9px] font-black tracking-widest text-emerald uppercase">Emerald Tier</span>
-              <span class="text-xl font-bold tracking-tight">Cinnamon Life</span>
+        <section class="glass-card rounded-2xl shadow-sm overflow-hidden tier-emerald">
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2.5 py-0.5 rounded-full uppercase">Entry Tier</span>
+                        <h2 class="text-2xl font-bold mt-1">Emerald</h2>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-sm text-gray-500 line-through">LKR</span>
+                        <div class="text-xl font-bold text-gray-900">50,000/-</div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="flex items-center text-sm font-semibold text-gray-900 mb-2">
+                            <i class="fa-solid fa-utensils mr-2 text-emerald-500"></i> Dining & Beverages
+                        </h3>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            [span_0](start_span)<li class="flex justify-between"><span>Up to 50% off food</span> <span class="font-medium text-gray-900">[span_0](end_span)</span></li>
+                            [span_1](start_span)<li class="flex justify-between"><span>10% Off Weekday Lunch @ Quizine</span> <span class="font-medium text-gray-900">[span_1](end_span)</span></li>
+                            [span_2](start_span)<li class="flex justify-between"><span>20% off Beverages</span> <span class="font-medium text-gray-900">[span_2](end_span)</span></li>
+                            [span_3](start_span)<li class="bg-emerald-50 p-2 rounded italic text-emerald-800">Includes Buffet Experience & Afternoon Tea for Two[span_3](end_span)</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="flex items-center text-sm font-semibold text-gray-900 mb-2">
+                            <i class="fa-solid fa-bed mr-2 text-emerald-500"></i> Accommodation
+                        </h3>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• Stay 2 nights, get 3rd free</li>
+                            <li>• 50% off BAR for Rooms</li>
+                            [span_4](start_span)<li class="flex justify-between"><span>Complimentary Ocean View Upgrade</span> <span class="font-medium text-gray-900">[span_4](end_span)</span></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <button class="w-full mt-6 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition-all shadow-md">
+                    Select Emerald
+                </button>
             </div>
-            <i data-lucide="gem" class="w-8 h-8 text-emerald"></i>
-          </div>
-          <div class="mt-auto">
-            <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-0.5">Annual Investment</p>
-            <p class="text-3xl font-black tracking-tighter">LKR 50,000/-</p>
-          </div>
-        </div>
-      </div>
+        </section>
 
-      <div class="snap-center shrink-0 w-[85%]">
-        <div :class="activeIdx === 1 ? 'scale-100 opacity-100 ring-1 ring-ruby/30' : 'scale-90 opacity-40 grayscale'" 
-             class="transition-all duration-500 aspect-[1.586/1] rounded-[32px] p-8 glass-card relative overflow-hidden shadow-2xl">
-          <div class="flex justify-between items-start mb-10">
-            <div class="flex flex-col">
-              <span class="text-[9px] font-black tracking-widest text-ruby uppercase">Ruby Tier</span>
-              <span class="text-xl font-bold tracking-tight">Cinnamon Life</span>
+        <section class="glass-card rounded-2xl shadow-sm overflow-hidden tier-ruby">
+            <div class="p-6 bg-rose-50/30">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <span class="bg-rose-100 text-rose-700 text-xs font-bold px-2.5 py-0.5 rounded-full uppercase">Most Popular</span>
+                        <h2 class="text-2xl font-bold mt-1">Ruby</h2>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-sm text-gray-500 line-through">LKR</span>
+                        <div class="text-xl font-bold text-gray-900">125,000/-</div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="bg-white/80 p-3 rounded-lg border border-rose-100 shadow-sm">
+                        <p class="text-xs font-bold text-rose-600 uppercase mb-1">Exclusive Perk</p>
+                        [span_5](start_span)<p class="text-sm font-medium">LKR 10,000 Room Credit & Pool Access[span_5](end_span)</p>
+                    </div>
+
+                    <div>
+                        <h3 class="flex items-center text-sm font-semibold text-gray-900 mb-2">
+                            <i class="fa-solid fa-spa mr-2 text-rose-500"></i> Wellness & Lifestyle
+                        </h3>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            [span_6](start_span)<li class="flex justify-between"><span>30% off Wellness Preferred Rate</span> <span class="font-medium text-gray-900">[span_6](end_span)</span></li>
+                            [span_7](start_span)<li>• Nature's Symphony 60min massage[span_7](end_span)</li>
+                            [span_8](start_span)<li class="flex justify-between"><span>LKR 4,000 F&B Wellness Credit</span> <span class="font-medium text-gray-900">[span_8](end_span)</span></li>
+                            [span_9](start_span)<li>• Complimentary Spouse Card[span_9](end_span)</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="flex items-center text-sm font-semibold text-gray-900 mb-2">
+                            <i class="fa-solid fa-wine-glass mr-2 text-rose-500"></i> Dining
+                        </h3>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            [span_10](start_span)<li>• One Exclusive Bottle of Selected Wine[span_10](end_span)</li>
+                            [span_11](start_span)<li>• 20% off Beverages[span_11](end_span)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="w-full mt-6 bg-rose-600 hover:bg-rose-700 text-white font-semibold py-3 rounded-xl transition-all shadow-md">
+                    Select Ruby
+                </button>
             </div>
-            <i data-lucide="crown" class="w-8 h-8 text-ruby"></i>
-          </div>
-          <div class="mt-auto">
-            <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-0.5">Annual Investment</p>
-            <p class="text-3xl font-black tracking-tighter">LKR 125,000/-</p>
-          </div>
-        </div>
-      </div>
+        </section>
 
-      <div class="snap-center shrink-0 w-[85%]">
-        <div :class="activeIdx === 2 ? 'scale-100 opacity-100 ring-1 ring-diamond/30' : 'scale-90 opacity-40 grayscale'" 
-             class="transition-all duration-500 aspect-[1.586/1] rounded-[32px] p-8 glass-card relative overflow-hidden shadow-2xl">
-          <div class="flex justify-between items-start mb-10">
-            <div class="flex flex-col">
-              <span class="text-[9px] font-black tracking-widest text-diamond uppercase">Diamond Tier</span>
-              <span class="text-xl font-bold tracking-tight">Cinnamon Life</span>
+        <section class="glass-card rounded-2xl shadow-sm overflow-hidden tier-diamond bg-slate-900 text-white">
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <span class="bg-sky-500 text-white text-xs font-bold px-2.5 py-0.5 rounded-full uppercase">Ultra Luxury</span>
+                        <h2 class="text-2xl font-bold mt-1">Diamond</h2>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-sm text-gray-400 line-through">LKR</span>
+                        <div class="text-xl font-bold text-sky-400">425,000/-</div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="border-l-2 border-sky-500 pl-4 py-1">
+                        <p class="text-xs font-bold text-sky-400 uppercase">Suite Experience</p>
+                        [span_12](start_span)<p class="text-sm font-medium">Complimentary Oceanscape Suite and breakfast for Two[span_12](end_span)</p>
+                    </div>
+
+                    <div>
+                        <h3 class="flex items-center text-sm font-semibold mb-2">
+                            <i class="fa-solid fa-star mr-2 text-sky-400"></i> Premium Benefits
+                        </h3>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            [span_13](start_span)<li>• 20% Off Food & Beverage at Cloud Wine[span_13](end_span)</li>
+                            [span_14](start_span)<li class="flex justify-between"><span>Exclusive Party Voucher</span> <span class="font-medium text-sky-400">[span_14](end_span)</span></li>
+                            [span_15](start_span)<li>• One Exclusive Bottle of Selected Wine[span_15](end_span)</li>
+                            [span_16](start_span)<li>• Upgrade: Premier Life Ocean View to Suite[span_16](end_span)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <button class="w-full mt-6 bg-sky-500 hover:bg-sky-400 text-slate-900 font-bold py-3 rounded-xl transition-all shadow-lg">
+                    Go Diamond
+                </button>
             </div>
-            <i data-lucide="sparkles" class="w-8 h-8 text-diamond"></i>
-          </div>
-          <div class="mt-auto">
-            <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-0.5">Annual Investment</p>
-            <p class="text-3xl font-black tracking-tighter">LKR 425,000/-</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+        </section>
 
-  <div class="flex-1 bg-zinc-950 rounded-t-[44px] border-t border-white/10 px-8 pt-8 overflow-y-auto no-scrollbar pb-48 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
-    
-    <div class="flex p-1 bg-black rounded-2xl mb-8 border border-white/5 shadow-inner">
-      <button @click="activeTab = 'dining'" :class="activeTab === 'dining' ? 'bg-zinc-800 text-white shadow-lg' : 'text-zinc-500'" class="flex-1 py-3 text-[11px] font-black uppercase tracking-widest rounded-xl transition-all duration-300">Dining</button>
-      <button @click="activeTab = 'stay'" :class="activeTab === 'stay' ? 'bg-zinc-800 text-white shadow-lg' : 'text-zinc-500'" class="flex-1 py-3 text-[11px] font-black uppercase tracking-widest rounded-xl transition-all duration-300">Stay</button>
-      <button @click="activeTab = 'more'" :class="activeTab === 'more' ? 'bg-zinc-800 text-white shadow-lg' : 'text-zinc-500'" class="flex-1 py-3 text-[11px] font-black uppercase tracking-widest rounded-xl transition-all duration-300">More</button>
-    </div>
+    </main>
 
-    <div x-show="activeIdx === 0" class="space-y-4">
-        <div x-show="activeTab === 'dining'" class="space-y-3">
-            [span_0](start_span)<div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="utensils" class="w-4 h-4 text-emerald shrink-0"></i><p class="text-sm font-medium text-zinc-300">Up to 50% off food[span_0](end_span)</p></div>
-            [span_1](start_span)<div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="coffee" class="w-4 h-4 text-emerald shrink-0"></i><p class="text-sm font-medium text-zinc-300">Afternoon Tea for Two[span_1](end_span)</p></div>
-            <div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="wallet" class="w-4 h-4 text-emerald shrink-0"></i><p class="text-sm font-medium text-zinc-300">LKR 4,000 F&B Wellness Credit</p></div>
-        </div>
-        <div x-show="activeTab === 'stay'" class="space-y-3">
-            <div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="bed" class="w-4 h-4 text-emerald shrink-0"></i><p class="text-sm font-medium text-zinc-300">Stay 2 nights, get 3rd free</p></div>
-            [span_2](start_span)<div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="arrow-up-circle" class="w-4 h-4 text-emerald shrink-0"></i><p class="text-sm font-medium text-zinc-300">Upgrade to Ocean View[span_2](end_span)</p></div>
-        </div>
-        <div x-show="activeTab === 'more'" class="space-y-3">
-            [span_3](start_span)<div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="users" class="w-4 h-4 text-emerald shrink-0"></i><p class="text-sm font-medium text-zinc-300">Complimentary Spouse Card[span_3](end_span)</p></div>
-            <div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="shirt" class="w-4 h-4 text-emerald shrink-0"></i><p class="text-sm font-medium text-zinc-300">25% off Laundry & Dry Cleaning</p></div>
-        </div>
-    </div>
+    <footer class="text-center p-6 text-xs text-gray-400">
+        <p>© 2025 Luxury Hotels Group. All rights reserved.</p>
+        <p class="mt-2 italic">*Terms and conditions apply for all tiered benefits.</p>
+    </footer>
 
-    <div x-show="activeIdx === 1" class="space-y-4">
-        <div x-show="activeTab === 'dining'" class="space-y-3">
-            [span_4](start_span)<div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="wine" class="w-4 h-4 text-ruby shrink-0"></i><p class="text-sm font-medium text-zinc-300">20% off Beverages[span_4](end_span)</p></div>
-            [span_5](start_span)<div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="gift" class="w-4 h-4 text-ruby shrink-0"></i><p class="text-sm font-medium text-zinc-300">Exclusive Bottle of Wine[span_5](end_span)</p></div>
-            [span_6](start_span)<div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="credit-card" class="w-4 h-4 text-ruby shrink-0"></i><p class="text-sm font-medium text-zinc-300">LKR 4,000 F&B Wellness Credit[span_6](end_span)</p></div>
-        </div>
-        <div x-show="activeTab === 'stay'" class="space-y-3">
-            [span_7](start_span)<div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="calendar" class="w-4 h-4 text-ruby shrink-0"></i><p class="text-sm font-medium text-zinc-300">Stay 2 nights, get 3rd free[span_7](end_span)</p></div>
-            [span_8](start_span)<div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="banknote" class="w-4 h-4 text-ruby shrink-0"></i><p class="text-sm font-medium text-zinc-300">LKR 10,000 Room Credit[span_8](end_span)</p></div>
-        </div>
-        <div x-show="activeTab === 'more'" class="space-y-3">
-            [span_9](start_span)<div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="sparkles" class="w-4 h-4 text-ruby shrink-0"></i><p class="text-sm font-medium text-zinc-300">30% off Wellness Rate[span_9](end_span)</p></div>
-        </div>
-    </div>
-
-    <div x-show="activeIdx === 2" class="space-y-4">
-        <div x-show="activeTab === 'dining'" class="space-y-3">
-            [span_10](start_span)<div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="wine" class="w-4 h-4 text-diamond shrink-0"></i><p class="text-sm font-medium text-zinc-300">Exclusive Bottle of Wine[span_10](end_span)</p></div>
-            [span_11](start_span)<div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="ticket" class="w-4 h-4 text-diamond shrink-0"></i><p class="text-sm font-medium text-zinc-300">Party Voucher Included[span_11](end_span)</p></div>
-        </div>
-        <div x-show="activeTab === 'stay'" class="space-y-3">
-            <div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="hotel" class="w-4 h-4 text-diamond shrink-0"></i><p class="text-sm font-medium text-zinc-300">Complimentary Oceanscape Suite</p></div>
-        </div>
-        <div x-show="activeTab === 'more'" class="space-y-3">
-            <div class="flex gap-4 p-5 rounded-3xl bg-white/[0.02] border border-white/5"><i data-lucide="crown" class="w-4 h-4 text-diamond shrink-0"></i><p class="text-sm font-medium text-zinc-300">Full VIP Lifestyle Access</p></div>
-        </div>
-    </div>
-
-  </div>
-
-  <footer class="fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto px-8 pb-12 pt-6 bg-gradient-to-t from-black via-black/90 to-transparent z-50">
-    <button :class="activeIdx === 0 ? 'bg-emerald text-black' : activeIdx === 1 ? 'bg-ruby text-white' : 'bg-diamond text-black'" 
-            class="w-full h-16 rounded-[22px] font-black text-[15px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all active:scale-95 shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
-      Apply Membership
-      <i data-lucide="chevron-right" class="w-5 h-5"></i>
-    </button>
-  </footer>
-
-</div>
-
-<script>
-  // Initialize Lucide Icons
-  lucide.createIcons();
-  
-  // Re-render icons on tab or tier change
-  document.addEventListener('alpine:init', () => {
-    Alpine.effect(() => {
-      lucide.createIcons();
-    });
-  });
-</script>
 </body>
 </html>
