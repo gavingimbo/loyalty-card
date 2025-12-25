@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Cinnamon Life | The Privilege Collection</title>
+    <title>Cinnamon Life | The Elite Collection</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -13,7 +13,7 @@
         
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #020202; 
+            background-color: #030303; 
             color: #fff; 
             margin: 0; 
             -webkit-font-smoothing: antialiased;
@@ -22,41 +22,29 @@
         .serif { font-family: 'Cormorant Garamond', serif; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Multi-layered Glass Effect */
-        .glass-card {
-            background: linear-gradient(165deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(255,255,255,0.1);
+        /* The Aura Effect */
+        .aura-emerald { background: radial-gradient(circle at 50% 30%, rgba(16, 185, 129, 0.08) 0%, transparent 70%); }
+        .aura-ruby { background: radial-gradient(circle at 50% 30%, rgba(225, 29, 72, 0.08) 0%, transparent 70%); }
+        .aura-diamond { background: radial-gradient(circle at 50% 30%, rgba(186, 155, 100, 0.12) 0%, transparent 70%); }
+
+        /* Structural Glass */
+        .premium-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(50px);
+            border-radius: 40px;
             position: relative;
-            overflow: hidden;
         }
 
-        .glass-card::before {
-            content: "";
-            position: absolute;
-            top: 0; left: -100%;
-            width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
-            transform: skewX(-25deg);
-            transition: 0.75s;
-        }
-
-        .glass-card:active::before { left: 150%; }
-
-        /* Tier Specific Ambient Glows */
-        .glow-emerald { background: radial-gradient(circle at 50% -20%, rgba(16, 185, 129, 0.15) 0%, transparent 70%); }
-        .glow-ruby { background: radial-gradient(circle at 50% -20%, rgba(225, 29, 72, 0.15) 0%, transparent 70%); }
-        .glow-diamond { background: radial-gradient(circle at 50% -20%, rgba(186, 155, 100, 0.18) 0%, transparent 70%); }
-
-        .gold-text {
-            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+        .gold-label {
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        @keyframes reveal { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-reveal { animation: reveal 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-entrance { animation: slideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
 <body>
@@ -70,111 +58,92 @@
                 id: 'emerald',
                 title: 'Emerald',
                 price: '50,000',
-                theme: 'glow-emerald',
+                aura: 'aura-emerald',
                 accent: '#10b981',
-                tagline: 'The Essential Collection',
-                summary: 'A gateway to the City of Dreams, offering fundamental luxury for the frequent guest.',
-                benefits: [
-                    { cat: 'Culinary Artistry', items: [
-                        { t: 'Dining Preference', d: 'Up to 50% off food and 20% off beverages across signature venues.' },
-                        { t: 'Epicurean Vouchers', d: 'Buffet experience and elegant Afternoon Tea for two guests.' },
-                        { t: 'Sommelier’s Toast', d: 'An exclusive bottle of selected wine to commemorate your visit.' }
-                    ]},
-                    { cat: 'Suite Sanctuaries', items: [
-                        { t: 'The Gift of Time', d: 'Complimentary 3rd night stay upon booking two consecutive evenings.' },
-                        { t: 'Vista Enhancement', d: 'Guaranteed upgrade from Standard City View to an Ocean View sanctuary.' }
-                    ]}
-                ]
+                tagline: 'The Foundation',
+                topPerks: ['50% Culinary Preference', 'Ocean View Upgrades', '3rd Night Complimentary']
             },
             {
                 id: 'ruby',
                 title: 'Ruby',
                 price: '125,000',
-                theme: 'glow-ruby',
+                aura: 'aura-ruby',
                 accent: '#e11d48',
-                tagline: 'The Signature Collection',
-                summary: 'Elevated access for those who appreciate more space, deeper wellness, and limitless potential.',
-                benefits: [
-                    { cat: 'Gastronomic Grace', items: [
-                        { t: 'Chef’s Table', d: '10% priority preference for Weekday Lunch at the celebrated Quizine.' },
-                        { t: 'Wellness Credit', d: 'LKR 4,000 credit for your choice of F&B or therapeutic wellness.' },
-                        { t: 'The Member Pass', d: 'A "Member for a Day" invitation for your distinguished guest.' }
-                    ]},
-                    { cat: 'Residency & Renewal', items: [
-                        { t: 'Signature Stay', d: 'Complimentary Deluxe room stay inclusive of an artisan breakfast for two.' },
-                        { t: 'Unlimited Horizon', d: 'Unrestricted accommodation upgrades to the highest available categories.' },
-                        { t: 'Nature’s Symphony', d: 'A 60-minute therapeutic massage and full pool access for two.' }
-                    ]}
-                ]
+                tagline: 'The Signature',
+                topPerks: ['Deluxe Suite Overnight', 'LKR 10,000 Room Credit', '60m Nature’s Symphony']
             },
             {
                 id: 'diamond',
                 title: 'Diamond',
                 price: '425,000',
-                theme: 'glow-diamond',
+                aura: 'aura-diamond',
                 accent: '#ba9b64',
-                tagline: 'The Masterpiece Collection',
-                summary: 'The zenith of prestige. An uncompromising lifestyle designed for those who define the extraordinary.',
-                benefits: [
-                    { cat: 'Masterpiece Dining', items: [
-                        { t: 'Skyward Preference', d: 'Exclusive 20% preference on the curated offerings at Cloud Wine.' },
-                        { t: 'GATZ Tea Service', d: 'Traditional Afternoon Tea experience in the grand setting of GATZ.' },
-                        { t: 'Gala Celebrations', d: 'A dedicated Party Voucher to facilitate your private grand events.' }
-                    ]},
-                    { cat: 'The Suite Estate', items: [
-                        { t: 'Oceanscape Retreat', d: 'An annual complimentary stay in our most prestigious Oceanscape Suite.' },
-                        { t: 'Seamless Transition', d: 'Guaranteed upgrade from Premier Life rooms to our Master Suites.' },
-                        { t: 'Heritage Privileges', d: 'Complimentary Spouse Card and 25% preference on professional wardrobe care.' }
-                    ]}
-                ]
+                tagline: 'The Masterpiece',
+                topPerks: ['Oceanscape Suite Retreat', 'Cloud Wine Exclusives', 'Private Party Vouchers']
             }
         ];
 
         function App() {
-            const [idx, setIdx] = useState(0);
+            const [active, setActive] = useState(0);
             const scrollRef = useRef(null);
 
             const handleScroll = () => {
                 if (scrollRef.current) {
-                    const progress = scrollRef.current.scrollLeft / (window.innerWidth * 0.88);
-                    const newIdx = Math.round(progress);
-                    if (newIdx !== idx && newIdx < TIERS.length) setIdx(newIdx);
+                    const index = Math.round(scrollRef.current.scrollLeft / (window.innerWidth * 0.85));
+                    if (index !== active && index < TIERS.length) setActive(index);
                 }
             };
 
             return (
-                <div className={`min-h-screen transition-all duration-1000 ${TIERS[idx].theme}`}>
-                    {/* Brand Header */}
-                    <div className="pt-20 px-10 text-center animate-reveal">
-                        <p className="text-[9px] tracking-[0.5em] text-white/30 uppercase mb-4 font-bold">Cinnamon Life | City of Dreams</p>
-                        <h1 className="text-4xl font-light serif italic leading-tight">The Privilege Collection</h1>
+                <div className={`min-h-screen transition-all duration-1000 ${TIERS[active].aura}`}>
+                    {/* Minimal Navigation */}
+                    <div className="pt-20 px-10 flex justify-between items-end animate-entrance">
+                        <div>
+                            <h1 className="text-3xl serif italic text-white/90">The Privilege Collection</h1>
+                            <p className="text-[8px] tracking-[0.5em] text-white/30 uppercase mt-2 font-bold">Cinnamon Life | City of Dreams</p>
+                        </div>
                     </div>
 
-                    {/* Interactive Swiper */}
+                    {/* Architectural Gallery */}
                     <div 
                         ref={scrollRef}
                         onScroll={handleScroll}
-                        className="flex overflow-x-auto snap-x hide-scrollbar px-6 gap-6 my-12"
+                        className="flex overflow-x-auto snap-x hide-scrollbar px-6 gap-6 my-16"
                     >
-                        {TIERS.map((tier, i) => (
-                            <div key={tier.id} className="min-w-[85vw] snap-center">
-                                <div className={`glass-card rounded-[48px] p-10 h-[520px] flex flex-col justify-between transition-all duration-700 ${i === idx ? 'scale-100 opacity-100 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.9)]' : 'scale-90 opacity-20'}`}>
-                                    <div className="space-y-6">
-                                        <div className="flex justify-between items-center">
-                                            <span className="text-[10px] tracking-[0.3em] uppercase text-white/40">{tier.tagline}</span>
-                                            <div className="h-1.5 w-1.5 rounded-full" style={{backgroundColor: tier.accent}} />
+                        {TIERS.map((t, i) => (
+                            <div key={t.id} className="min-w-[85vw] snap-center">
+                                <div className={`premium-card p-10 h-[520px] flex flex-col justify-between transition-all duration-700 ${i === active ? 'opacity-100' : 'opacity-20 scale-95'}`}>
+                                    
+                                    {/* Card Header: Tier & Tagline */}
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="h-px w-6 bg-white/20" />
+                                            <span className="text-[9px] tracking-[0.3em] uppercase text-white/40">{t.tagline}</span>
                                         </div>
-                                        <h2 className="text-6xl font-light tracking-tighter serif italic leading-none">{tier.title}</h2>
-                                        <p className="text-[13px] text-white/50 font-light leading-relaxed pr-4">{tier.summary}</p>
+                                        <h2 className={`text-6xl font-light tracking-tighter serif italic ${t.id === 'diamond' ? 'gold-label' : ''}`}>{t.title}</h2>
                                     </div>
 
-                                    <div className="space-y-8">
-                                        <div className="flex items-baseline gap-2">
-                                            <span className="text-[10px] text-white/30 tracking-[0.2em]">INVESTMENT</span>
-                                            <span className={`text-4xl font-light tracking-tighter ${tier.id === 'diamond' ? 'gold-text' : 'text-white'}`}>LKR {tier.price}</span>
+                                    {/* High-Level Feature Grid */}
+                                    <div className="grid gap-6">
+                                        {t.topPerks.map((perk, pi) => (
+                                            <div key={pi} className="flex items-center gap-4">
+                                                <div className="h-1 w-1 rounded-full opacity-40" style={{backgroundColor: t.accent}} />
+                                                <p className="text-[13px] font-light text-white/60 tracking-wide">{perk}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Card Action Area */}
+                                    <div className="pt-10 flex items-center justify-between border-t border-white/5">
+                                        <div>
+                                            <p className="text-[8px] text-white/20 uppercase tracking-widest mb-1">Annual Investment</p>
+                                            <div className="flex items-baseline gap-1">
+                                                <span className="text-[10px] text-white/40">LKR</span>
+                                                <span className="text-2xl font-light">{t.price}</span>
+                                            </div>
                                         </div>
-                                        <button className="w-full py-6 rounded-full border border-white/10 text-[10px] tracking-[0.3em] uppercase font-bold bg-white text-black active:scale-95 transition-transform shadow-xl">
-                                            Request Private Invitation
+                                        <button className="px-10 py-4 rounded-full bg-white text-black text-[10px] tracking-[0.3em] uppercase font-bold active:scale-90 transition-transform">
+                                            Apply
                                         </button>
                                     </div>
                                 </div>
@@ -182,36 +151,55 @@
                         ))}
                     </div>
 
-                    {/* Detailed Compendium */}
-                    <div className="px-10 pb-40 space-y-16 animate-reveal">
-                        <div className="flex items-center gap-4">
-                            <div className="h-[1px] flex-grow bg-white/5" />
-                            <h3 className="text-[9px] tracking-[0.4em] uppercase text-white/20">The Compendium</h3>
-                            <div className="h-[1px] flex-grow bg-white/5" />
+                    {/* Tier Depth Sections */}
+                    <div className="px-10 pb-40 space-y-16 animate-entrance">
+                        <div className="flex items-center gap-4 opacity-20">
+                            <div className="h-px grow bg-white" />
+                            <span className="text-[8px] tracking-[0.5em] uppercase font-bold">Privilege Details</span>
+                            <div className="h-px grow bg-white" />
                         </div>
 
-                        {TIERS[idx].benefits.map((section, sIdx) => (
-                            <div key={sIdx} className="space-y-8">
-                                <h4 className="serif text-3xl font-light italic text-white/90">{section.cat}</h4>
-                                <div className="grid gap-10">
-                                    {section.items.map((item, pIdx) => (
-                                        <div key={pIdx} className="flex gap-6 items-start group">
-                                            <div className="mt-1.5 h-[1px] w-5 bg-white/20 shrink-0 transition-all group-hover:w-8 group-hover:bg-white" />
-                                            <div className="space-y-2">
-                                                <p className="text-[13px] font-bold text-white tracking-[0.1em] uppercase">{item.t}</p>
-                                                <p className="text-[14px] font-light text-white/40 leading-relaxed group-hover:text-white/70 transition-colors">{item.d}</p>
-                                            </div>
-                                        </div>
-                                    ))}
+                        <div className="space-y-12">
+                            {/* Detailed Benefits mapping directly from user document */}
+                            <div className="space-y-6">
+                                <h4 className="text-[11px] font-bold tracking-[0.2em] text-white/30 uppercase italic serif">Epicurean Life</h4>
+                                <div className="space-y-8">
+                                    <div className="flex gap-6">
+                                        <span className="text-[10px] text-white/20 mt-1">01</span>
+                                        <p className="text-sm font-light leading-relaxed text-white/60">
+                                            <span className="text-white block font-medium mb-1">Culinary Preference</span>
+                                            Up to 50% off food and 20% off beverages across signature dining venues. Includes Buffet and Afternoon Tea experiences for two.
+                                        </p>
+                                    </div>
+                                    <div className="flex gap-6">
+                                        <span className="text-[10px] text-white/20 mt-1">02</span>
+                                        <p className="text-sm font-light leading-relaxed text-white/60">
+                                            <span className="text-white block font-medium mb-1">Sommelier Selection</span>
+                                            One exclusive bottle of selected wine and LKR 4,000 F&B wellness credit to personalize your journey.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                        ))}
+
+                            <div className="space-y-6">
+                                <h4 className="text-[11px] font-bold tracking-[0.2em] text-white/30 uppercase italic serif">Residency Privileges</h4>
+                                <div className="space-y-8">
+                                    <div className="flex gap-6">
+                                        <span className="text-[10px] text-white/20 mt-1">03</span>
+                                        <p className="text-sm font-light leading-relaxed text-white/60">
+                                            <span className="text-white block font-medium mb-1">The Gift of Time</span>
+                                            Stay 2 nights and receive the 3rd evening with our compliments. Includes complimentary Ocean View and Suite room upgrades.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    {/* Floating Navigation Dots */}
-                    <div className="fixed bottom-10 left-0 right-0 flex justify-center gap-3">
+                    {/* Minimal Fixed Navigation */}
+                    <div className="fixed bottom-12 left-0 right-0 flex justify-center items-center gap-4 pointer-events-none">
                         {TIERS.map((_, i) => (
-                            <div key={i} className={`h-1 rounded-full transition-all duration-700 ${i === idx ? 'w-12 bg-white' : 'w-2 bg-white/10'}`} />
+                            <div key={i} className={`h-1 transition-all duration-700 ${i === active ? 'w-10 bg-white' : 'w-2 bg-white/10'}`} />
                         ))}
                     </div>
                 </div>
