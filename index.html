@@ -3,380 +3,336 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Cinnamon Life | The Sovereign Collection</title>
+    <title>Cinnamon Life | Wallet Collection</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* TYPOGRAPHY STACK */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Cormorant+Garamond:ital,wght@1,300;1,400;1,500&display=swap');
+        /* iOS SYSTEM FONTS */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@1,400;1,500&display=swap');
         
         :root {
-            --bg-deep: #050505;
-            --text-primary: #FFFFFF;
-            --emerald: #34C759;
-            --ruby: #FF3B30;
-            --diamond: #D4AF37;
-            --ease-luxury: cubic-bezier(0.25, 1, 0.5, 1);
+            --bg-deep: #000000;
+            --card-emerald: linear-gradient(135deg, #064e3b 0%, #10b981 100%);
+            --card-ruby: linear-gradient(135deg, #4c0519 0%, #e11d48 100%);
+            --card-diamond: linear-gradient(135deg, #451a03 0%, #D4AF37 100%);
+            --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
         }
 
         body {
             background-color: var(--bg-deep);
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
             margin: 0;
+            overflow: hidden; /* App-like feel, no scrolling body */
             -webkit-font-smoothing: antialiased;
-            letter-spacing: -0.02em;
-            overflow-x: hidden;
-            width: 100vw;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* UTILITIES */
-        .serif { font-family: 'Cormorant Garamond', serif; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .snap-x { scroll-snap-type: x mandatory; }
-        .snap-center { scroll-snap-align: center; }
-
-        /* BRANDING: CENTER ALIGNMENT */
-        .brand-header {
+        /* HEADER */
+        .wallet-header {
+            padding: 60px 24px 20px;
+            z-index: 100;
             position: relative;
-            width: 100%;
-            padding: 40px 20px 20px; /* Reduced padding */
-            text-align: center;
-            z-index: 50;
+            background: linear-gradient(to bottom, #000 0%, transparent 100%);
+            pointer-events: none;
         }
 
-        /* CARD ARCHITECTURE */
-        .glass-monolith {
-            background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 20px;
-            box-shadow: 0 40px 100px -30px rgba(0,0,0,0.9);
-            transition: transform 0.8s var(--ease-luxury);
+        /* WALLET STACK CONTAINER */
+        .wallet-stack {
+            position: relative;
+            height: 85vh;
             width: 100%;
-            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+        }
+
+        /* THE CARD */
+        .pass-card {
+            position: absolute;
+            width: 90%;
+            max-width: 400px;
+            height: 220px; /* Collapsed Height */
+            border-radius: 20px;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+            transition: all 0.6s var(--ease-spring);
+            cursor: pointer;
+            overflow: hidden;
+            transform-origin: center top;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* CARD CONTENT LAYOUT */
+        .card-face {
+            padding: 24px;
+            height: 220px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            position: relative;
+            z-index: 20;
         }
 
-        /* ACCORDION ARCHITECTURE */
-        .accordion-wrapper {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 20px;
-            padding: 0 20px;
-            backdrop-filter: blur(20px);
+        /* EXPANDED STATE (THE DETAILS) */
+        .card-details {
+            opacity: 0;
+            height: 0;
+            background: #1c1c1e; /* iOS Dark Mode Grey */
+            transition: opacity 0.4s ease;
+            overflow-y: auto;
+            padding: 0 24px 40px;
         }
 
-        .accordion-item {
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            overflow: hidden;
-        }
-        .accordion-item:last-child { border-bottom: none; }
-
-        .accordion-trigger {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 0; /* Tighter padding */
-            cursor: pointer;
-            transition: opacity 0.3s ease;
+        /* ACTIVE STATE LOGIC */
+        .pass-card.active {
+            top: 0 !important;
+            height: 85vh; /* Fill permissible space */
+            z-index: 50;
+            transform: scale(1);
+            border-radius: 24px 24px 0 0;
+            box-shadow: 0 20px 80px rgba(0,0,0,0.9);
         }
         
-        .accordion-content {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.5s var(--ease-luxury);
-            opacity: 0.8;
-        }
-        .accordion-item.active .accordion-content {
-            grid-template-rows: 1fr;
+        .pass-card.active .card-details {
             opacity: 1;
-            padding-bottom: 18px;
-        }
-        .accordion-inner { overflow: hidden; }
-
-        .icon-plus { transition: transform 0.4s ease; }
-        .accordion-item.active .icon-plus { transform: rotate(45deg); }
-
-        /* DIAMOND SHIMMER */
-        .gold-shimmer {
-            background: linear-gradient(90deg, #D4AF37, #FFF5E1, #D4AF37);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 5s linear infinite;
-        }
-        @keyframes shimmer { to { background-position: 200% center; } }
-
-        /* RESPONSIVE LAYOUT */
-        .swiper-container {
-            display: flex;
-            overflow-x: auto;
-            gap: 12px;
-            padding: 0 24px 24px 24px; /* Reduced bottom padding */
-            scroll-behavior: smooth;
+            height: auto; /* Allow scroll */
+            flex-grow: 1;
         }
 
-        @media (min-width: 1024px) {
-            .swiss-grid {
-                display: grid;
-                grid-template-columns: repeat(12, 1fr);
-                gap: 48px;
-                padding: 120px 64px 80px;
-                height: 100vh;
-                align-items: center;
-            }
-            .brand-header { position: absolute; top: 0; padding-top: 40px; }
-            .col-cards { grid-column: 2 / span 5; height: 600px; position: relative; z-index: 10; }
-            .col-benefits { 
-                grid-column: 8 / span 4; 
-                height: 600px; 
-                overflow-y: auto; 
-                padding-right: 20px;
-                scrollbar-width: none;
-            }
-            .glass-monolith { border-radius: 4px; }
-            .swiper-container { padding: 0; gap: 0; height: 100%; }
-            .card-wrapper { min-width: 100%; height: 100%; }
-            .mobile-dots { position: absolute; bottom: -40px; left: 0; right: 0; }
+        /* HIDDEN STATE (When another card is active) */
+        .pass-card.hidden-stack {
+            transform: translateY(100vh);
         }
 
-        @media (max-width: 1023px) {
-            .swiss-grid { display: block; padding-bottom: 60px; }
-            /* Reduced mobile height to pull content up */
-            .col-cards { height: 480px; margin-bottom: 0px; } 
-            .col-benefits { padding: 0 24px; margin-top: 24px; } /* Reduced top margin */
-            .card-wrapper { min-width: 85vw; height: 100%; padding: 0 4px; }
-            .mobile-dots { display: flex; justify-content: center; margin-top: 0px; }
+        /* TYPOGRAPHY UTILS */
+        .serif { font-family: 'Cormorant Garamond', serif; }
+        .gold-text { color: #D4AF37; }
+        
+        /* APPLE WALLET SHINE */
+        .shine {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(125deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 70%);
+            pointer-events: none;
+            z-index: 10;
         }
 
-        #aura {
+        /* ACCORDION WITHIN DETAILS */
+        .detail-row {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 20px 0;
+        }
+        .detail-row:last-child { border-bottom: none; }
+
+        /* BUTTONS */
+        .apple-btn {
+            background: #fff;
+            color: #000;
+            border-radius: 12px;
+            padding: 16px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 13px;
+        }
+        
+        /* CLOSE BUTTON */
+        #close-btn {
             position: fixed;
-            top: 50%; left: 50%;
-            width: 140vw; height: 140vh;
-            transform: translate(-50%, -50%);
-            filter: blur(140px);
-            z-index: -1;
-            transition: background 1.5s ease;
+            top: 60px;
+            right: 24px;
+            z-index: 200;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
         }
+        #close-btn.visible { opacity: 1; pointer-events: auto; }
+
     </style>
 </head>
 <body>
-    <div id="aura" style="background: radial-gradient(circle, rgba(52, 199, 89, 0.15) 0%, transparent 60%);"></div>
-    
-    <header class="brand-header">
-        <h1 class="text-[9px] md:text-xs font-bold tracking-[0.4em] uppercase text-white/40 mb-2">Cinnamon Life</h1>
-        <h2 class="text-2xl md:text-4xl serif italic text-white leading-none">City of Dreams</h2>
+
+    <header class="wallet-header">
+        <h1 class="text-3xl font-bold tracking-tight">Wallet</h1>
+        <p class="text-sm font-medium text-gray-400 mt-1">Cinnamon Life Privileges</p>
     </header>
 
-    <main class="swiss-grid">
+    <div id="close-btn" onclick="resetStack()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </div>
+
+    <div class="wallet-stack" id="stack-container">
         
-        <section class="col-cards relative">
-            <div id="swiper" class="swiper-container snap-x hide-scrollbar" onscroll="handleScroll()">
-                
-                <div class="card-wrapper snap-center">
-                    <div class="glass-monolith p-8">
-                        <div class="flex justify-between items-start border-b border-white/10 pb-4">
-                            <span class="text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase">Foundation</span>
-                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-                        </div>
-                        <div class="text-center my-auto">
-                            <h2 class="text-6xl md:text-8xl font-bold tracking-tighter text-emerald-500">Emerald</h2>
-                            <p class="serif italic text-white/50 mt-2 text-lg">The Essential Privilege</p>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-end">
-                                <span class="text-[9px] font-bold tracking-widest text-white/30 uppercase">Annual<br>Access</span>
-                                <span class="text-3xl font-light tracking-tight">50,000<span class="text-[10px] ml-1 opacity-50">LKR</span></span>
-                            </div>
-                            <button class="w-full py-4 bg-white text-black text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-neutral-200 transition-colors">Apply</button>
-                        </div>
-                    </div>
+        <div class="pass-card" id="card-0" style="background: var(--card-emerald); top: 0px;" onclick="activateCard(0)">
+            <div class="shine"></div>
+            <div class="card-face">
+                <div class="flex justify-between items-start">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" class="w-5 h-5 opacity-50 invert" alt="Logo">
+                    <span class="font-mono text-xs opacity-60">TIER 01</span>
                 </div>
-
-                <div class="card-wrapper snap-center">
-                    <div class="glass-monolith p-8">
-                        <div class="flex justify-between items-start border-b border-white/10 pb-4">
-                            <span class="text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase">Signature</span>
-                            <div class="w-1.5 h-1.5 rounded-full bg-rose-500"></div>
-                        </div>
-                        <div class="text-center my-auto">
-                            <h2 class="text-6xl md:text-8xl font-bold tracking-tighter text-rose-500">Ruby</h2>
-                            <p class="serif italic text-white/50 mt-2 text-lg">The Elevated Standard</p>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-end">
-                                <span class="text-[9px] font-bold tracking-widest text-white/30 uppercase">Annual<br>Access</span>
-                                <span class="text-3xl font-light tracking-tight">125,000<span class="text-[10px] ml-1 opacity-50">LKR</span></span>
-                            </div>
-                            <button class="w-full py-4 bg-white text-black text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-neutral-200 transition-colors">Apply</button>
-                        </div>
-                    </div>
+                <div>
+                    <h2 class="text-3xl font-semibold tracking-tight">Emerald</h2>
+                    <p class="font-medium opacity-70 text-sm mt-1">Foundation Access</p>
                 </div>
-
-                <div class="card-wrapper snap-center">
-                    <div class="glass-monolith p-8" style="border-color: rgba(212, 175, 55, 0.2);">
-                        <div class="flex justify-between items-start border-b border-white/10 pb-4">
-                            <span class="text-[9px] font-bold tracking-[0.2em] text-[#D4AF37] uppercase">Zenith</span>
-                            <div class="w-1.5 h-1.5 rounded-full bg-[#D4AF37] shadow-[0_0_10px_#D4AF37]"></div>
-                        </div>
-                        <div class="text-center my-auto">
-                            <h2 class="text-6xl md:text-8xl font-bold tracking-tighter gold-shimmer">Diamond</h2>
-                            <p class="serif italic text-[#D4AF37]/70 mt-2 text-lg">The Sovereign Choice</p>
-                        </div>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-end">
-                                <span class="text-[9px] font-bold tracking-widest text-white/30 uppercase">Annual<br>Access</span>
-                                <span class="text-3xl font-light tracking-tight text-[#D4AF37]">425,000<span class="text-[10px] ml-1 opacity-50">LKR</span></span>
-                            </div>
-                            <button class="w-full py-4 bg-white text-black text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-neutral-200 transition-colors">Apply</button>
-                        </div>
-                    </div>
+                <div class="flex justify-between items-end">
+                    <span class="font-mono text-xs opacity-50">**** 5000</span>
+                    <span class="text-lg font-bold">LKR 50,000</span>
                 </div>
             </div>
+            <div class="card-details hide-scrollbar">
+                <div class="pt-6">
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Privileges</p>
+                    
+                    <div class="detail-row">
+                        <h4 class="font-semibold text-lg text-emerald-400 mb-1">Dining</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed">50% off food. 10% Off Weekday Lunch @ Quizine. Buffet Experience for Two.</p>
+                    </div>
+                    <div class="detail-row">
+                        <h4 class="font-semibold text-lg text-emerald-400 mb-1">Stay</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed">Buy 2 Nights, Get 3rd Free. Upgrade from City to Ocean View.</p>
+                    </div>
+                    <div class="detail-row">
+                        <h4 class="font-semibold text-lg text-emerald-400 mb-1">Lifestyle</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed">25% Off Laundry. 4,000 F&B Credit. Complimentary Spouse Card.</p>
+                    </div>
 
-            <div class="mobile-dots gap-2">
-                <div id="dot0" class="h-0.5 w-6 bg-white transition-all duration-500"></div>
-                <div id="dot1" class="h-0.5 w-2 bg-white/20 transition-all duration-500"></div>
-                <div id="dot2" class="h-0.5 w-2 bg-white/20 transition-all duration-500"></div>
-            </div>
-        </section>
-
-        <section class="col-benefits">
-            <h3 class="text-[9px] font-bold tracking-[0.3em] uppercase text-white/30 mb-4 pl-2">Privilege Compendium</h3>
-            <div class="accordion-wrapper" id="benefits-container">
+                    <button class="apple-btn">Add to Wallet</button>
+                    <p class="text-[10px] text-center text-gray-600 mt-4 pb-10">Terms and conditions apply.</p>
                 </div>
-        </section>
+            </div>
+        </div>
 
-    </main>
+        <div class="pass-card" id="card-1" style="background: var(--card-ruby); top: 60px;" onclick="activateCard(1)">
+            <div class="shine"></div>
+            <div class="card-face">
+                <div class="flex justify-between items-start">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" class="w-5 h-5 opacity-50 invert" alt="Logo">
+                    <span class="font-mono text-xs opacity-60">TIER 02</span>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-semibold tracking-tight">Ruby</h2>
+                    <p class="font-medium opacity-70 text-sm mt-1">Signature Access</p>
+                </div>
+                <div class="flex justify-between items-end">
+                    <span class="font-mono text-xs opacity-50">**** 2500</span>
+                    <span class="text-lg font-bold">LKR 125,000</span>
+                </div>
+            </div>
+            <div class="card-details hide-scrollbar">
+                <div class="pt-6">
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Privileges</p>
+                    
+                    <div class="detail-row">
+                        <h4 class="font-semibold text-lg text-rose-400 mb-1">Dining</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed">20% off Beverages. Exclusive Bottle of Wine. Afternoon Tea for Two.</p>
+                    </div>
+                    <div class="detail-row">
+                        <h4 class="font-semibold text-lg text-rose-400 mb-1">Stay</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed">Complimentary Deluxe Room Night. Unlimited Upgrades. LKR 10,000 Credit.</p>
+                    </div>
+                    <div class="detail-row">
+                        <h4 class="font-semibold text-lg text-rose-400 mb-1">Wellness</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed">60min Nature’s Symphony Massage. Pool Access. 30% Off Treatments.</p>
+                    </div>
+
+                    <button class="apple-btn">Add to Wallet</button>
+                    <p class="text-[10px] text-center text-gray-600 mt-4 pb-10">Terms and conditions apply.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="pass-card" id="card-2" style="background: var(--card-diamond); top: 120px;" onclick="activateCard(2)">
+            <div class="shine"></div>
+            <div class="card-face">
+                <div class="flex justify-between items-start">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" class="w-5 h-5 opacity-50 invert" alt="Logo">
+                    <span class="font-mono text-xs opacity-60 text-black">TIER 03</span>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-semibold tracking-tight text-black">Diamond</h2>
+                    <p class="font-medium opacity-70 text-sm mt-1 text-black">Zenith Access</p>
+                </div>
+                <div class="flex justify-between items-end text-black">
+                    <span class="font-mono text-xs opacity-50">**** 4250</span>
+                    <span class="text-lg font-bold">LKR 425,000</span>
+                </div>
+            </div>
+            <div class="card-details hide-scrollbar">
+                <div class="pt-6">
+                    <p class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Privileges</p>
+                    
+                    <div class="detail-row">
+                        <h4 class="font-semibold text-lg text-amber-400 mb-1">Elite Dining</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed">Access to Cloud Wine (20% Off). Party Vouchers. Exclusive Wine selection.</p>
+                    </div>
+                    <div class="detail-row">
+                        <h4 class="font-semibold text-lg text-amber-400 mb-1">Master Suite</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed">Complimentary Oceanscape Suite Residency. Upgrade to Master Suites.</p>
+                    </div>
+                    <div class="detail-row">
+                        <h4 class="font-semibold text-lg text-amber-400 mb-1">Exclusive</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed">"Member for a Day" Pass. Complimentary Spouse Card. 50% Off Rooms.</p>
+                    </div>
+
+                    <button class="apple-btn">Add to Wallet</button>
+                    <p class="text-[10px] text-center text-gray-600 mt-4 pb-10">Terms and conditions apply.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
     <script>
-        const DATA = [
-            {
-                color: 'rgba(52, 199, 89, 0.15)',
-                cats: [
-                    { 
-                        t: 'Dining Privileges', 
-                        d: 'Up to 50% off food. Includes 10% Off Weekday Lunch @ Quizine, 20% off Beverages, Buffet Experience for Two, Afternoon Tea Experience for Two, and One Exclusive Bottle of Selected Wine.' 
-                    },
-                    { 
-                        t: 'Accommodation', 
-                        d: 'Stay 2 nights and get the 3rd night free. 50% off BAR for Rooms. Complimentary Upgrade from Standard City View to Ocean View.' 
-                    },
-                    { 
-                        t: 'Wellness & Lifestyle', 
-                        d: '4,000 F&B Wellness Credit. 25% Off Laundry & Dry Cleaning. 20% off Wellness Preferred Rate. 15% Off for Wellness Treatments for Two. Complimentary Spouse Card.' 
-                    }
-                ]
-            },
-            {
-                color: 'rgba(255, 59, 48, 0.15)',
-                cats: [
-                    { 
-                        t: 'Dining Privileges', 
-                        d: 'Up to 50% off food. 10% Off Weekday Lunch @ Quizine. 20% off Beverages. Buffet & Afternoon Tea Experience for Two. One Exclusive Bottle of Selected Wine.' 
-                    },
-                    { 
-                        t: 'Accommodation', 
-                        d: 'Deluxe room and breakfast for Two. Unlimited Accommodation Upgrade. Stay 2 nights and get 3rd night free. 50% off BAR for Rooms. LKR 10,000 Room Credit.' 
-                    },
-                    { 
-                        t: 'Wellness & Lifestyle', 
-                        d: 'Nature’s Symphony 60min massage. 4,000 F&B Wellness Credit. Pool access for Two. 30% off Wellness Preferred Rate.' 
-                    }
-                ]
-            },
-            {
-                color: 'rgba(212, 175, 55, 0.2)',
-                cats: [
-                    { 
-                        t: 'Dining Privileges', 
-                        d: '20% Off Food & Beverage at Cloud Wine. Buffet & Afternoon Tea for Two. One Exclusive Bottle of Selected Wine. Party Voucher.' 
-                    },
-                    { 
-                        t: 'Accommodation', 
-                        d: 'Complimentary Oceanscape Suite and breakfast for Two. Stay 2 nights get 3rd free. Complimentary Upgrade from Premier Life Ocean View to Suite Room.' 
-                    },
-                    { 
-                        t: 'Exclusive Access', 
-                        d: '"Member for a Day" Pass. Complimentary Spouse Card. 50% off BAR for Rooms.' 
-                    }
-                ]
-            }
-        ];
+        // WALLET LOGIC
+        const cards = [document.getElementById('card-0'), document.getElementById('card-1'), document.getElementById('card-2')];
+        const closeBtn = document.getElementById('close-btn');
+        let activeIndex = -1;
 
-        const swiper = document.getElementById('swiper');
-        const benefitsContainer = document.getElementById('benefits-container');
-        const aura = document.getElementById('aura');
-        let currentTier = 0;
+        // Initial offsets for the stack (simulating depth)
+        const offsets = [0, 60, 120];
 
-        function renderAccordion(index) {
-            const data = DATA[index];
-            
-            // Aura Transition
-            aura.style.background = `radial-gradient(circle, ${data.color} 0%, transparent 60%)`;
+        function activateCard(index) {
+            if (activeIndex === index) return; // Already active
 
-            let html = '';
-            data.cats.forEach((cat, i) => {
-                const isActive = i === 0 ? 'active' : '';
-                html += `
-                    <div class="accordion-item ${isActive}" onclick="toggleAccordion(this)">
-                        <div class="accordion-trigger group">
-                            <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-white group-hover:text-white/80 transition-colors">${cat.t}</span>
-                            <svg class="icon-plus text-white/40" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                        </div>
-                        <div class="accordion-content">
-                            <div class="accordion-inner">
-                                <p class="serif italic text-lg text-white/60 leading-relaxed max-w-sm pb-4">${cat.d}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            benefitsContainer.style.opacity = '0';
-            setTimeout(() => {
-                benefitsContainer.innerHTML = html;
-                benefitsContainer.style.opacity = '1';
-            }, 150);
-        }
+            activeIndex = index;
+            closeBtn.classList.add('visible');
 
-        function toggleAccordion(el) {
-            document.querySelectorAll('.accordion-item').forEach(item => {
-                if(item !== el) item.classList.remove('active');
-            });
-            el.classList.toggle('active');
-        }
-
-        function handleScroll() {
-            const width = swiper.clientWidth; 
-            const scrollPos = swiper.scrollLeft + (width * 0.1); 
-            const cardWidth = width > 768 ? width : (window.innerWidth * 0.85 + 16); 
-            const index = Math.round(swiper.scrollLeft / cardWidth);
-            const safeIndex = Math.min(Math.max(index, 0), 2);
-
-            if (safeIndex !== currentTier) {
-                currentTier = safeIndex;
-                renderAccordion(safeIndex);
-                
-                for(let i=0; i<3; i++) {
-                    const dot = document.getElementById(`dot${i}`);
-                    if(i === safeIndex) {
-                        dot.style.width = '24px';
-                        dot.style.backgroundColor = '#FFFFFF';
-                    } else {
-                        dot.style.width = '8px';
-                        dot.style.backgroundColor = 'rgba(255,255,255,0.2)';
-                    }
+            cards.forEach((card, i) => {
+                if (i === index) {
+                    // Selected Card: Moves to top, expands
+                    card.classList.add('active');
+                    card.classList.remove('hidden-stack');
+                    card.style.transform = `translateY(0px)`;
+                } else {
+                    // Other Cards: Slide down out of view
+                    card.classList.remove('active');
+                    card.classList.add('hidden-stack');
                 }
-            }
+            });
         }
 
-        // Initialize immediately
-        renderAccordion(0);
+        function resetStack() {
+            activeIndex = -1;
+            closeBtn.classList.remove('visible');
+
+            cards.forEach((card, i) => {
+                card.classList.remove('active');
+                card.classList.remove('hidden-stack');
+                // Return to original stacked positions
+                card.style.top = `${offsets[i]}px`;
+                card.style.transform = `translateY(0px)`;
+                
+                // Reset scroll on details
+                const details = card.querySelector('.card-details');
+                if(details) details.scrollTop = 0;
+            });
+        }
     </script>
 </body>
 </html>
