@@ -6,60 +6,51 @@
     <title>The Privilege Collection | Cinnamon Life</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400;1,500;1,600&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400;1,500;1,600&family=Inter:wght@100;200;300;400;500;600;700&display=swap');
         
-        /* DESIGN SYSTEM: SOVEREIGN BLACK
-           Strict adherence to Apple HIG & Luxury Standards
-        */
         :root {
             --emerald: #34C759;
             --ruby: #FF3B30;
             --diamond: #D4AF37;
             --system-bg: #000000;
-            --label-primary: #FFFFFF;
-            --label-secondary: rgba(235, 235, 245, 0.6);
-            --label-tertiary: rgba(235, 235, 245, 0.3);
-            --material-thin: rgba(255, 255, 255, 0.05);
-            --material-thick: rgba(28, 28, 30, 0.95);
-            --border: rgba(255, 255, 255, 0.1);
+            --material-thin: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.08);
         }
 
         body {
             background-color: var(--system-bg);
-            color: var(--label-primary);
-            font-family: -apple-system, "Inter", sans-serif;
+            color: #ffffff;
+            font-family: 'Inter', -apple-system, sans-serif;
             -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
             margin: 0;
-            letter-spacing: -0.015em;
+            letter-spacing: -0.01em;
         }
 
         .serif { font-family: 'Cormorant Garamond', serif; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Apple Continuous Corner Radius (The Squircle) */
+        /* Apple HIG Continuous Corner Radius (The Squircle) */
         .squircle { border-radius: 44px; }
         @media (max-width: 768px) { .squircle { border-radius: 36px; } }
 
-        /* Netflix-Inspired Cinematic Depth */
-        #mesh-canvas {
+        /* Dynamic Background Glow */
+        #aura-field {
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
             z-index: -1;
-            filter: blur(120px) saturate(150%);
-            opacity: 0.18;
-            transition: all 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+            filter: blur(140px);
+            opacity: 0.12;
+            transition: all 1.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        /* Luxury Materials (HIG Glassmorphism) */
+        /* Premium Glass Architecture */
         .glass-atelier {
             background: var(--material-thin);
-            backdrop-filter: blur(50px) saturate(200%);
-            -webkit-backdrop-filter: blur(50px) saturate(200%);
-            border: 0.5px solid var(--border);
-            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.8);
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(60px) saturate(200%);
+            -webkit-backdrop-filter: blur(60px) saturate(200%);
+            border: 1px solid var(--border);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .gold-shimmer {
@@ -71,242 +62,160 @@
         }
         @keyframes shine { to { background-position: 200% center; } }
 
-        /* Carousel Logic */
         .snap-x { scroll-snap-type: x mandatory; }
         .snap-center { scroll-snap-align: center; }
 
-        /* Desktop Grid Adaptive Architecture */
+        /* Button Interaction Physics */
+        .ios-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .ios-btn:active { transform: scale(0.96); opacity: 0.8; }
+        .ios-btn:hover { background: #f5f5f7; transform: translateY(-2px); }
+
+        /* Responsive Architecture Grid */
         @media (min-width: 1024px) {
-            .atelier-grid {
+            .desktop-atelier {
                 display: grid;
-                grid-template-columns: 500px 1fr;
-                gap: 120px;
+                grid-template-columns: 480px 1fr;
+                gap: 100px;
                 align-items: center;
-                min-height: 85vh;
+                min-height: 80vh;
             }
-        }
-
-        /* Haptic Micro-Interactions */
-        .apple-btn {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .apple-btn:active { transform: scale(0.96); opacity: 0.7; }
-        .apple-btn:hover { background: #fff; color: #000; box-shadow: 0 0 30px rgba(255,255,255,0.2); }
-
-        /* Type Hierarchy */
-        h1 { line-height: 0.95; }
-        .stat-label { font-size: 9px; letter-spacing: 0.5em; font-weight: 800; color: var(--label-tertiary); text-transform: uppercase; }
-        
-        /* Interactive Dot Logic */
-        .progress-bar {
-            height: 1px;
-            background: rgba(255,255,255,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        #progress-fill {
-            position: absolute;
-            top: 0; left: 0;
-            height: 100%;
-            background: #fff;
-            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
     </style>
 </head>
-<body class="px-8 py-12 lg:px-24 lg:py-20">
-    <div id="mesh-canvas" style="background: radial-gradient(circle at 70% 30%, var(--emerald) 0%, transparent 60%);"></div>
+<body class="px-6 py-12 lg:px-24 lg:py-20">
+    <div id="aura-field" style="background: radial-gradient(circle at 50% 50%, var(--emerald) 0%, transparent 70%);"></div>
 
-    <header class="flex justify-between items-baseline mb-16 lg:mb-24 relative z-50">
-        <div class="space-y-2">
-            <p class="stat-label">Cinnamon Life | City of Dreams</p>
-            <h1 class="text-3xl lg:text-5xl font-light serif italic tracking-wide text-white/90">The Privilege Collection</h1>
-        </div>
-        <div class="hidden lg:flex items-center gap-12">
-            <div class="text-right">
-                <p class="stat-label mb-1">Authenticated</p>
-                <p id="active-tier-label" class="text-xs font-medium tracking-tight uppercase text-emerald-500 transition-colors">Emerald Access</p>
-            </div>
-            <div class="h-10 w-10 rounded-full border border-white/10 flex items-center justify-center bg-white/5">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="opacity-40"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            </div>
-        </div>
+    <header class="text-center mb-12 lg:mb-20">
+        <p class="text-[9px] tracking-[0.6em] text-white/20 uppercase font-bold mb-4">Cinnamon Life | City of Dreams</p>
+        <h1 class="text-3xl lg:text-5xl font-light serif italic tracking-wide">The Privilege Collection</h1>
     </header>
 
-    <main class="atelier-grid">
+    <main class="desktop-atelier">
         <section class="relative">
-            <div id="swiper" class="flex overflow-x-auto snap-x hide-scrollbar gap-8 pb-12" onscroll="syncUI()">
+            <div id="swiper" class="flex overflow-x-auto snap-x hide-scrollbar gap-6 pb-8" onscroll="syncAtelier()">
                 
                 <div class="min-w-full lg:min-w-0 lg:w-full snap-center">
-                    <div class="glass-atelier squircle p-10 lg:p-14 h-[580px] flex flex-col justify-between">
-                        <div class="space-y-8">
-                            <span class="stat-label border-l border-emerald-500/50 pl-4">Foundation Collection</span>
-                            <h2 class="text-7xl lg:text-8xl font-light serif italic text-emerald-500 leading-none">Emerald</h2>
-                            <p class="text-[15px] font-light opacity-40 leading-relaxed max-w-xs italic serif">A masterfully curated entry into the resort's finest culinary and residential narratives.</p>
+                    <div class="glass-atelier squircle p-10 lg:p-14 h-[540px] flex flex-col justify-between text-center shadow-2xl">
+                        <div class="space-y-6">
+                            <span class="text-[9px] tracking-[0.4em] uppercase text-white/30 font-bold">Foundation</span>
+                            <h2 class="text-7xl lg:text-8xl font-light serif italic text-[#34C759] leading-none">Emerald</h2>
+                            <p class="text-[14px] font-light opacity-40 leading-relaxed italic serif max-w-[240px] mx-auto">A masterfully curated entry into the resort's finest culinary and residential narratives.</p>
                         </div>
-                        <div class="space-y-10">
-                            <div class="flex items-baseline gap-2">
-                                <span class="stat-label">Investment</span>
-                                <span class="text-4xl font-light tracking-tighter serif italic">LKR 50,000</span>
+                        <div class="space-y-8">
+                            <div class="flex flex-col items-center gap-1">
+                                <span class="text-[9px] text-white/20 font-bold tracking-widest uppercase">Investment</span>
+                                <span class="text-3xl font-light tracking-tighter serif italic">LKR 50,000</span>
                             </div>
-                            <button class="apple-btn w-full py-5 rounded-2xl bg-white text-black text-[11px] font-extrabold tracking-[0.3em] uppercase shadow-2xl">Apply for Access</button>
+                            <button class="ios-btn w-full py-5 rounded-2xl bg-white text-black text-[11px] font-bold tracking-[0.3em] uppercase">Apply for Access</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="min-w-full lg:min-w-0 lg:w-full snap-center">
-                    <div class="glass-atelier squircle p-10 lg:p-14 h-[580px] flex flex-col justify-between">
-                        <div class="space-y-8">
-                            <span class="stat-label border-l border-rose-500/50 pl-4">Signature Collection</span>
-                            <h2 class="text-7xl lg:text-8xl font-light serif italic text-rose-500 leading-none">Ruby</h2>
-                            <p class="text-[15px] font-light opacity-40 leading-relaxed max-w-xs italic serif">Elevated access defining the art of suite category enhancements and vital renewal.</p>
+                    <div class="glass-atelier squircle p-10 lg:p-14 h-[540px] flex flex-col justify-between text-center shadow-2xl">
+                        <div class="space-y-6">
+                            <span class="text-[9px] tracking-[0.4em] uppercase text-white/30 font-bold">Signature</span>
+                            <h2 class="text-7xl lg:text-8xl font-light serif italic text-[#FF3B30] leading-none">Ruby</h2>
+                            <p class="text-[14px] font-light opacity-40 leading-relaxed italic serif max-w-[240px] mx-auto">Elevated immersion defining the art of suite category enhancements and vital renewal.</p>
                         </div>
-                        <div class="space-y-10">
-                            <div class="flex items-baseline gap-2">
-                                <span class="stat-label">Investment</span>
-                                <span class="text-4xl font-light tracking-tighter serif italic">LKR 125,000</span>
+                        <div class="space-y-8">
+                            <div class="flex flex-col items-center gap-1">
+                                <span class="text-[9px] text-white/20 font-bold tracking-widest uppercase">Investment</span>
+                                <span class="text-3xl font-light tracking-tighter serif italic">LKR 125,000</span>
                             </div>
-                            <button class="apple-btn w-full py-5 rounded-2xl bg-white text-black text-[11px] font-extrabold tracking-[0.3em] uppercase shadow-2xl">Apply for Access</button>
+                            <button class="ios-btn w-full py-5 rounded-2xl bg-white text-black text-[11px] font-bold tracking-[0.3em] uppercase">Apply for Access</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="min-w-full lg:min-w-0 lg:w-full snap-center">
-                    <div class="glass-atelier squircle p-10 lg:p-14 h-[580px] flex flex-col justify-between">
-                        <div class="space-y-8">
-                            <span class="stat-label border-l border-[#ba9b64]/50 pl-4">Zenith Collection</span>
+                    <div class="glass-atelier squircle p-10 lg:p-14 h-[540px] flex flex-col justify-between text-center shadow-2xl">
+                        <div class="space-y-6">
+                            <span class="text-[9px] tracking-[0.4em] uppercase text-white/30 font-bold">Zenith</span>
                             <h2 class="text-7xl lg:text-8xl font-light serif italic gold-shimmer leading-none">Diamond</h2>
-                            <p class="text-[15px] font-light opacity-40 leading-relaxed max-w-xs italic serif">The ultimate sovereign privilege. Reserved exclusively for those who define the extraordinary.</p>
+                            <p class="text-[14px] font-light opacity-40 leading-relaxed italic serif max-w-[240px] mx-auto">The ultimate sovereign privilege. Reserved exclusively for those who define the extraordinary.</p>
                         </div>
-                        <div class="space-y-10">
-                            <div class="flex items-baseline gap-2">
-                                <span class="stat-label">Investment</span>
-                                <span class="text-4xl font-light tracking-tighter serif italic">LKR 425,000</span>
+                        <div class="space-y-8">
+                            <div class="flex flex-col items-center gap-1">
+                                <span class="text-[9px] text-white/20 font-bold tracking-widest uppercase">Investment</span>
+                                <span class="text-3xl font-light tracking-tighter serif italic">LKR 425,000</span>
                             </div>
-                            <button class="apple-btn w-full py-5 rounded-2xl bg-white text-black text-[11px] font-extrabold tracking-[0.3em] uppercase shadow-2xl">Apply for Access</button>
+                            <button class="ios-btn w-full py-5 rounded-2xl bg-white text-black text-[11px] font-bold tracking-[0.3em] uppercase">Apply for Access</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="flex items-center gap-6 mt-8">
-                <span class="text-[9px] font-bold opacity-20 tracking-widest">01</span>
-                <div class="progress-bar flex-grow">
-                    <div id="progress-fill" style="width: 33.3%"></div>
-                </div>
-                <span class="text-[9px] font-bold opacity-20 tracking-widest">03</span>
+            <div class="flex justify-center lg:justify-start gap-4 mt-6">
+                <div id="dot0" class="h-1 w-10 bg-white transition-all duration-700"></div>
+                <div id="dot1" class="h-1 w-4 bg-white/10 transition-all duration-700"></div>
+                <div id="dot2" class="h-1 w-4 bg-white/10 transition-all duration-700"></div>
             </div>
         </section>
 
-        <section id="storyboard" class="mt-24 lg:mt-0 space-y-20 lg:pl-12 relative z-10">
+        <section id="storyboard" class="mt-20 lg:mt-0 space-y-16 lg:pl-12 text-center lg:text-left">
             </section>
     </main>
 
-    <footer class="mt-40 border-t border-white/5 pt-12 pb-24 flex flex-col md:flex-row justify-between items-start gap-8">
-        <div class="space-y-4 max-w-sm">
-            <h3 class="stat-label">Privacy & Exclusivity</h3>
-            <p class="text-[13px] font-light text-white/30 leading-relaxed">Access to The Collection is granted via private invitation or authenticated inquiry only. Benefits are subject to the Master Terms of Cinnamon Life Privileges.</p>
-        </div>
-        <div class="flex gap-12">
-            <div>
-                <p class="stat-label mb-2">Location</p>
-                <p class="text-xs text-white/50">Colombo, Sri Lanka</p>
-            </div>
-            <div>
-                <p class="stat-label mb-2">Inquiry</p>
-                <p class="text-xs text-white/50">concierge@cinnamonlife.com</p>
-            </div>
-        </div>
-    </footer>
-
     <script>
-        /* INTERACTION ENGINE
-           Vanilla JS for High Stability (Zero Black Screen Risk)
-        */
         const TIERS = [
             {
-                label: 'Emerald Access',
-                color: '#10b981',
-                aura: 'radial-gradient(circle at 70% 30%, rgba(16, 185, 129, 0.15) 0%, #000 70%)',
-                story: 'A refined introduction to the resort’s finest culinary and residential narratives.',
-                privileges: [
-                    { t: 'Epicurean Excellence', d: 'Up to 50% culinary preference and sommelier selections across signature venues.' },
-                    { t: 'The Gift of Time', d: 'Secure your third evening with our compliments upon booking two consecutive nights.' },
+                label: 'Emerald Invitation',
+                color: 'rgba(52, 199, 89, 0.15)',
+                perks: [
+                    { t: 'The Gift of Time', d: 'Secure your third evening with our compliments upon booking two nights.' },
+                    { t: 'Epicurean Grace', d: 'Up to 50% culinary preference and sommelier selection.' },
                     { t: 'Vista Enhancement', d: 'Guaranteed upgrade from Standard City to Ocean View sanctuaries.' }
                 ]
             },
             {
-                label: 'Ruby Access',
-                color: '#e11d48',
-                aura: 'radial-gradient(circle at 70% 30%, rgba(225, 29, 72, 0.15) 0%, #000 70%)',
-                story: 'Elevated signature immersion with expanded residency credits and vital renewal therapies.',
-                privileges: [
-                    { t: 'Signature Residency', d: 'One complimentary Deluxe room stay with breakfast and LKR 10,000 residency credit.' },
+                label: 'Ruby Invitation',
+                color: 'rgba(255, 59, 48, 0.15)',
+                perks: [
+                    { t: 'Signature Residency', d: 'One complimentary Deluxe room stay and LKR 10,000 residency credit.' },
                     { t: 'Unlimited Horizon', d: 'Unrestricted accommodation upgrades across all available categories.' },
-                    { t: 'Nature’s Symphony', d: 'Sixty minutes of therapeutic massage and private pool access for two.' }
+                    { t: 'Vitality Therapy', d: 'Sixty minutes of Nature’s Symphony therapeutic massage.' }
                 ]
             },
             {
-                label: 'Diamond Access',
-                color: '#ba9b64',
-                aura: 'radial-gradient(circle at 70% 30%, rgba(186, 155, 100, 0.2) 0%, #000 70%)',
-                story: 'The absolute sovereign privilege. Reserved exclusively for those who define the extraordinary.',
-                privileges: [
-                    { t: 'Oceanscape Retreat', d: 'Annual retreat in our most prestigious master suite residency inclusive of breakfast.' },
-                    { t: 'Elite Transition', d: 'Guaranteed upgrade from Premier Ocean View rooms to our Master Suites.' },
-                    { t: 'Bespoke Services', d: 'Elite access to Cloud Wine, GATZ Afternoon Tea, and celebration party vouchers.' }
+                label: 'Diamond Invitation',
+                color: 'rgba(186, 155, 100, 0.2)',
+                perks: [
+                    { t: 'Oceanscape Retreat', d: 'Annual retreat in our most prestigious master suite residency.' },
+                    { t: 'Elite Transition', d: 'Seamless upgrades from Premier Ocean View to our Master Suites.' },
+                    { t: 'Bespoke Exclusivity', d: 'Elite access to Cloud Wine and gala celebration vouchers.' }
                 ]
             }
         ];
 
         const swiper = document.getElementById('swiper');
-        const aura = document.getElementById('mesh-canvas');
+        const aura = document.getElementById('aura-field');
         const storyboard = document.getElementById('storyboard');
-        const label = document.getElementById('active-tier-label');
-        const progress = document.getElementById('progress-fill');
 
-        function syncUI() {
-            const index = Math.round(swiper.scrollLeft / swiper.clientWidth);
-            const t = TIERS[index];
+        function syncAtelier() {
+            const idx = Math.round(swiper.scrollLeft / swiper.clientWidth);
+            const t = TIERS[idx];
 
-            // 1. Aura Physics (Netflix Background)
-            aura.style.background = t.aura;
+            aura.style.background = `radial-gradient(circle at 50% 50%, ${t.color} 0%, transparent 60%)`;
             
-            // 2. Global Badge
-            label.innerText = t.label;
-            label.style.color = t.color;
-
-            // 3. Spotify Progress
-            progress.style.width = `${((index + 1) / 3) * 100}%`;
-
-            // 4. Content Reveal (Bespoke Storytelling)
             storyboard.style.opacity = '0';
-            storyboard.style.transform = 'translateY(10px)';
-            
             setTimeout(() => {
-                storyboard.innerHTML = `
-                    <div class="space-y-6">
-                        <p class="text-3xl md:text-5xl font-light serif italic leading-tight text-white/90">${t.story}</p>
-                        <div class="h-px w-24 bg-white/10"></div>
+                storyboard.innerHTML = t.perks.map((p, i) => `
+                    <div class="space-y-4">
+                        <h4 class="text-[10px] tracking-[0.4em] uppercase text-white/20 font-bold">Privilege 0${i+1}</h4>
+                        <h3 class="text-3xl lg:text-4xl serif italic tracking-wide text-white/90 leading-tight">${p.t}</h3>
+                        <p class="text-[15px] font-light leading-relaxed text-white/30 max-w-sm mx-auto lg:mx-0">${p.d}</p>
                     </div>
-                    <div class="grid gap-12 pt-10">
-                        ${t.privileges.map((p, i) => `
-                            <div class="space-y-4 group">
-                                <div class="flex items-center gap-6">
-                                    <span class="text-[10px] font-bold text-white/10 tracking-[0.4em] transition-colors group-hover:text-white">0${i+1}</span>
-                                    <h3 class="text-2xl lg:text-4xl serif italic text-white/90 tracking-wide">${p.t}</h3>
-                                </div>
-                                <p class="text-[15px] font-light leading-relaxed text-white/30 max-w-lg ml-14 group-hover:text-white/60 transition-colors duration-500">${p.d}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
+                `).join('');
                 storyboard.style.opacity = '1';
-                storyboard.style.transform = 'translateY(0)';
             }, 300);
+
+            for (let i = 0; i < 3; i++) {
+                document.getElementById(`dot${i}`).className = (i === idx) ? 'h-1 w-10 bg-white transition-all duration-700' : 'h-1 w-4 bg-white/10 transition-all duration-700';
+            }
         }
 
-        // Initialize First Render
-        window.onload = syncUI;
+        window.onload = syncAtelier;
     </script>
 </body>
 </html>
