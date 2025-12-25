@@ -9,129 +9,126 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <style>
-        /* --- TYPOGRAPHY SYSTEM --- */
+        /* --- TYPOGRAPHY --- */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@1,300;1,400;1,500;1,600&display=swap');
         
         :root {
-            --bg-deep: #020202;
+            --bg-void: #020202;
             --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-surface: rgba(255, 255, 255, 0.02);
-            --accent-gold: #D4AF37;
-            --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
+            --glass-surface: rgba(255, 255, 255, 0.03);
+            --gold: #D4AF37;
         }
 
         body {
-            background-color: var(--bg-deep);
+            background-color: var(--bg-void);
             color: #ffffff;
             font-family: 'Inter', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
             margin: 0;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         .serif { font-family: 'Cormorant Garamond', serif; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
 
-        /* --- VISUAL FX --- */
+        /* --- SPATIAL ENVIRONMENT --- */
         
-        /* Noise Texture for Depth */
-        .noise-overlay {
+        /* 1. Cinematic Noise */
+        .noise-field {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            inset: 0;
             background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48ZmlsdGVyIGlkPSJnoiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIwLjY1IiBudW1PY3RhdmVzPSIzIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI2cpIiBvcGFjaXR5PSIwLjAzIi8+PC9zdmc+');
-            opacity: 0.4;
+            opacity: 0.35;
             pointer-events: none;
             z-index: 0;
         }
 
-        /* Aurora Background */
-        .aurora-bg {
+        /* 2. Deep Space Aurora */
+        .aurora-layer {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: -1;
             background: 
-                radial-gradient(circle at 10% 20%, rgba(20, 83, 45, 0.08), transparent 40%), 
-                radial-gradient(circle at 90% 80%, rgba(120, 53, 15, 0.08), transparent 40%);
-            filter: blur(80px);
+                radial-gradient(circle at 15% 50%, rgba(20, 83, 45, 0.1), transparent 40%), 
+                radial-gradient(circle at 85% 30%, rgba(120, 53, 15, 0.08), transparent 40%);
+            filter: blur(100px);
+            transition: background 2s ease;
         }
 
-        /* --- COMPONENTS --- */
+        /* --- SPATIAL COMPONENTS --- */
 
-        /* Navigation Capsule */
+        /* 3D Tilt Card (Desktop) */
+        .spatial-card {
+            background: var(--glass-surface);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            position: relative;
+            transition: transform 0.1s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+            transform-style: preserve-3d;
+            overflow: hidden;
+        }
+        
+        .spatial-card:hover {
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 
+                0 20px 50px -10px rgba(0,0,0,0.5),
+                0 0 20px rgba(255,255,255,0.05);
+        }
+
+        .card-content {
+            transform: translateZ(20px); /* Lifts content off the card */
+        }
+
+        /* Nav Capsule */
         .nav-capsule {
             position: fixed;
-            top: 24px; left: 50%;
+            top: 32px; left: 50%;
             transform: translateX(-50%);
             padding: 10px 10px 10px 24px;
-            background: rgba(10, 10, 10, 0.8);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--glass-border);
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 999px;
             z-index: 100;
             display: flex;
             align-items: center;
             justify-content: space-between;
             width: 90%;
-            max-width: 500px;
+            max-width: 520px;
             box-shadow: 0 20px 40px -10px rgba(0,0,0,0.8);
-            transition: all 0.3s ease;
         }
 
-        /* Bento Card (The Monolith) */
-        .bento-card {
-            background: var(--glass-surface);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-            transition: all 0.5s var(--ease-luxury);
-        }
-        .bento-card:hover {
-            border-color: rgba(255,255,255,0.2);
-            transform: translateY(-5px);
-            background: rgba(255,255,255,0.04);
-            box-shadow: 0 30px 60px -20px rgba(0,0,0,1);
-        }
-
-        /* Spatial UI Floating Elements */
-        .float-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.01) 100%);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 20px;
-            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.8);
+        /* Floating Elements Animation */
+        .float-layer {
             position: absolute;
+            border-radius: 20px;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.8);
         }
-        
-        .anim-float-1 { animation: float 7s ease-in-out infinite; }
-        .anim-float-2 { animation: float 9s ease-in-out infinite reverse; }
-        .anim-float-3 { animation: float 8s ease-in-out infinite 1s; }
+
+        .anim-float { animation: float 6s ease-in-out infinite; }
+        .anim-float-delay { animation: float 7s ease-in-out infinite 1s; }
+        .anim-float-reverse { animation: float 8s ease-in-out infinite reverse; }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(0.5deg); }
         }
 
-        /* Typography FX */
+        /* Text FX */
         .gold-shimmer {
             background: linear-gradient(90deg, #D4AF37, #FFF5E1, #D4AF37);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-size: 200%;
-            animation: shine 6s linear infinite;
+            animation: shine 5s linear infinite;
         }
         @keyframes shine { to { background-position: 200%; } }
 
-        .reveal {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 1s var(--ease-luxury);
-        }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-
-        /* Input Styling */
-        .input-editorial {
+        /* Input Editorial */
+        .input-minimal {
             background: transparent;
             border: none;
             border-bottom: 1px solid rgba(255,255,255,0.2);
@@ -140,90 +137,82 @@
             padding: 12px 0;
             font-family: 'Cormorant Garamond', serif;
             font-style: italic;
-            font-size: 18px;
+            font-size: 20px;
             outline: none;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
         }
-        .input-editorial:focus { border-color: #fff; }
+        .input-minimal:focus { border-color: #fff; padding-left: 10px; }
 
-        /* --- LAYOUT GRIDS --- */
-        .grid-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
+        /* Grid Layout */
+        .max-w-grid { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
 
-    <div class="noise-overlay"></div>
-    <div class="aurora-bg"></div>
+    <div class="noise-field"></div>
+    <div class="aurora-layer" id="aurora"></div>
 
     <nav class="nav-capsule">
-        <div class="flex flex-col leading-tight">
+        <div class="flex flex-col leading-none">
             <span class="text-[9px] uppercase tracking-[0.2em] text-white/40 font-bold">Cinnamon Life</span>
             <span class="text-sm serif italic text-white/90">City of Dreams</span>
         </div>
-        <div class="flex items-center gap-4">
-            <a href="#collection" class="hidden md:block text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Collection</a>
-            <a href="#digital" class="hidden md:block text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">App</a>
-            <button class="bg-white text-black px-5 py-2.5 rounded-full text-[9px] font-bold uppercase tracking-widest hover:bg-neutral-200 transition-colors">
+        <div class="flex items-center gap-6">
+            <a href="#collection" class="hidden md:block text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Tiers</a>
+            <a href="#app" class="hidden md:block text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">App</a>
+            <button class="bg-white text-black px-5 py-2.5 rounded-full text-[9px] font-bold uppercase tracking-widest hover:scale-105 transition-transform">
                 Login
             </button>
         </div>
     </nav>
 
-    <header class="min-h-screen flex items-center pt-20">
-        <div class="grid-container w-full grid lg:grid-cols-2 gap-12 items-center">
+    <header class="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] border border-white/5 rounded-full opacity-30 animate-[spin_60s_linear_infinite]"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[40vw] border border-white/5 rounded-full opacity-20 animate-[spin_40s_linear_infinite_reverse]"></div>
+
+        <div class="max-w-grid text-center relative z-10 reveal">
+            <div class="inline-flex items-center gap-2 border border-white/10 rounded-full px-4 py-1.5 bg-white/5 backdrop-blur-md mb-8">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-[9px] uppercase tracking-widest text-white/80 font-semibold">Membership 2025</span>
+            </div>
             
-            <div class="reveal space-y-8">
-                <div class="inline-flex items-center gap-2 border border-white/10 rounded-full px-3 py-1 bg-white/5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="text-[9px] uppercase tracking-widest text-white/60 font-medium">Membership Open 2025</span>
-                </div>
-                <h1 class="text-6xl md:text-8xl font-light tracking-tighter leading-[0.9]">
-                    The<br>
-                    <span class="serif italic text-white/50">Sovereign</span><br>
-                    Collection.
-                </h1>
-                <p class="text-white/40 max-w-md leading-relaxed text-lg font-light">
-                    More than a membership. A curated passage into the City of Dreams. Unlock culinary mastery, sanctuary upgrades, and bespoke access.
-                </p>
-                <div class="pt-6">
-                    <a href="#collection" class="inline-block border-b border-white text-xs uppercase tracking-widest pb-1 hover:text-emerald-400 hover:border-emerald-400 transition-colors">Explore Tiers</a>
-                </div>
-            </div>
+            <h1 class="text-6xl md:text-9xl font-light tracking-tighter leading-[0.9] mb-8">
+                The<br>
+                <span class="serif italic text-white/50">Sovereign</span><br>
+                Collection
+            </h1>
+            
+            <p class="text-white/40 text-lg font-light max-w-lg mx-auto leading-relaxed mb-12">
+                A curated passage into the City of Dreams. Unlock culinary mastery, sanctuary upgrades, and bespoke access through a single digital key.
+            </p>
 
-            <div class="reveal relative h-[500px] hidden lg:block">
-                <div class="absolute inset-0 bg-gradient-to-tr from-emerald-900/10 to-transparent rounded-full blur-3xl"></div>
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[400px] bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl transform rotate-6 hover:rotate-0 transition-transform duration-700"></div>
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[400px] bg-white/5 border border-white/10 backdrop-blur-xl rounded-2xl transform -rotate-6 z-10 hover:rotate-0 transition-transform duration-700 delay-100"></div>
-            </div>
-
+            <a href="#collection" class="group inline-flex flex-col items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-white/50 hover:text-white transition-colors">
+                <span>Explore Access</span>
+                <i class="ph ph-arrow-down text-lg group-hover:translate-y-2 transition-transform"></i>
+            </a>
         </div>
     </header>
 
-    <section id="collection" class="py-24">
-        <div class="grid-container">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-3xl md:text-5xl serif italic">Select Your Access</h2>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="bento-card p-8 min-h-[500px] flex flex-col justify-between reveal group">
-                    <div>
-                        <div class="flex justify-between items-start mb-8">
+    <section id="collection" class="py-32 relative z-10">
+        <div class="max-w-grid">
+            <div class="grid lg:grid-cols-3 gap-8 perspective-container">
+                
+                <div class="spatial-card p-10 min-h-[550px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
+                    <div class="card-content">
+                        <div class="flex justify-between items-start mb-12">
                             <span class="text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase">Foundation</span>
-                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                            <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
                         </div>
-                        <h3 class="text-5xl serif italic text-emerald-400 mb-2">Emerald</h3>
+                        <h3 class="text-5xl serif italic text-emerald-400 mb-4">Emerald</h3>
                         <p class="text-sm text-white/40 leading-relaxed font-light">The essential key to culinary preference and extended sanctuaries.</p>
                     </div>
-                    <div class="space-y-6">
-                        <ul class="space-y-3 pt-6 border-t border-white/5">
+                    <div class="card-content space-y-8">
+                        <ul class="space-y-4 pt-8 border-t border-white/5">
                             <li class="flex items-center gap-3 text-xs text-white/70"><i class="ph-fill ph-check-circle text-emerald-500"></i> 3rd Night Complimentary</li>
                             <li class="flex items-center gap-3 text-xs text-white/70"><i class="ph-fill ph-check-circle text-emerald-500"></i> 50% Dining Preference</li>
-                            <li class="flex items-center gap-3 text-xs text-white/70"><i class="ph-fill ph-check-circle text-emerald-500"></i> Ocean View Upgrade</li>
                         </ul>
                         <div class="flex justify-between items-end">
                             <div class="text-[9px] uppercase tracking-widest text-white/30">Annual Access</div>
@@ -233,18 +222,17 @@
                     </div>
                 </div>
 
-                <div class="bento-card p-8 min-h-[500px] flex flex-col justify-between reveal group" style="transition-delay: 100ms;">
-                    <div>
-                        <div class="flex justify-between items-start mb-8">
+                <div class="spatial-card p-10 min-h-[550px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2" style="transition-delay: 100ms;">
+                    <div class="card-content">
+                        <div class="flex justify-between items-start mb-12">
                             <span class="text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase">Signature</span>
-                            <div class="w-1.5 h-1.5 rounded-full bg-rose-500"></div>
+                            <div class="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_10px_rgba(225,29,72,0.5)]"></div>
                         </div>
-                        <h3 class="text-5xl serif italic text-rose-400 mb-2">Ruby</h3>
+                        <h3 class="text-5xl serif italic text-rose-400 mb-4">Ruby</h3>
                         <p class="text-sm text-white/40 leading-relaxed font-light">Elevated immersion with residency credits and vital renewal therapies.</p>
                     </div>
-                    <div class="space-y-6">
-                        <ul class="space-y-3 pt-6 border-t border-white/5">
-                            <li class="flex items-center gap-3 text-xs text-white/70"><i class="ph-fill ph-check-circle text-rose-500"></i> Complimentary Deluxe Night</li>
+                    <div class="card-content space-y-8">
+                        <ul class="space-y-4 pt-8 border-t border-white/5">
                             <li class="flex items-center gap-3 text-xs text-white/70"><i class="ph-fill ph-check-circle text-rose-500"></i> LKR 10,000 Room Credit</li>
                             <li class="flex items-center gap-3 text-xs text-white/70"><i class="ph-fill ph-check-circle text-rose-500"></i> 60min Nature's Symphony</li>
                         </ul>
@@ -256,20 +244,19 @@
                     </div>
                 </div>
 
-                <div class="bento-card p-8 min-h-[500px] flex flex-col justify-between reveal group" style="transition-delay: 200ms;">
-                    <div>
-                        <div class="flex justify-between items-start mb-8">
+                <div class="spatial-card p-10 min-h-[550px] flex flex-col justify-between reveal group" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2" style="transition-delay: 200ms;">
+                    <div class="card-content">
+                        <div class="flex justify-between items-start mb-12">
                             <span class="text-[9px] font-bold tracking-[0.2em] text-[#D4AF37] uppercase">Zenith</span>
-                            <div class="w-1.5 h-1.5 rounded-full bg-[#D4AF37] shadow-[0_0_10px_#D4AF37]"></div>
+                            <div class="w-2 h-2 rounded-full bg-[#D4AF37] shadow-[0_0_15px_#D4AF37]"></div>
                         </div>
-                        <h3 class="text-5xl serif italic gold-shimmer mb-2">Diamond</h3>
+                        <h3 class="text-5xl serif italic gold-shimmer mb-4">Diamond</h3>
                         <p class="text-sm text-white/40 leading-relaxed font-light">The ultimate sovereign privilege. Oceanscape suites and skyward access.</p>
                     </div>
-                    <div class="space-y-6">
-                        <ul class="space-y-3 pt-6 border-t border-white/5">
+                    <div class="card-content space-y-8">
+                        <ul class="space-y-4 pt-8 border-t border-white/5">
                             <li class="flex items-center gap-3 text-xs text-white/70"><i class="ph-fill ph-check-circle text-amber-400"></i> Oceanscape Suite Residency</li>
-                            <li class="flex items-center gap-3 text-xs text-white/70"><i class="ph-fill ph-check-circle text-amber-400"></i> 20% Cloud Wine Preference</li>
-                            <li class="flex items-center gap-3 text-xs text-white/70"><i class="ph-fill ph-check-circle text-amber-400"></i> Member for a Day Pass</li>
+                            <li class="flex items-center gap-3 text-xs text-white/70"><i class="ph-fill ph-check-circle text-amber-400"></i> Cloud Wine Access</li>
                         </ul>
                         <div class="flex justify-between items-end">
                             <div class="text-[9px] uppercase tracking-widest text-white/30">Annual Access</div>
@@ -278,74 +265,71 @@
                         <button class="w-full py-4 bg-[#D4AF37] text-black rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-colors">Apply</button>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <section id="digital" class="py-24 border-t border-white/5 overflow-hidden">
-        <div class="grid-container grid lg:grid-cols-2 gap-16 items-center">
+    <section id="app" class="py-32 border-t border-white/5 overflow-hidden">
+        <div class="max-w-grid grid lg:grid-cols-2 gap-20 items-center">
             
             <div class="relative h-[600px] w-full flex items-center justify-center order-2 lg:order-1 reveal">
-                <div class="absolute w-[300px] h-[300px] bg-emerald-900/30 rounded-full blur-3xl animate-pulse"></div>
                 
-                <div class="float-card anim-float-1 w-[260px] h-[380px] z-20 p-6 flex flex-col justify-between">
+                <div class="float-layer anim-float w-[280px] h-[420px] z-20 p-8 flex flex-col justify-between">
                     <div class="flex justify-between items-start">
-                        <i class="ph ph-qr-code text-4xl text-white/80"></i>
-                        <div class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center">
-                            <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
-                        </div>
+                        <i class="ph ph-qr-code text-4xl text-white/70"></i>
+                        <span class="text-[9px] font-bold uppercase tracking-widest text-white/30">Live Pass</span>
                     </div>
                     <div>
-                        <p class="text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase mb-2">Access Pass</p>
+                        <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center mb-4">
+                            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                        </div>
                         <h3 class="text-3xl serif italic text-white leading-none">Emerald<br>Sovereign</h3>
                     </div>
                     <div class="pt-6 border-t border-white/10 flex justify-between text-[9px] uppercase tracking-widest text-white/50">
-                        <span>ID: 8821</span>
+                        <span>Ref: 9942</span>
                         <span>Active</span>
                     </div>
                 </div>
 
-                <div class="float-card anim-float-2 w-[220px] p-4 z-30 absolute top-20 right-0 lg:right-10 bg-black/60">
-                    <div class="flex gap-3">
-                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
-                            <i class="ph-fill ph-bell text-amber-400"></i>
+                <div class="float-layer anim-float-delay w-[240px] p-5 z-10 absolute top-20 right-0 lg:right-10">
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center flex-shrink-0">
+                            <i class="ph-fill ph-chat-teardrop-text text-amber-400"></i>
                         </div>
                         <div>
-                            <p class="text-[9px] font-bold uppercase text-white/50 mb-1">Concierge</p>
-                            <p class="text-xs text-white leading-snug">Your table at Cloud Wine is confirmed.</p>
+                            <p class="text-[9px] font-bold uppercase text-white/40 mb-1">Concierge</p>
+                            <p class="text-xs text-white leading-snug">"Your reservation at GATZ is confirmed for 7 PM."</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="float-card anim-float-3 w-[180px] p-4 z-10 absolute bottom-24 left-0 lg:left-10 bg-black/60">
-                    <p class="text-[9px] font-bold uppercase text-white/50 mb-2">Credit Balance</p>
+                <div class="float-layer anim-float-reverse w-[200px] p-5 z-30 absolute bottom-32 left-0 lg:left-10">
+                    <p class="text-[9px] font-bold uppercase text-white/40 mb-3">Room Credit</p>
                     <div class="h-1 w-full bg-white/10 rounded-full mb-2">
-                        <div class="h-1 w-3/4 bg-white rounded-full"></div>
+                        <div class="h-1 w-[70%] bg-white rounded-full"></div>
                     </div>
-                    <p class="text-xs text-white">LKR 75,000</p>
+                    <p class="text-xs text-white text-right">LKR 75,000</p>
                 </div>
             </div>
 
-            <div class="order-1 lg:order-2 space-y-8 reveal lg:pl-12">
-                <span class="text-[9px] font-bold tracking-[0.3em] uppercase text-emerald-500">The Connected Life</span>
-                <h2 class="text-5xl lg:text-6xl serif italic leading-tight text-white">
+            <div class="order-1 lg:order-2 space-y-10 reveal">
+                <span class="text-[9px] font-bold tracking-[0.3em] uppercase text-emerald-500">The Digital Key</span>
+                <h2 class="text-5xl lg:text-7xl serif italic leading-[0.9] text-white">
                     Your world,<br>
                     <span class="text-white/40">synchronized.</span>
                 </h2>
                 <p class="text-white/50 text-lg font-light leading-relaxed max-w-md">
-                    The Sovereign App is not just a tool; it is your digital key to the City of Dreams. Seamlessly manage reservations, access your residency credits, and communicate with your dedicated lifestyle manager—all from a single, encrypted interface.
+                    Seamlessly manage reservations, access your residency credits, and communicate with your dedicated lifestyle manager—all from a single, encrypted interface designed for the modern sovereign.
                 </p>
-                
-                <div class="pt-8 grid grid-cols-2 gap-8 border-t border-white/5">
+                <div class="grid grid-cols-2 gap-8 pt-6 border-t border-white/5">
                     <div>
-                        <i class="ph ph-chat-centered-text text-2xl text-white mb-2"></i>
-                        <h4 class="text-sm font-bold text-white uppercase tracking-widest mb-1">Live Concierge</h4>
-                        <p class="text-xs text-white/40">Chat support 24/7</p>
+                        <h4 class="text-lg text-white font-medium mb-1">Instant</h4>
+                        <p class="text-[10px] text-white/40 uppercase tracking-widest">Concierge Chat</p>
                     </div>
                     <div>
-                        <i class="ph ph-shield-check text-2xl text-white mb-2"></i>
-                        <h4 class="text-sm font-bold text-white uppercase tracking-widest mb-1">Secure Entry</h4>
-                        <p class="text-xs text-white/40">Encrypted Digital Pass</p>
+                        <h4 class="text-lg text-white font-medium mb-1">Secure</h4>
+                        <p class="text-[10px] text-white/40 uppercase tracking-widest">Digital Entry</p>
                     </div>
                 </div>
             </div>
@@ -353,20 +337,20 @@
         </div>
     </section>
 
-    <footer class="border-t border-white/10 bg-[#050505] relative z-10 pt-24 pb-12">
-        <div class="grid-container grid lg:grid-cols-4 gap-12 mb-20">
+    <footer class="border-t border-white/10 bg-[#020202] relative z-10 pt-24 pb-12">
+        <div class="max-w-grid grid lg:grid-cols-4 gap-16 mb-24">
             
-            <div class="space-y-6 lg:col-span-1">
+            <div class="space-y-6">
                 <div>
                     <h3 class="text-[10px] font-bold tracking-[0.3em] uppercase text-white mb-2">Cinnamon Life</h3>
-                    <p class="serif italic text-white/50 text-xl">City of Dreams</p>
+                    <p class="serif italic text-white/50 text-2xl">City of Dreams</p>
                 </div>
                 <p class="text-xs text-white/40 leading-relaxed max-w-xs">
-                    An architectural icon redefining the skyline and the standard of luxury living in Colombo. The Sovereign Collection represents the pinnacle of this vision.
+                    Redefining the skyline and the standard of luxury living in Colombo. The Sovereign Collection represents the pinnacle of this vision.
                 </p>
             </div>
 
-            <div class="lg:col-span-1">
+            <div>
                 <h4 class="text-[9px] font-bold tracking-[0.2em] uppercase text-white/30 mb-8">Private Concierge</h4>
                 <div class="space-y-6">
                     <div>
@@ -377,29 +361,24 @@
                         <p class="text-[10px] text-white/40 mb-1 uppercase tracking-wider">Email</p>
                         <a href="#" class="text-white hover:text-emerald-400 transition-colors text-sm">concierge@cinnamonlife.com</a>
                     </div>
-                    <div>
-                        <p class="text-[10px] text-white/40 mb-1 uppercase tracking-wider">Address</p>
-                        <p class="text-white text-sm">Glennie Street, Colombo 02</p>
-                    </div>
                 </div>
             </div>
 
-            <div class="lg:col-span-1">
+            <div>
                 <h4 class="text-[9px] font-bold tracking-[0.2em] uppercase text-white/30 mb-8">Directory</h4>
-                <nav class="flex flex-col gap-3">
+                <nav class="flex flex-col gap-4">
                     <a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Emerald Access</a>
                     <a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Ruby Access</a>
                     <a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Diamond Access</a>
                     <a href="#" class="text-xs text-white/50 hover:text-white transition-colors mt-4">Member Login</a>
-                    <a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Privacy Policy</a>
                 </nav>
             </div>
 
-            <div class="lg:col-span-1">
+            <div>
                 <h4 class="text-[9px] font-bold tracking-[0.2em] uppercase text-white/30 mb-8">The Inner Circle</h4>
                 <p class="text-xs text-white/40 mb-6 leading-relaxed">Receive curated invitations to our gala events and private viewings.</p>
                 <form class="relative group">
-                    <input type="email" placeholder="Email Address" class="input-editorial">
+                    <input type="email" placeholder="Email Address" class="input-minimal">
                     <button type="button" class="absolute right-0 bottom-3 text-white/40 group-hover:text-white transition-colors">
                         <i class="ph ph-arrow-right text-xl"></i>
                     </button>
@@ -415,24 +394,40 @@
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
     <script>
-        // --- SCROLL REVEAL ---
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
+        // Init Tilt for Desktop only to save battery/performance on mobile
+        if (window.matchMedia("(min-width: 1024px)").matches) {
+            VanillaTilt.init(document.querySelectorAll(".spatial-card"), {
+                max: 5,
+                speed: 400,
+                glare: true,
+                "max-glare": 0.1,
+                scale: 1.02
+            });
+        }
 
-        const observer = new IntersectionObserver((entries, observer) => {
+        // Scroll Reveal
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
 
-        document.querySelectorAll('.reveal').forEach(el => {
-            observer.observe(el);
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Background Aurora Shift based on Scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const aurora = document.getElementById('aurora');
+            // Subtle color shift
+            if (scrolled > 500 && scrolled < 1500) {
+                aurora.style.opacity = '0.5'; // Dim for content
+            } else {
+                aurora.style.opacity = '1';
+            }
         });
     </script>
 </body>
