@@ -10,14 +10,14 @@
     
     <style>
         /* --- TYPOGRAPHY --- */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@1,300;1,400;1,500;1,600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400;1,500;1,600&display=swap');
         
         :root {
-            --bg-void: #030304; /* Linear Dark */
+            --bg-void: #050505;
             --border-dim: rgba(255, 255, 255, 0.08);
             --border-highlight: rgba(255, 255, 255, 0.15);
-            --glass-surface: rgba(255, 255, 255, 0.02);
-            --accent-emerald: #10b981;
+            --glass-surface: rgba(255, 255, 255, 0.03);
+            --text-muted: rgba(255, 255, 255, 0.5);
             --accent-gold: #D4AF37;
         }
 
@@ -28,76 +28,78 @@
             margin: 0;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            /* Linear App Style Background Grid */
             background-image: 
                 linear-gradient(var(--bg-void) 0%, var(--bg-void) 100%),
                 linear-gradient(var(--border-dim) 1px, transparent 1px),
                 linear-gradient(90deg, var(--border-dim) 1px, transparent 1px);
-            background-size: 100% 100%, 40px 40px, 40px 40px; /* Subtle grid background */
+            background-size: 100% 100%, 40px 40px, 40px 40px;
             background-blend-mode: normal, overlay, overlay;
         }
 
         .serif { font-family: 'Cormorant Garamond', serif; }
 
-        /* --- CONNECTOR LINES --- */
-        .guide-line-vertical {
-            position: absolute;
-            top: 0; bottom: 0; left: 50%;
-            width: 1px;
-            background: linear-gradient(to bottom, transparent, var(--border-dim) 20%, var(--border-dim) 80%, transparent);
-            z-index: 0;
+        /* --- LAYOUT UTILITIES --- */
+        .layout-container { 
+            width: 100%;
+            max-width: 1100px; 
+            margin: 0 auto; 
+            padding: 0 24px; /* Mobile Padding */
         }
-        
-        .connector-node {
-            width: 9px; height: 9px;
-            background: var(--bg-void);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            position: absolute;
-            left: 50%; transform: translateX(-50%);
-            z-index: 10;
-        }
+        @media (min-width: 768px) { .layout-container { padding: 0 32px; } } /* Tablet */
+        @media (min-width: 1024px) { .layout-container { padding: 0 48px; } } /* Desktop */
 
         /* --- BENTO CARD SYSTEM --- */
         .bento-card {
-            background: rgba(10, 10, 12, 0.6);
-            backdrop-filter: blur(12px);
+            background: rgba(15, 15, 15, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-dim);
-            border-radius: 16px;
+            border-radius: 20px;
             overflow: hidden;
             position: relative;
-            transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            transition: border-color 0.3s ease, transform 0.3s ease;
         }
-        .bento-card:hover {
-            border-color: var(--border-highlight);
-            box-shadow: 0 0 0 1px var(--border-highlight), 0 20px 40px -10px rgba(0,0,0,0.5);
-            z-index: 10;
+        /* Hover effects only on devices that support hover */
+        @media (hover: hover) {
+            .bento-card:hover {
+                border-color: var(--border-highlight);
+                transform: translateY(-4px);
+                z-index: 10;
+            }
         }
 
-        /* Inner Glow Gradient for Cards */
+        /* Mouse Tracking Glow (Desktop Only) */
         .bento-glow {
+            display: none;
             position: absolute;
             inset: 0;
-            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%);
+            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%);
             opacity: 0;
             transition: opacity 0.5s;
             pointer-events: none;
+            z-index: 0;
         }
-        .bento-card:hover .bento-glow { opacity: 1; }
+        @media (min-width: 1024px) {
+            .bento-glow { display: block; }
+            .bento-card:hover .bento-glow { opacity: 1; }
+        }
 
-        /* --- WIDGETS & BADGES --- */
+        /* --- WIDGETS --- */
         .widget-pill {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 4px 10px;
+            padding: 6px 12px;
             border-radius: 999px;
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: rgba(255,255,255,0.6);
+            color: var(--text-muted);
+            white-space: nowrap;
         }
         .widget-pill.active {
             background: rgba(16, 185, 129, 0.1);
@@ -105,93 +107,101 @@
             color: #34d399;
         }
 
+        /* --- CONNECTOR LINES (Tablet+ Only) --- */
+        .connector-line {
+            display: none;
+            position: absolute;
+            background: linear-gradient(to bottom, transparent, var(--border-dim) 50%, transparent);
+            width: 1px;
+            z-index: -1;
+        }
+        .connector-node {
+            display: none;
+            width: 9px; height: 9px;
+            background: var(--bg-void);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            position: absolute;
+            z-index: 5;
+        }
+        @media (min-width: 768px) {
+            .connector-line, .connector-node { display: block; }
+        }
+
         /* --- NAV CAPSULE --- */
         .nav-capsule {
             position: fixed;
-            top: 24px; left: 50%;
+            top: 20px; left: 50%;
             transform: translateX(-50%);
-            padding: 8px 8px 8px 24px;
-            background: rgba(10, 10, 12, 0.8);
-            backdrop-filter: blur(16px);
+            padding: 8px 8px 8px 20px;
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(20px);
             border: 1px solid var(--border-dim);
             border-radius: 999px;
             z-index: 100;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: auto;
-            min-width: 320px;
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.8);
+            width: 90%;
+            max-width: 480px;
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.8);
         }
 
         /* --- ANIMATIONS --- */
-        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        .animate-float { animation: float 6s ease-in-out infinite; }
 
-        .pulse-ring {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.1);
-            animation: pulse-ring 4s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-        }
-        @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            100% { transform: scale(2); opacity: 0; }
-        }
-
-        .gold-text {
-            background: linear-gradient(to bottom right, #D4AF37, #FDE68A);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Input Minimal */
+        /* Input Styling */
         .input-linear {
             background: rgba(255,255,255,0.03);
             border: 1px solid var(--border-dim);
             border-radius: 8px;
             color: #fff;
             width: 100%;
-            padding: 12px 16px;
+            padding: 14px 16px;
             font-size: 13px;
             outline: none;
             transition: all 0.2s;
         }
         .input-linear:focus { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.05); }
 
-        .layout-container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; }
+        /* Gold Gradient Text */
+        .gold-text {
+            background: linear-gradient(to bottom right, #D4AF37, #FDE68A);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
 <body>
 
-    <div class="fixed inset-0 pointer-events-none z-0 flex justify-center">
-        <div class="w-[1px] h-full bg-white/5"></div>
-    </div>
+    <div class="connector-line left-1/2 top-0 bottom-0"></div>
 
     <nav class="nav-capsule">
-        <div class="flex flex-col leading-none mr-8">
+        <div class="flex flex-col leading-none mr-4">
             <span class="text-[9px] uppercase tracking-[0.2em] text-white/50 font-bold">Cinnamon Life</span>
-            <span class="text-xs serif italic text-white">City of Dreams</span>
+            <span class="text-[11px] serif italic text-white">City of Dreams</span>
         </div>
-        <div class="flex items-center gap-2">
-            <a href="#vision" class="px-3 py-1.5 text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors rounded-full hover:bg-white/5">Vision</a>
-            <a href="#collection" class="px-3 py-1.5 text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors rounded-full hover:bg-white/5">Collection</a>
-            <a href="#app" class="px-3 py-1.5 text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors rounded-full hover:bg-white/5">App</a>
-            <button class="ml-2 bg-white text-black px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors">
-                Login
+        <div class="flex items-center gap-1 md:gap-2">
+            <a href="#vision" class="hidden sm:block px-3 py-1.5 text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Vision</a>
+            <a href="#tiers" class="hidden sm:block px-3 py-1.5 text-[10px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Tiers</a>
+            <button class="bg-white text-black px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors ml-2">
+                Member Login
             </button>
         </div>
     </nav>
 
-    <header class="min-h-screen flex flex-col items-center justify-center relative pt-20">
+    <header class="min-h-screen flex flex-col items-center justify-center relative pt-24 pb-12 overflow-hidden">
         
-        <div class="absolute inset-0 z-0">
-            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-emerald-900/20 blur-[120px] rounded-full mix-blend-screen animate-pulse"></div>
-            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-amber-900/10 blur-[100px] rounded-full mix-blend-screen"></div>
+        <div class="absolute inset-0 z-0 pointer-events-none">
+            <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-emerald-900/20 blur-[100px] rounded-full mix-blend-screen animate-pulse"></div>
         </div>
 
-        <div class="layout-container text-center relative z-10">
-            <div class="connector-node top-[-40px]"></div>
+        <div class="layout-container text-center relative z-10 flex flex-col items-center">
+            <div class="connector-node top-[-60px] left-1/2 -translate-x-1/2"></div>
             
             <div class="reveal flex justify-center mb-8">
                 <div class="widget-pill active backdrop-blur-md">
@@ -200,56 +210,55 @@
                 </div>
             </div>
 
-            <h1 class="reveal text-7xl md:text-9xl font-semibold tracking-tighter leading-[0.9] mb-8 bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40">
+            <h1 class="reveal text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-semibold tracking-tighter leading-[0.9] mb-8 text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">
                 Sovereign<br>
                 <span class="serif italic text-white/50 font-light">Collection</span>
             </h1>
 
-            <p class="reveal text-white/50 text-lg max-w-md mx-auto leading-relaxed mb-10">
+            <p class="reveal text-white/50 text-base md:text-lg max-w-md mx-auto leading-relaxed mb-10">
                 A programmable luxury experience. Architectural living meets digital precision in the heart of Colombo.
             </p>
 
-            <div class="reveal flex flex-col items-center gap-4">
-                <a href="#collection" class="group relative inline-flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all">
-                    <span class="text-xs font-semibold tracking-widest uppercase">Explore Tiers</span>
+            <div class="reveal flex flex-col items-center gap-4 w-full sm:w-auto">
+                <a href="#tiers" class="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all w-full sm:w-auto">
+                    <span class="text-xs font-bold tracking-[0.15em] uppercase">Request Access</span>
                     <i class="ph ph-arrow-right text-white/50 group-hover:text-white transition-colors"></i>
                 </a>
                 
-                <div class="h-16 w-[1px] bg-gradient-to-b from-white/20 to-transparent mt-2"></div>
+                <div class="h-16 w-[1px] bg-gradient-to-b from-white/20 to-transparent mt-2 hidden md:block"></div>
             </div>
         </div>
     </header>
 
-    <section id="vision" class="py-24 relative">
+    <section id="vision" class="py-20 md:py-32 relative">
         <div class="layout-container">
-            <div class="connector-node top-[-20px]"></div>
+            <div class="connector-node top-[-20px] left-1/2 -translate-x-1/2"></div>
             
             <div class="bento-card p-0 grid md:grid-cols-2 reveal group">
                 <div class="bento-glow"></div>
                 
-                <div class="p-12 flex flex-col justify-center border-r border-white/5">
+                <div class="p-8 md:p-12 flex flex-col justify-center border-b md:border-b-0 md:border-r border-white/5">
                     <div class="flex gap-2 mb-6">
                         <span class="widget-pill">Architecture</span>
-                        <span class="widget-pill">Lifestyle</span>
+                        <span class="widget-pill">Hospitality</span>
                     </div>
-                    <h2 class="text-3xl serif italic text-white mb-6">The Living Ecosystem</h2>
+                    <h2 class="text-3xl md:text-4xl serif italic text-white mb-6">The Living Ecosystem</h2>
                     <p class="text-white/50 text-sm leading-relaxed mb-6">
-                        Cinnamon Life is not just a destination; it is a calculated masterpiece. The Sovereign Collection integrates you into this system. From the Balmond Studio architecture to the culinary precision, your membership acts as the operating system for your experience.
+                        Cinnamon Life City of Dreams is not merely a structure; it is an architectural symphony. The Sovereign Collection was conceived as the conductor of this experience—a membership that transcends traditional loyalty.
                     </p>
-                    <div class="flex items-center gap-3 pt-4 border-t border-white/5">
-                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs">A</div>
+                    <p class="text-white/50 text-sm leading-relaxed mb-8">
+                        We believe true luxury is fluid. Moving from the vibrancy of Staten Bar & Grill to the serenity of the Oceanscape Suites with recognition that precedes your arrival.
+                    </p>
+                    <div class="flex items-center gap-3 pt-6 border-t border-white/5">
+                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs border border-white/10">A</div>
                         <div class="text-[10px] uppercase tracking-widest text-white/40">Balmond Studio<br><span class="text-white/80">Architect of Record</span></div>
                     </div>
                 </div>
 
-                <div class="relative h-[400px] md:h-auto bg-gradient-to-br from-gray-900 to-black overflow-hidden">
-                    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle, white 1px, transparent 1px); background-size: 30px 30px;"></div>
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="w-40 h-40 border border-white/20 rounded-full animate-[spin_20s_linear_infinite]"></div>
-                        <div class="w-60 h-60 border border-white/10 rounded-full absolute animate-[spin_30s_linear_infinite_reverse]"></div>
-                        <div class="pulse-ring"></div>
-                    </div>
-                    <div class="absolute bottom-6 left-6 widget-pill backdrop-blur-xl border-white/20">
+                <div class="relative h-[300px] md:h-auto bg-gradient-to-br from-gray-900 to-black overflow-hidden flex items-center justify-center">
+                    <div class="absolute w-48 h-48 border border-white/20 rounded-full animate-[spin_20s_linear_infinite]"></div>
+                    <div class="absolute w-64 h-64 border border-white/10 rounded-full animate-[spin_30s_linear_infinite_reverse]"></div>
+                    <div class="absolute bottom-6 left-6 widget-pill backdrop-blur-xl border-white/20 bg-black/40">
                         <i class="ph-fill ph-map-pin text-white"></i> Colombo 02
                     </div>
                 </div>
@@ -257,26 +266,26 @@
         </div>
     </section>
 
-    <section id="collection" class="py-24 relative">
+    <section id="tiers" class="py-20 md:py-32 relative">
         <div class="layout-container">
-            <div class="flex justify-between items-end mb-12 reveal">
+            
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 reveal gap-4">
                 <div>
-                    <span class="text-[10px] font-bold tracking-[0.2em] text-emerald-500 uppercase mb-2 block">System Access</span>
-                    <h2 class="text-4xl text-white font-medium">Select Tier</h2>
+                    <span class="text-[10px] font-bold tracking-[0.2em] text-emerald-500 uppercase mb-2 block">Privileges</span>
+                    <h2 class="text-3xl md:text-4xl text-white font-medium">Select Tier</h2>
                 </div>
-                <div class="hidden md:flex gap-2">
-                    <span class="widget-pill">Monthly</span>
-                    <span class="widget-pill bg-white text-black border-white">Annual</span>
+                <div class="flex gap-2 self-start md:self-auto">
+                    <span class="widget-pill cursor-pointer hover:bg-white/10 transition-colors">Monthly</span>
+                    <span class="widget-pill bg-white text-black border-white cursor-pointer">Annual</span>
                 </div>
             </div>
 
-            <div class="grid lg:grid-cols-3 gap-6">
-                <div class="absolute top-[200px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent z-0"></div>
-
-                <div class="bento-card p-8 min-h-[480px] flex flex-col justify-between reveal hover:scale-[1.02] transition-transform duration-500">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <div class="bento-card p-6 md:p-8 min-h-[440px] flex flex-col justify-between reveal">
                     <div class="bento-glow"></div>
                     <div class="relative z-10">
-                        <div class="flex justify-between items-start mb-8">
+                        <div class="flex justify-between items-start mb-6">
                             <span class="widget-pill">Level 01</span>
                             <i class="ph-fill ph-plant text-emerald-500 text-xl"></i>
                         </div>
@@ -287,29 +296,29 @@
                     <div class="relative z-10 space-y-6">
                         <div class="space-y-3">
                             <div class="flex items-center justify-between py-2 border-b border-white/5">
-                                <span class="text-xs text-white/70">Nights</span>
-                                <span class="text-xs font-mono text-emerald-400">3rd Free</span>
+                                <span class="text-xs text-white/70">Residency</span>
+                                <span class="text-xs font-mono text-emerald-400">3rd Night Free</span>
                             </div>
                             <div class="flex items-center justify-between py-2 border-b border-white/5">
                                 <span class="text-xs text-white/70">Dining</span>
-                                <span class="text-xs font-mono text-emerald-400">50% Off</span>
+                                <span class="text-xs font-mono text-emerald-400">50% Privilege</span>
                             </div>
                         </div>
-                        <div class="pt-4">
-                            <p class="text-[10px] uppercase tracking-widest text-white/30 mb-1">Annual Fee</p>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest text-white/30 mb-1">Access Fee</p>
                             <div class="flex justify-between items-end">
                                 <span class="text-lg font-bold text-white">50,000</span>
-                                <span class="text-[10px] text-white/30">LKR</span>
+                                <span class="text-[10px] text-white/30">LKR / YR</span>
                             </div>
                         </div>
-                        <button class="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors">Select</button>
+                        <button class="w-full py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors">Select Tier</button>
                     </div>
                 </div>
 
-                <div class="bento-card p-8 min-h-[480px] flex flex-col justify-between reveal hover:scale-[1.02] transition-transform duration-500 delay-75">
+                <div class="bento-card p-6 md:p-8 min-h-[440px] flex flex-col justify-between reveal delay-75">
                     <div class="bento-glow"></div>
                     <div class="relative z-10">
-                        <div class="flex justify-between items-start mb-8">
+                        <div class="flex justify-between items-start mb-6">
                             <span class="widget-pill">Level 02</span>
                             <i class="ph-fill ph-diamond text-rose-500 text-xl"></i>
                         </div>
@@ -320,29 +329,29 @@
                     <div class="relative z-10 space-y-6">
                         <div class="space-y-3">
                             <div class="flex items-center justify-between py-2 border-b border-white/5">
-                                <span class="text-xs text-white/70">Credit</span>
+                                <span class="text-xs text-white/70">Room Credit</span>
                                 <span class="text-xs font-mono text-rose-400">10k LKR</span>
                             </div>
                             <div class="flex items-center justify-between py-2 border-b border-white/5">
                                 <span class="text-xs text-white/70">Wellness</span>
-                                <span class="text-xs font-mono text-rose-400">60min</span>
+                                <span class="text-xs font-mono text-rose-400">60min Therapy</span>
                             </div>
                         </div>
-                        <div class="pt-4">
-                            <p class="text-[10px] uppercase tracking-widest text-white/30 mb-1">Annual Fee</p>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest text-white/30 mb-1">Access Fee</p>
                             <div class="flex justify-between items-end">
                                 <span class="text-lg font-bold text-white">125,000</span>
-                                <span class="text-[10px] text-white/30">LKR</span>
+                                <span class="text-[10px] text-white/30">LKR / YR</span>
                             </div>
                         </div>
-                        <button class="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors">Select</button>
+                        <button class="w-full py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors">Select Tier</button>
                     </div>
                 </div>
 
-                <div class="bento-card p-8 min-h-[480px] flex flex-col justify-between reveal hover:scale-[1.02] transition-transform duration-500 delay-150 border-amber-500/20">
+                <div class="bento-card p-6 md:p-8 min-h-[440px] flex flex-col justify-between reveal delay-150 border-amber-500/20">
                     <div class="bento-glow"></div>
                     <div class="relative z-10">
-                        <div class="flex justify-between items-start mb-8">
+                        <div class="flex justify-between items-start mb-6">
                             <span class="widget-pill border-amber-500/30 text-amber-500">Level 03</span>
                             <i class="ph-fill ph-crown text-amber-500 text-xl"></i>
                         </div>
@@ -353,82 +362,82 @@
                     <div class="relative z-10 space-y-6">
                         <div class="space-y-3">
                             <div class="flex items-center justify-between py-2 border-b border-white/5">
-                                <span class="text-xs text-white/70">Suite</span>
-                                <span class="text-xs font-mono text-amber-400">Oceanscape</span>
+                                <span class="text-xs text-white/70">Residency</span>
+                                <span class="text-xs font-mono text-amber-400">Oceanscape Suite</span>
                             </div>
                             <div class="flex items-center justify-between py-2 border-b border-white/5">
                                 <span class="text-xs text-white/70">Cloud Wine</span>
-                                <span class="text-xs font-mono text-amber-400">Access</span>
+                                <span class="text-xs font-mono text-amber-400">Exclusive Access</span>
                             </div>
                         </div>
-                        <div class="pt-4">
-                            <p class="text-[10px] uppercase tracking-widest text-white/30 mb-1">Annual Fee</p>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest text-white/30 mb-1">Access Fee</p>
                             <div class="flex justify-between items-end">
                                 <span class="text-lg font-bold gold-text">425,000</span>
-                                <span class="text-[10px] text-white/30">LKR</span>
+                                <span class="text-[10px] text-white/30">LKR / YR</span>
                             </div>
                         </div>
-                        <button class="w-full py-3 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 text-amber-500 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors">Select</button>
+                        <button class="w-full py-3.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 text-amber-500 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors">Select Tier</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="app" class="py-24 relative overflow-hidden">
+    <section id="app" class="py-20 md:py-32 relative overflow-hidden">
         <div class="layout-container grid lg:grid-cols-2 gap-16 items-center">
             
-            <div class="reveal relative z-10">
+            <div class="reveal relative z-10 order-1">
                 <div class="flex items-center gap-2 mb-6">
                     <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                    <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-white/50">Live System</span>
+                    <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-white/50">Concierge Interface</span>
                 </div>
-                <h2 class="text-4xl md:text-5xl font-semibold tracking-tight text-white mb-6">
+                <h2 class="text-3xl md:text-5xl font-semibold tracking-tight text-white mb-6">
                     Your world,<br>
                     <span class="text-white/40">synchronized.</span>
                 </h2>
                 <p class="text-white/50 text-sm leading-relaxed mb-8 max-w-sm">
-                    The Sovereign App is a real-time dashboard for your lifestyle. Manage reservations, view live credit balances, and chat with your concierge securely.
+                    The Sovereign App is a real-time concierge. Manage reservations, view live credit balances, and chat with your dedicated lifestyle manager securely.
                 </p>
                 
-                <div class="space-y-4">
-                    <div class="flex items-center gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/5 cursor-default">
+                <div class="space-y-3">
+                    <div class="flex items-center gap-4 p-3 rounded-lg bg-white/5 border border-white/5">
                         <div class="w-8 h-8 rounded bg-emerald-500/10 flex items-center justify-center text-emerald-500"><i class="ph-fill ph-chat-text"></i></div>
                         <div>
-                            <h4 class="text-xs font-bold text-white">Instant Concierge</h4>
-                            <p class="text-[10px] text-white/40">Average response: 2m</p>
+                            <h4 class="text-xs font-bold text-white">Direct Chat</h4>
+                            <p class="text-[10px] text-white/40">Response time: &lt; 2 mins</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors border border-transparent hover:border-white/5 cursor-default">
+                    <div class="flex items-center gap-4 p-3 rounded-lg bg-white/5 border border-white/5">
                         <div class="w-8 h-8 rounded bg-blue-500/10 flex items-center justify-center text-blue-500"><i class="ph-fill ph-qr-code"></i></div>
                         <div>
-                            <h4 class="text-xs font-bold text-white">Secure Entry</h4>
-                            <p class="text-[10px] text-white/40">Dynamic QR Refresh</p>
+                            <h4 class="text-xs font-bold text-white">Digital Key</h4>
+                            <p class="text-[10px] text-white/40">Encrypted Entry</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="reveal relative h-[500px] flex items-center justify-center">
+            <div class="reveal relative h-[450px] flex items-center justify-center order-2 lg:order-2 mt-8 lg:mt-0">
                 
-                <div class="absolute inset-0 z-0">
-                    <div class="absolute top-1/2 left-0 w-full h-[1px] bg-white/5 border-t border-dashed border-white/10"></div>
-                    <div class="absolute left-1/2 top-0 h-full w-[1px] bg-white/5 border-l border-dashed border-white/10"></div>
+                <div class="absolute inset-0 z-0 opacity-30">
+                    <div class="absolute top-1/2 left-0 w-full h-[1px] bg-white/10 border-t border-dashed border-white/20"></div>
+                    <div class="absolute left-1/2 top-0 h-full w-[1px] bg-white/10 border-l border-dashed border-white/20"></div>
                 </div>
 
-                <div class="bento-card w-[260px] h-[400px] absolute z-10 flex flex-col justify-between p-6 transform scale-95 opacity-50 blur-[2px] transition-all hover:blur-0 hover:opacity-100 hover:scale-100 duration-700">
+                <div class="bento-card w-[240px] h-[360px] absolute z-10 flex flex-col justify-between p-6 transform scale-90 opacity-60 blur-[1px]">
                     <div class="flex justify-between text-white/30"><i class="ph ph-qr-code text-3xl"></i></div>
                     <div class="text-center">
-                        <div class="w-16 h-16 mx-auto bg-white/5 rounded-full mb-4 flex items-center justify-center"><i class="ph-fill ph-lock text-white/30"></i></div>
-                        <p class="text-xs text-white/40 font-mono">ENCRYPTED</p>
+                        <div class="w-14 h-14 mx-auto bg-white/5 rounded-full mb-4 flex items-center justify-center"><i class="ph-fill ph-lock text-white/30"></i></div>
+                        <p class="text-[10px] text-white/40 font-mono">SECURE</p>
                     </div>
-                    <div class="text-[10px] text-white/20 font-mono flex justify-between"><span>ID: 8821</span><span>••••</span></div>
+                    <div class="text-[9px] text-white/20 font-mono flex justify-between"><span>ID: 8821</span><span>Active</span></div>
                 </div>
 
-                <div class="bento-card w-[240px] p-4 absolute top-10 right-0 lg:right-10 z-20 shadow-2xl animate-[float_6s_ease-in-out_infinite]">
+                <div class="bento-card w-[220px] p-4 absolute top-4 right-0 lg:right-10 z-20 shadow-2xl animate-float">
                     <div class="flex justify-between items-center mb-3">
                         <div class="flex items-center gap-2">
-                            <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
                             <span class="text-[9px] font-bold uppercase text-white/50">Staten Bar & Grill</span>
                         </div>
                         <span class="text-[9px] text-white/30">Now</span>
@@ -436,12 +445,12 @@
                     <p class="text-xs text-white leading-snug">"Your table is confirmed for 7 PM. Shall we prepare the usual?"</p>
                 </div>
 
-                <div class="bento-card w-[200px] p-4 absolute bottom-20 left-0 lg:left-10 z-20 shadow-2xl animate-[float_8s_ease-in-out_infinite_reverse]">
+                <div class="bento-card w-[200px] p-4 absolute bottom-12 left-0 lg:left-10 z-20 shadow-2xl animate-float" style="animation-delay: 1s;">
                     <div class="flex justify-between items-center mb-3">
-                        <span class="text-[9px] font-bold uppercase text-white/50">Balance</span>
+                        <span class="text-[9px] font-bold uppercase text-white/50">Room Credit</span>
                         <i class="ph-fill ph-credit-card text-white/30"></i>
                     </div>
-                    <div class="h-1.5 w-full bg-white/10 rounded-full mb-2 overflow-hidden">
+                    <div class="h-1 w-full bg-white/10 rounded-full mb-2 overflow-hidden">
                         <div class="h-full w-[70%] bg-emerald-500"></div>
                     </div>
                     <p class="text-sm font-bold text-white text-right">75,000 <span class="text-[9px] font-normal text-white/50">LKR</span></p>
@@ -450,43 +459,43 @@
         </div>
     </section>
 
-    <section class="py-24 border-t border-white/5">
-        <div class="layout-container max-w-4xl">
-            <h2 class="text-2xl font-semibold text-white mb-12 text-center reveal">Curated Inquiries</h2>
+    <section class="py-20 md:py-24 border-t border-white/5">
+        <div class="layout-container max-w-3xl">
+            <h2 class="text-2xl font-semibold text-white mb-8 md:mb-12 text-center reveal">Member Inquiries</h2>
             
-            <div class="grid gap-4 reveal">
-                <div class="bento-card px-6 py-4 cursor-pointer group hover:bg-white/5" onclick="this.classList.toggle('active')">
+            <div class="grid gap-3 reveal">
+                <div class="bento-card px-5 py-4 cursor-pointer group hover:bg-white/5" onclick="this.classList.toggle('active')">
                     <div class="flex justify-between items-center">
                         <span class="text-sm text-white/70 group-hover:text-white transition-colors">How is validity calculated?</span>
-                        <i class="ph ph-plus text-white/40 transition-transform duration-300 group-[.active]:rotate-45"></i>
+                        <i class="ph ph-caret-down text-white/40 transition-transform duration-300 group-[.active]:rotate-180"></i>
                     </div>
                     <div class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 group-[.active]:grid-rows-[1fr]">
                         <div class="overflow-hidden">
-                            <p class="text-xs text-white/40 leading-relaxed pt-4">Membership is valid for a rolling 12-month period commencing from activation. Renewal reminders are sent 30 days prior via the app.</p>
+                            <p class="text-xs text-white/40 leading-relaxed pt-3">Membership is valid for a rolling 12-month period commencing from activation. Renewal reminders are sent 30 days prior via the Sovereign App.</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="bento-card px-6 py-4 cursor-pointer group hover:bg-white/5" onclick="this.classList.toggle('active')">
+                <div class="bento-card px-5 py-4 cursor-pointer group hover:bg-white/5" onclick="this.classList.toggle('active')">
                     <div class="flex justify-between items-center">
                         <span class="text-sm text-white/70 group-hover:text-white transition-colors">Can I upgrade tiers mid-year?</span>
-                        <i class="ph ph-plus text-white/40 transition-transform duration-300 group-[.active]:rotate-45"></i>
+                        <i class="ph ph-caret-down text-white/40 transition-transform duration-300 group-[.active]:rotate-180"></i>
                     </div>
                     <div class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 group-[.active]:grid-rows-[1fr]">
                         <div class="overflow-hidden">
-                            <p class="text-xs text-white/40 leading-relaxed pt-4">Yes. Upgrade to Ruby or Diamond at any time. The difference in fee is calculated pro-rata.</p>
+                            <p class="text-xs text-white/40 leading-relaxed pt-3">Yes. Upgrade to Ruby or Diamond at any time. The difference in the annual access fee is calculated pro-rata.</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="bento-card px-6 py-4 cursor-pointer group hover:bg-white/5" onclick="this.classList.toggle('active')">
+                <div class="bento-card px-5 py-4 cursor-pointer group hover:bg-white/5" onclick="this.classList.toggle('active')">
                     <div class="flex justify-between items-center">
                         <span class="text-sm text-white/70 group-hover:text-white transition-colors">Are privileges transferable?</span>
-                        <i class="ph ph-plus text-white/40 transition-transform duration-300 group-[.active]:rotate-45"></i>
+                        <i class="ph ph-caret-down text-white/40 transition-transform duration-300 group-[.active]:rotate-180"></i>
                     </div>
                     <div class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 group-[.active]:grid-rows-[1fr]">
                         <div class="overflow-hidden">
-                            <p class="text-xs text-white/40 leading-relaxed pt-4">Primary membership is non-transferable. Diamond tier includes a Spouse Card and guest passes.</p>
+                            <p class="text-xs text-white/40 leading-relaxed pt-3">Primary membership is non-transferable. However, the Diamond tier includes a complimentary Spouse Card.</p>
                         </div>
                     </div>
                 </div>
@@ -494,12 +503,12 @@
         </div>
     </section>
 
-    <footer class="border-t border-white/10 bg-[#020202] pt-20 pb-12 relative z-10">
-        <div class="layout-container grid grid-cols-2 md:grid-cols-4 gap-12 mb-16">
+    <footer class="border-t border-white/10 bg-[#050505] pt-16 pb-12 relative z-10">
+        <div class="layout-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 mb-16">
             
-            <div class="col-span-2 md:col-span-1">
+            <div class="col-span-1 sm:col-span-2 md:col-span-1">
                 <div class="flex flex-col gap-4">
-                    <div class="w-8 h-8 rounded bg-white/10 flex items-center justify-center"><span class="font-serif italic text-white">C</span></div>
+                    <div class="w-8 h-8 rounded bg-white/10 flex items-center justify-center border border-white/10"><span class="font-serif italic text-white">C</span></div>
                     <p class="text-xs text-white/40 leading-relaxed">
                         Cinnamon Life<br>City of Dreams
                     </p>
@@ -507,7 +516,7 @@
             </div>
 
             <div>
-                <h4 class="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-6">Concierge</h4>
+                <h4 class="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-4">Concierge</h4>
                 <ul class="space-y-3">
                     <li><a href="#" class="text-xs text-white/50 hover:text-white transition-colors">+94 11 216 1111</a></li>
                     <li><a href="#" class="text-xs text-white/50 hover:text-white transition-colors">concierge@cinnamonlife.com</a></li>
@@ -515,17 +524,17 @@
             </div>
 
             <div>
-                <h4 class="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-6">Directory</h4>
+                <h4 class="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-4">Directory</h4>
                 <ul class="space-y-3">
-                    <li><a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Tiers</a></li>
+                    <li><a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Privileges</a></li>
                     <li><a href="#" class="text-xs text-white/50 hover:text-white transition-colors">App Download</a></li>
-                    <li><a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Member Login</a></li>
+                    <li><a href="#" class="text-xs text-white/50 hover:text-white transition-colors">Guest Portal</a></li>
                 </ul>
             </div>
 
             <div>
-                <h4 class="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-6">Stay Connected</h4>
-                <div class="relative">
+                <h4 class="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-4">The Inner Circle</h4>
+                <div class="relative max-w-[200px]">
                     <input type="email" placeholder="Email Address" class="input-linear pr-10">
                     <button class="absolute right-2 top-2 text-white/40 hover:text-white"><i class="ph-bold ph-arrow-right"></i></button>
                 </div>
@@ -533,7 +542,7 @@
         </div>
 
         <div class="layout-container pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <p class="text-[10px] text-white/30">
+            <p class="text-[10px] text-white/30 text-left">
                 &copy; 2026 Cinnamon Life City of Dreams, Sri Lanka. All rights reserved.
             </p>
             <div class="flex gap-4">
@@ -544,7 +553,7 @@
     </footer>
 
     <script>
-        // Mouse Tracking for Bento Glow
+        // Mouse Tracking for Bento Glow (Desktop only via CSS media query, but logic runs)
         document.querySelectorAll('.bento-card').forEach(card => {
             card.onmousemove = e => {
                 const rect = card.getBoundingClientRect();
