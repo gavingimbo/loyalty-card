@@ -6,7 +6,7 @@
     <title>Cinnamon Life | The Sovereign Collection</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* TYPOGRAPHY STACK: SWISS & LUXURY */
+        /* TYPOGRAPHY STACK */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Cormorant+Garamond:ital,wght@1,300;1,400;1,500&display=swap');
         
         :root {
@@ -39,18 +39,18 @@
         .brand-header {
             position: relative;
             width: 100%;
-            padding: 50px 20px 30px;
+            padding: 40px 20px 20px; /* Reduced padding */
             text-align: center;
             z-index: 50;
         }
 
-        /* CARD ARCHITECTURE (THE MONOLITH) */
+        /* CARD ARCHITECTURE */
         .glass-monolith {
             background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
             border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 24px;
+            border-radius: 20px;
             box-shadow: 0 40px 100px -30px rgba(0,0,0,0.9);
             transition: transform 0.8s var(--ease-luxury);
             width: 100%;
@@ -64,8 +64,8 @@
         .accordion-wrapper {
             background: rgba(255,255,255,0.02);
             border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 24px;
-            padding: 0 24px;
+            border-radius: 20px;
+            padding: 0 20px;
             backdrop-filter: blur(20px);
         }
 
@@ -80,22 +80,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 24px 0;
+            padding: 18px 0; /* Tighter padding */
             cursor: pointer;
             transition: opacity 0.3s ease;
         }
-        .accordion-trigger:hover { opacity: 0.8; }
-
+        
         .accordion-content {
             display: grid;
             grid-template-rows: 0fr;
-            transition: grid-template-rows 0.6s var(--ease-luxury);
-            opacity: 0.6;
+            transition: grid-template-rows 0.5s var(--ease-luxury);
+            opacity: 0.8;
         }
         .accordion-item.active .accordion-content {
             grid-template-rows: 1fr;
             opacity: 1;
-            padding-bottom: 24px;
+            padding-bottom: 18px;
         }
         .accordion-inner { overflow: hidden; }
 
@@ -116,8 +115,8 @@
         .swiper-container {
             display: flex;
             overflow-x: auto;
-            gap: 16px;
-            padding: 0 24px 40px 24px;
+            gap: 12px;
+            padding: 0 24px 24px 24px; /* Reduced bottom padding */
             scroll-behavior: smooth;
         }
 
@@ -128,30 +127,30 @@
                 gap: 48px;
                 padding: 120px 64px 80px;
                 height: 100vh;
-                align-items: start;
+                align-items: center;
             }
             .brand-header { position: absolute; top: 0; padding-top: 40px; }
-            .col-cards { grid-column: 2 / span 5; height: 65vh; position: relative; z-index: 10; }
+            .col-cards { grid-column: 2 / span 5; height: 600px; position: relative; z-index: 10; }
             .col-benefits { 
                 grid-column: 8 / span 4; 
-                height: 65vh; 
+                height: 600px; 
                 overflow-y: auto; 
                 padding-right: 20px;
-                /* Hide Scrollbar but allow scroll */
                 scrollbar-width: none;
-                -ms-overflow-style: none;
             }
             .glass-monolith { border-radius: 4px; }
             .swiper-container { padding: 0; gap: 0; height: 100%; }
-            .mobile-spacer { display: none; }
             .card-wrapper { min-width: 100%; height: 100%; }
+            .mobile-dots { position: absolute; bottom: -40px; left: 0; right: 0; }
         }
 
         @media (max-width: 1023px) {
-            .swiss-grid { display: block; padding-bottom: 80px; }
-            .col-cards { height: 520px; margin-bottom: 40px; }
-            .col-benefits { padding: 0 24px; }
+            .swiss-grid { display: block; padding-bottom: 60px; }
+            /* Reduced mobile height to pull content up */
+            .col-cards { height: 480px; margin-bottom: 0px; } 
+            .col-benefits { padding: 0 24px; margin-top: 24px; } /* Reduced top margin */
             .card-wrapper { min-width: 85vw; height: 100%; padding: 0 4px; }
+            .mobile-dots { display: flex; justify-content: center; margin-top: 0px; }
         }
 
         #aura {
@@ -169,8 +168,8 @@
     <div id="aura" style="background: radial-gradient(circle, rgba(52, 199, 89, 0.15) 0%, transparent 60%);"></div>
     
     <header class="brand-header">
-        <h1 class="text-[10px] md:text-xs font-bold tracking-[0.4em] uppercase text-white/40 mb-3">Cinnamon Life</h1>
-        <h2 class="text-3xl md:text-5xl serif italic text-white leading-none">City of Dreams</h2>
+        <h1 class="text-[9px] md:text-xs font-bold tracking-[0.4em] uppercase text-white/40 mb-2">Cinnamon Life</h1>
+        <h2 class="text-2xl md:text-4xl serif italic text-white leading-none">City of Dreams</h2>
     </header>
 
     <main class="swiss-grid">
@@ -179,76 +178,75 @@
             <div id="swiper" class="swiper-container snap-x hide-scrollbar" onscroll="handleScroll()">
                 
                 <div class="card-wrapper snap-center">
-                    <div class="glass-monolith p-8 md:p-12">
-                        <div class="flex justify-between items-start border-b border-white/10 pb-6">
+                    <div class="glass-monolith p-8">
+                        <div class="flex justify-between items-start border-b border-white/10 pb-4">
                             <span class="text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase">Foundation</span>
                             <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
                         </div>
                         <div class="text-center my-auto">
                             <h2 class="text-6xl md:text-8xl font-bold tracking-tighter text-emerald-500">Emerald</h2>
-                            <p class="serif italic text-white/50 mt-4 text-xl">The Essential Privilege</p>
+                            <p class="serif italic text-white/50 mt-2 text-lg">The Essential Privilege</p>
                         </div>
-                        <div class="space-y-6">
+                        <div class="space-y-4">
                             <div class="flex justify-between items-end">
                                 <span class="text-[9px] font-bold tracking-widest text-white/30 uppercase">Annual<br>Access</span>
-                                <span class="text-2xl md:text-4xl font-light tracking-tight">50,000<span class="text-[10px] ml-1 opacity-50">LKR</span></span>
+                                <span class="text-3xl font-light tracking-tight">50,000<span class="text-[10px] ml-1 opacity-50">LKR</span></span>
                             </div>
-                            <button class="w-full py-5 bg-white text-black text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-neutral-200 transition-colors">Apply</button>
+                            <button class="w-full py-4 bg-white text-black text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-neutral-200 transition-colors">Apply</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-wrapper snap-center">
-                    <div class="glass-monolith p-8 md:p-12">
-                        <div class="flex justify-between items-start border-b border-white/10 pb-6">
+                    <div class="glass-monolith p-8">
+                        <div class="flex justify-between items-start border-b border-white/10 pb-4">
                             <span class="text-[9px] font-bold tracking-[0.2em] text-white/40 uppercase">Signature</span>
                             <div class="w-1.5 h-1.5 rounded-full bg-rose-500"></div>
                         </div>
                         <div class="text-center my-auto">
                             <h2 class="text-6xl md:text-8xl font-bold tracking-tighter text-rose-500">Ruby</h2>
-                            <p class="serif italic text-white/50 mt-4 text-xl">The Elevated Standard</p>
+                            <p class="serif italic text-white/50 mt-2 text-lg">The Elevated Standard</p>
                         </div>
-                        <div class="space-y-6">
+                        <div class="space-y-4">
                             <div class="flex justify-between items-end">
                                 <span class="text-[9px] font-bold tracking-widest text-white/30 uppercase">Annual<br>Access</span>
-                                <span class="text-2xl md:text-4xl font-light tracking-tight">125,000<span class="text-[10px] ml-1 opacity-50">LKR</span></span>
+                                <span class="text-3xl font-light tracking-tight">125,000<span class="text-[10px] ml-1 opacity-50">LKR</span></span>
                             </div>
-                            <button class="w-full py-5 bg-white text-black text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-neutral-200 transition-colors">Apply</button>
+                            <button class="w-full py-4 bg-white text-black text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-neutral-200 transition-colors">Apply</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-wrapper snap-center">
-                    <div class="glass-monolith p-8 md:p-12" style="border-color: rgba(212, 175, 55, 0.2);">
-                        <div class="flex justify-between items-start border-b border-white/10 pb-6">
+                    <div class="glass-monolith p-8" style="border-color: rgba(212, 175, 55, 0.2);">
+                        <div class="flex justify-between items-start border-b border-white/10 pb-4">
                             <span class="text-[9px] font-bold tracking-[0.2em] text-[#D4AF37] uppercase">Zenith</span>
                             <div class="w-1.5 h-1.5 rounded-full bg-[#D4AF37] shadow-[0_0_10px_#D4AF37]"></div>
                         </div>
                         <div class="text-center my-auto">
                             <h2 class="text-6xl md:text-8xl font-bold tracking-tighter gold-shimmer">Diamond</h2>
-                            <p class="serif italic text-[#D4AF37]/70 mt-4 text-xl">The Sovereign Choice</p>
+                            <p class="serif italic text-[#D4AF37]/70 mt-2 text-lg">The Sovereign Choice</p>
                         </div>
-                        <div class="space-y-6">
+                        <div class="space-y-4">
                             <div class="flex justify-between items-end">
                                 <span class="text-[9px] font-bold tracking-widest text-white/30 uppercase">Annual<br>Access</span>
-                                <span class="text-2xl md:text-4xl font-light tracking-tight text-[#D4AF37]">425,000<span class="text-[10px] ml-1 opacity-50">LKR</span></span>
+                                <span class="text-3xl font-light tracking-tight text-[#D4AF37]">425,000<span class="text-[10px] ml-1 opacity-50">LKR</span></span>
                             </div>
-                            <button class="w-full py-5 bg-white text-black text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-neutral-200 transition-colors">Apply</button>
+                            <button class="w-full py-4 bg-white text-black text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-neutral-200 transition-colors">Apply</button>
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            <div class="flex justify-center gap-2 mt-6 md:absolute md:bottom-[-40px] md:left-0 md:right-0">
-                <div id="dot0" class="h-0.5 w-8 bg-white transition-all duration-500"></div>
+            <div class="mobile-dots gap-2">
+                <div id="dot0" class="h-0.5 w-6 bg-white transition-all duration-500"></div>
                 <div id="dot1" class="h-0.5 w-2 bg-white/20 transition-all duration-500"></div>
                 <div id="dot2" class="h-0.5 w-2 bg-white/20 transition-all duration-500"></div>
             </div>
         </section>
 
         <section class="col-benefits">
-            <h3 class="text-[10px] font-bold tracking-[0.4em] uppercase text-white/30 mb-6 pl-2">Privilege Compendium</h3>
+            <h3 class="text-[9px] font-bold tracking-[0.3em] uppercase text-white/30 mb-4 pl-2">Privilege Compendium</h3>
             <div class="accordion-wrapper" id="benefits-container">
                 </div>
         </section>
@@ -258,7 +256,6 @@
     <script>
         const DATA = [
             {
-                // EMERALD DATA
                 color: 'rgba(52, 199, 89, 0.15)',
                 cats: [
                     { 
@@ -276,7 +273,6 @@
                 ]
             },
             {
-                // RUBY DATA
                 color: 'rgba(255, 59, 48, 0.15)',
                 cats: [
                     { 
@@ -294,7 +290,6 @@
                 ]
             },
             {
-                // DIAMOND DATA
                 color: 'rgba(212, 175, 55, 0.2)',
                 cats: [
                     { 
@@ -331,7 +326,7 @@
                     <div class="accordion-item ${isActive}" onclick="toggleAccordion(this)">
                         <div class="accordion-trigger group">
                             <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-white group-hover:text-white/80 transition-colors">${cat.t}</span>
-                            <svg class="icon-plus text-white/40" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                            <svg class="icon-plus text-white/40" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
                         </div>
                         <div class="accordion-content">
                             <div class="accordion-inner">
@@ -342,12 +337,11 @@
                 `;
             });
             
-            // Subtle fade switch
             benefitsContainer.style.opacity = '0';
             setTimeout(() => {
                 benefitsContainer.innerHTML = html;
                 benefitsContainer.style.opacity = '1';
-            }, 200);
+            }, 150);
         }
 
         function toggleAccordion(el) {
@@ -381,10 +375,8 @@
             }
         }
 
-        // Force render on load to ensure content exists immediately
-        window.onload = () => {
-            renderAccordion(0);
-        };
+        // Initialize immediately
+        renderAccordion(0);
     </script>
 </body>
 </html>
