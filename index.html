@@ -2,412 +2,192 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Membership Experience | Premium Tiers</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Cinnamon Life | The Elite Collection</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            /* Shadcn-inspired Neutral Palette */
-            --background: 0 0% 100%;
-            --foreground: 222.2 84% 4.9%;
-            --card: 0 0% 100%;
-            --card-foreground: 222.2 84% 4.9%;
-            --popover: 0 0% 100%;
-            --popover-foreground: 222.2 84% 4.9%;
-            --primary: 222.2 47.4% 11.2%;
-            --primary-foreground: 210 40% 98%;
-            --secondary: 210 40% 96.1%;
-            --secondary-foreground: 222.2 47.4% 11.2%;
-            --muted: 210 40% 96.1%;
-            --muted-foreground: 215.4 16.3% 46.9%;
-            --accent: 210 40% 96.1%;
-            --accent-foreground: 222.2 47.4% 11.2%;
-            --border: 214.3 31.8% 91.4%;
-            --input: 214.3 31.8% 91.4%;
-            --ring: 222.2 84% 4.9%;
-            --radius: 0.75rem;
-
-            /* Tier Colors */
-            --emerald: 160 84% 39%;
-            --ruby: 346 84% 61%;
-            --diamond: 199 89% 48%;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --background: 222.2 84% 4.9%;
-                --foreground: 210 40% 98%;
-                --card: 222.2 84% 4.9%;
-                --card-foreground: 210 40% 98%;
-                --popover: 222.2 84% 4.9%;
-                --popover-foreground: 210 40% 98%;
-                --primary: 210 40% 98%;
-                --primary-foreground: 222.2 47.4% 11.2%;
-                --secondary: 217.2 32.6% 17.5%;
-                --secondary-foreground: 210 40% 98%;
-                --muted: 217.2 32.6% 17.5%;
-                --muted-foreground: 215 20.2% 65.1%;
-                --accent: 217.2 32.6% 17.5%;
-                --accent-foreground: 210 40% 98%;
-                --border: 217.2 32.6% 17.5%;
-                --input: 217.2 32.6% 17.5%;
-                --ring: 212.7 26.8% 83.9%;
-            }
-        }
-
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background-color: hsl(var(--background));
-            color: hsl(var(--foreground));
-            margin: 0;
-            line-height: 1.5;
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600&family=Plus+Jakarta+Sans:wght@200;400;700&display=swap');
+        
+        :root { --safe-top: env(safe-area-inset-top); }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #000; 
+            color: #fff; 
+            margin: 0; 
             -webkit-font-smoothing: antialiased;
+            overscroll-behavior-y: none;
+        }
+        .serif { font-family: 'Cormorant Garamond', serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* Premium Glassmorphism */
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 1.5rem;
+        /* Ambient Background Glows */
+        .glow-emerald { background: radial-gradient(circle at 50% -20%, rgba(16, 185, 129, 0.15) 0%, transparent 70%); }
+        .glow-ruby { background: radial-gradient(circle at 50% -20%, rgba(225, 29, 72, 0.15) 0%, transparent 70%); }
+        .glow-diamond { background: radial-gradient(circle at 50% -20%, rgba(56, 189, 248, 0.15) 0%, transparent 70%); }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
         }
-
-        /* Typography */
-        h1 { font-size: 1.875rem; font-weight: 700; letter-spacing: -0.025em; margin-bottom: 0.5rem; }
-        p.subtitle { color: hsl(var(--muted-foreground)); margin-bottom: 2rem; }
-
-        /* Tabs Component */
-        .tabs-list {
-            display: flex;
-            background: hsl(var(--muted));
-            padding: 0.25rem;
-            border-radius: var(--radius);
-            margin-bottom: 1.5rem;
-            gap: 0.25rem;
+        .premium-btn {
+            background: linear-gradient(90deg, #fff, #e2e2e2, #fff);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite linear;
         }
-
-        .tab-trigger {
-            flex: 1;
-            padding: 0.5rem;
-            border: none;
-            background: transparent;
-            color: hsl(var(--muted-foreground));
-            font-size: 0.875rem;
-            font-weight: 500;
-            border-radius: calc(var(--radius) - 0.25rem);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .tab-trigger.active {
-            background: hsl(var(--card));
-            color: hsl(var(--foreground));
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        /* Card Component */
-        .tier-card {
-            border: 1px solid hsl(var(--border));
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            background: hsl(var(--card));
-            margin-bottom: 1.5rem;
-            transition: transform 0.2s ease;
-        }
-
-        .price-tag {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 0.5rem 0 1.5rem 0;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .badge-emerald { background: hsla(var(--emerald), 0.1); color: hsl(var(--emerald)); }
-        .badge-ruby { background: hsla(var(--ruby), 0.1); color: hsl(var(--ruby)); }
-        .badge-diamond { background: hsla(var(--diamond), 0.1); color: hsl(var(--diamond)); }
-
-        /* Sections */
-        .section-title {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: hsl(var(--muted-foreground));
-            letter-spacing: 0.1em;
-            margin: 1.5rem 0 0.75rem 0;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .section-title::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: hsl(var(--border));
-        }
-
-        .benefit-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid hsl(var(--border));
-            font-size: 0.9375rem;
-        }
-
-        .benefit-item:last-child { border-bottom: none; }
-
-        .benefit-icon {
-            color: hsl(var(--primary));
-            flex-shrink: 0;
-            margin-top: 0.125rem;
-        }
-
-        /* Actions */
-        .btn {
-            width: 100%;
-            padding: 0.875rem;
-            border-radius: var(--radius);
-            font-weight: 600;
-            font-size: 1rem;
-            border: none;
-            cursor: pointer;
-            transition: opacity 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background: hsl(var(--primary));
-            color: hsl(var(--primary-foreground));
-        }
-
-        .btn-primary:active { opacity: 0.9; transform: scale(0.98); }
-
-        /* Transitions */
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hidden { display: none; }
-
-        /* Toast */
-        #toast {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            background: hsl(var(--primary));
-            color: hsl(var(--primary-foreground));
-            padding: 0.75rem 1.5rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            z-index: 50;
-            opacity: 0;
-            transition: opacity 0.3s, transform 0.3s;
-            pointer-events: none;
-        }
-        #toast.visible { opacity: 1; transform: translateX(-50%) translateY(-10px); }
     </style>
 </head>
 <body>
+    <div id="root"></div>
 
-    <div class="container">
-        <header>
-            <h1>Memberships</h1>
-            <p class="subtitle">Select a tier to view exclusive benefits and privileges.</p>
-        </header>
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
 
-        <div class="tabs-list" role="tablist">
-            <button class="tab-trigger active" onclick="switchTier('emerald')" data-tier="emerald">Emerald</button>
-            <button class="tab-trigger" onclick="switchTier('ruby')" data-tier="ruby">Ruby</button>
-            <button class="tab-trigger" onclick="switchTier('diamond')" data-tier="diamond">Diamond</button>
-        </div>
-
-        <div id="content-area" class="fade-in">
-            </div>
-
-        <button class="btn btn-primary" onclick="showToast('Initiating registration...')">
-            Purchase Membership
-        </button>
-    </div>
-
-    <div id="toast">Request Received</div>
-
-    <script>
-        const membershipData = {
-            emerald: {
-                name: "Emerald",
-                price: "LKR 50,000",
-                colorClass: "badge-emerald",
-                dining: [
-                    "Up to 50% off food",
-                    "10% Off Weekday Lunch @ Quizine",
-                    "20% off Beverages",
-                    "Buffet Experience for Two",
-                    "Afternoon Tea Experience for Two",
-                    "One Exclusive Bottle of Selected Wine",
-                    "\"Member for a Day\" Pass",
-                    "4,000 F&B Wellness Credit"
-                ],
-                accommodation: [
-                    "Stay 2 nights and get the 3rd night free",
-                    "50% off BAR for Rooms",
-                    "Complimentary Upgrade (City View to Ocean View)"
-                ],
-                other: [
-                    "25% Off Laundry & Dry Cleaning",
-                    "20% off Wellness Preferred Rate",
-                    "15% Off for Wellness Treatments for Two",
-                    "5% off Wellness Retail Purchases",
-                    "Complimentary Spouse Card"
+        const TIERS = [
+            {
+                id: 'emerald',
+                title: 'Emerald',
+                price: '50,000',
+                theme: 'glow-emerald',
+                accent: '#10b981',
+                summary: 'The Essential Luxury',
+                perks: [
+                    { cat: 'Dining', items: ['Up to 50% off food [cite: 2]', '10% Off Weekday Lunch @ Quizine [cite: 3]', '20% off Beverages [cite: 3]', 'Buffet Experience for Two [cite: 5]'] },
+                    { cat: 'Stay', items: ['Stay 2 nights, get 3rd free [cite: 8]', '50% off BAR for Rooms [cite: 9]', 'Upgrade: City to Ocean View [cite: 9, 10]'] },
+                    { cat: 'Wellness', items: ['4,000 F&B Wellness Credit [cite: 6]', '25% Off Laundry & Dry Cleaning [cite: 12]'] }
                 ]
             },
-            ruby: {
-                name: "Ruby",
-                price: "LKR 125,000",
-                colorClass: "badge-ruby",
-                dining: [
-                    "Up to 50% off food",
-                    "10% Off Weekday Lunch @ Quizine",
-                    "20% off Beverages",
-                    "Buffet Experience for Two",
-                    "Afternoon Tea Experience for Two",
-                    "One Exclusive Bottle of Selected Wine",
-                    "\"Member for a Day\" Pass",
-                    "4,000 F&B Wellness Credit"
-                ],
-                accommodation: [
-                    "Deluxe room and breakfast for Two",
-                    "Unlimited Accommodation Upgrade",
-                    "Stay 2 nights and get the 3rd night free",
-                    "50% off BAR for Rooms",
-                    "Nature's Symphony 60min massage",
-                    "LKR 10,000 Room Credit",
-                    "Pool access for Two"
-                ],
-                other: [
-                    "25% Off Laundry & Dry Cleaning",
-                    "30% off Wellness Preferred Rate",
-                    "20% Off for Wellness Treatments for Two",
-                    "15% off Wellness Retail Purchases",
-                    "Complimentary Spouse Card"
+            {
+                id: 'ruby',
+                title: 'Ruby',
+                price: '125,000',
+                theme: 'glow-ruby',
+                accent: '#e11d48',
+                summary: 'The Signature Experience',
+                perks: [
+                    { cat: 'Dining', items: ['Up to 50% off food [cite: 16]', '10% Off Weekday Lunch @ Quizine [cite: 17]', 'Afternoon Tea for Two [cite: 19]', 'Exclusive Bottle of Wine [cite: 19]'] },
+                    { cat: 'Stay', items: ['Deluxe room & breakfast for Two [cite: 22]', 'Unlimited Accommodation Upgrade [cite: 22]', 'LKR 10,000 Room Credit [cite: 24]'] },
+                    { cat: 'Wellness', items: ['Nature\'s Symphony 60min massage [cite: 23]', '30% off Wellness Preferred Rate [cite: 26]', 'Pool access for Two [cite: 24]'] }
                 ]
             },
-            diamond: {
-                name: "Diamond",
-                price: "LKR 425,000",
-                colorClass: "badge-diamond",
-                dining: [
-                    "Up to 50% off food",
-                    "10% Off Weekday Lunch @ Quizine",
-                    "20% off Beverages",
-                    "20% Off F&B at Cloud Wine",
-                    "Buffet Experience for Two",
-                    "Afternoon Tea Experience at GATZ",
-                    "One Exclusive Bottle of Selected Wine",
-                    "\"Member for a Day\" Pass",
-                    "Exclusive Party Voucher"
-                ],
-                accommodation: [
-                    "Complimentary Oceanscape Suite + Breakfast",
-                    "Stay 2 nights and get the 3rd night free",
-                    "50% off BAR for Rooms",
-                    "Upgrade: City View to Ocean View",
-                    "Premier Life Ocean View to Suite (1-3 nights)"
-                ],
-                other: [
-                    "Full Concierge Service",
-                    "Priority Reservations",
-                    "All Lower Tier Amenities Included"
+            {
+                id: 'diamond',
+                title: 'Diamond',
+                price: '425,000',
+                theme: 'glow-diamond',
+                accent: '#38bdf8',
+                summary: 'The Ultimate Privilege',
+                perks: [
+                    { cat: 'Dining', items: ['Up to 50% off food [cite: 29]', '20% Off F&B at Cloud Wine [cite: 31]', 'Party Voucher [cite: 34]', 'Afternoon Tea at GATZ [cite: 33]'] },
+                    { cat: 'Stay', items: ['Complimentary Oceanscape Suite ', 'Premier Life to Suite Upgrade ', 'Stay 2 nights, 3rd free '] },
+                    { cat: 'Exclusive', items: ['"Member for a Day" Pass [cite: 34]', 'Complimentary Spouse Card [cite: 27]'] }
                 ]
             }
-        };
+        ];
 
-        function switchTier(tierKey) {
-            // Update UI Tabs
-            document.querySelectorAll('.tab-trigger').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.tier === tierKey);
-            });
+        function App() {
+            const [idx, setIdx] = useState(0);
+            const scrollRef = useRef(null);
 
-            const tier = membershipData[tierKey];
-            const contentArea = document.getElementById('content-area');
-            
-            // Generate HTML
-            let html = `
-                <div class="tier-card">
-                    <span class="badge ${tier.colorClass}">${tier.name}</span>
-                    <div class="price-tag">${tier.price}</div>
-                    
-                    <div class="section-title">Dining & Drinks</div>
-                    ${tier.dining.map(item => `
-                        <div class="benefit-item">
-                            <span class="benefit-icon">◈</span>
-                            <span>${item}</span>
+            const handleScroll = () => {
+                if (scrollRef.current) {
+                    const newIdx = Math.round(scrollRef.current.scrollLeft / (window.innerWidth * 0.88));
+                    if (newIdx !== idx && newIdx < TIERS.length) setIdx(newIdx);
+                }
+            };
+
+            return (
+                <div className={`min-h-screen transition-all duration-1000 ${TIERS[idx].theme}`}>
+                    {/* Hero Header */}
+                    <div className="pt-16 px-8 mb-8 text-center">
+                        <p className="text-[10px] tracking-[0.5em] text-white/40 uppercase mb-2">Cinnamon Life City of Dreams</p>
+                        <h1 className="text-4xl font-light serif italic tracking-wide">The Membership Collection</h1>
+                    </div>
+
+                    {/* Horizontal Snap Carousel */}
+                    <div 
+                        ref={scrollRef}
+                        onScroll={handleScroll}
+                        className="flex overflow-x-auto snap-x hide-scrollbar px-6 gap-6 mb-12"
+                    >
+                        {TIERS.map((tier, i) => (
+                            <div key={tier.id} className="min-w-[85vw] snap-center">
+                                <div className={`glass-card rounded-[40px] p-8 h-[480px] flex flex-col justify-between transition-transform duration-500 ${i === idx ? 'scale-100' : 'scale-90 opacity-40'}`}>
+                                    <div>
+                                        <div className="flex justify-between items-center mb-6">
+                                            <div className="px-3 py-1 rounded-full border border-white/10 text-[10px] tracking-widest uppercase text-white/60">Tier 0{i+1}</div>
+                                            <div className="h-2 w-2 rounded-full animate-pulse" style={{backgroundColor: tier.accent}} />
+                                        </div>
+                                        <h2 className="text-5xl font-bold tracking-tighter mb-2">{tier.title}</h2>
+                                        <p className="text-sm text-white/40 font-medium italic mb-8">{tier.summary}</p>
+                                        
+                                        <div className="flex items-baseline gap-1">
+                                            <span className="text-xs text-white/40 uppercase">LKR</span>
+                                            <span className="text-4xl font-bold tracking-tight">{tier.price}</span>
+                                            <span className="text-xs text-white/40">/year</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-6">
+                                        <div className="h-[1px] w-full bg-white/10" />
+                                        <button className="premium-btn w-full py-5 rounded-2xl text-black text-xs font-bold tracking-[0.2em] uppercase shadow-xl active:scale-95 transition-transform">
+                                            Request Invitation
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Dynamic Detail Sections */}
+                    <div className="px-8 pb-32 space-y-12">
+                        <div className="flex items-center gap-4">
+                            <h3 className="text-xs font-bold tracking-[0.3em] uppercase text-white/30 whitespace-nowrap">Tier Privileges</h3>
+                            <div className="h-[1px] w-full bg-white/5" />
                         </div>
-                    `).join('')}
 
-                    <div class="section-title">Accommodation</div>
-                    ${tier.accommodation.map(item => `
-                        <div class="benefit-item">
-                            <span class="benefit-icon">◈</span>
-                            <span>${item}</span>
-                        </div>
-                    `).join('')}
+                        {TIERS[idx].perks.map((section, sIdx) => (
+                            <div key={sIdx} className="space-y-4">
+                                <h4 className="serif text-xl italic text-white/90">{section.cat}</h4>
+                                <div className="grid gap-3">
+                                    {section.items.map((item, pIdx) => (
+                                        <div key={pIdx} className="group p-5 rounded-3xl bg-white/[0.02] border border-white/[0.04] flex items-center justify-between active:bg-white/10 transition-colors">
+                                            <span className="text-sm text-white/60 leading-snug pr-4">{item}</span>
+                                            <div className="shrink-0 opacity-20 group-active:opacity-100">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
 
-                    <div class="section-title">Lifestyle & Wellness</div>
-                    ${tier.other.map(item => `
-                        <div class="benefit-item">
-                            <span class="benefit-icon">◈</span>
-                            <span>${item}</span>
-                        </div>
-                    `).join('')}
+                    {/* Footer Nav */}
+                    <div className="fixed bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black to-transparent pointer-events-none flex items-center justify-center gap-3">
+                        {TIERS.map((_, i) => (
+                            <div key={i} className={`h-1 rounded-full transition-all duration-500 ${i === idx ? 'w-12 bg-white' : 'w-2 bg-white/20'}`} />
+                        ))}
+                    </div>
                 </div>
-            `;
-
-            // Reset animation
-            contentArea.classList.remove('fade-in');
-            void contentArea.offsetWidth; // Trigger reflow
-            contentArea.innerHTML = html;
-            contentArea.classList.add('fade-in');
+            );
         }
 
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('visible');
-            setTimeout(() => {
-                toast.classList.remove('visible');
-            }, 3000);
-        }
-
-        // Initialize
-        window.onload = () => switchTier('emerald');
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
