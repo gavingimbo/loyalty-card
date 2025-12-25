@@ -2,8 +2,8 @@
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Membership Experience</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Premium Membership Wallet</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -12,21 +12,33 @@
             theme: {
                 extend: {
                     colors: {
-                        background: "#09090b", // Zinc 950
-                        surface: "#18181b",    // Zinc 900
-                        primary: "#fafafa",
+                        background: "#050505", 
+                        surface: "#121212",
+                        primary: "#ffffff",
                         muted: "#71717a",
-                        emerald: { DEFAULT: "#10b981", glow: "#059669" },
-                        ruby: { DEFAULT: "#f43f5e", glow: "#e11d48" },
-                        diamond: { DEFAULT: "#38bdf8", glow: "#0284c7" }
+                        emerald: { DEFAULT: "#10b981", dark: "#064e3b" },
+                        ruby: { DEFAULT: "#f43f5e", dark: "#881337" },
+                        diamond: { DEFAULT: "#38bdf8", dark: "#0c4a6e" }
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
                     },
-                    boxShadow: {
-                        'glow-emerald': '0 0 40px -10px rgba(16, 185, 129, 0.3)',
-                        'glow-ruby': '0 0 40px -10px rgba(244, 63, 94, 0.3)',
-                        'glow-diamond': '0 0 40px -10px rgba(56, 189, 248, 0.3)',
+                    aspectRatio: {
+                        'credit-card': '1.586 / 1', // ISO 7810 ID-1 Standard
+                    },
+                    animation: {
+                        'shine': 'shine 6s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        shine: {
+                            '0%': { backgroundPosition: '200% center' },
+                            '100%': { backgroundPosition: '-200% center' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' },
+                        }
                     }
                 }
             }
@@ -40,9 +52,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        /* Premium Noise Texture */
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
         /* Hide Scrollbar */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Holographic Sheen Effect */
+        .holo-sheen {
+            background: linear-gradient(
+                115deg,
+                transparent 40%,
+                rgba(255, 255, 255, 0.15) 45%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0.15) 55%,
+                transparent 60%
+            );
+            background-size: 200% 100%;
+            mix-blend-mode: overlay;
+        }
 
         /* Smooth iOS Scrolling */
         .carousel-container {
@@ -50,117 +86,108 @@
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
         }
-        
-        /* Card Gradients */
-        .bg-gradient-emerald { background: linear-gradient(135deg, #064e3b 0%, #022c22 100%); }
-        .bg-gradient-ruby { background: linear-gradient(135deg, #881337 0%, #4c0519 100%); }
-        .bg-gradient-diamond { background: linear-gradient(135deg, #0c4a6e 0%, #082f49 100%); }
 
-        /* Glassmorphism for Bottom Bar */
-        .glass-panel {
-            background: rgba(9, 9, 11, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255,255,255,0.08);
-        }
-
-        /* Prevent vertical scroll while swiping cards */
-        .touch-pan-x { touch-action: pan-x; }
+        /* Tabular Numbers for Prices */
+        .tabular-nums { font-feature-settings: "tnum"; }
         
         [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="bg-background text-primary font-sans antialiased overflow-x-hidden selection:bg-white/20">
+<body class="bg-background text-primary font-sans antialiased overflow-x-hidden selection:bg-emerald-500/30">
 
-    <div x-data="app()" x-init="init()" class="flex flex-col min-h-screen max-w-md mx-auto relative border-x border-white/5 shadow-2xl bg-background">
+    <div class="noise-overlay"></div>
+
+    <div x-data="app()" x-init="init()" class="flex flex-col min-h-screen max-w-[430px] mx-auto relative shadow-2xl bg-background pb-32">
         
-        <header class="pt-8 px-6 pb-2 flex justify-between items-end z-20">
+        <header class="pt-12 px-6 pb-4 flex justify-between items-center z-20">
             <div>
                 <p class="text-[10px] font-bold tracking-[0.2em] text-muted uppercase mb-1">Select Tier</p>
-                <h1 class="text-2xl font-bold tracking-tight text-white">Membership</h1>
+                <h1 class="text-3xl font-bold tracking-tight text-white">Membership</h1>
             </div>
-            <div class="flex gap-1.5 pb-1.5">
+            
+            <div class="flex gap-1.5 items-center">
                 <template x-for="i in 3">
-                    <div class="h-1 rounded-full transition-all duration-300" 
-                        :class="activeCard === (i-1) ? 'w-6 bg-white' : 'w-1.5 bg-zinc-700'"></div>
+                    <div class="h-1 rounded-full transition-all duration-500 ease-out" 
+                        :class="activeCard === (i-1) ? 'w-8 bg-white' : 'w-1.5 bg-zinc-800'"></div>
                 </template>
             </div>
         </header>
 
-        <div class="relative w-full py-6 z-10">
-            <div x-ref="slider" @scroll.debounce.10ms="onScroll" 
-                 class="carousel-container flex gap-4 px-8 pb-8 pt-2 overflow-x-auto no-scrollbar touch-pan-x">
+        <div class="relative w-full py-4 z-10">
+            <div x-ref="slider" @scroll.debounce.5ms="onScroll" 
+                 class="carousel-container flex gap-5 px-6 pb-8 pt-2 overflow-x-auto no-scrollbar"
+                 style="scroll-padding-left: 24px;">
                 
-                <div class="snap-center shrink-0 w-[85%] relative group" @click="scrollTo(0)">
-                    <div class="relative h-[230px] rounded-3xl p-6 flex flex-col justify-between overflow-hidden transition-all duration-500 border border-white/10"
-                         :class="activeCard === 0 ? 'scale-105 shadow-glow-emerald ring-1 ring-emerald-500/50' : 'scale-95 opacity-60 grayscale-[0.5]'">
+                <div class="snap-center shrink-0 w-[88%] relative perspective-1000" @click="scrollTo(0)">
+                    <div class="relative w-full aspect-credit-card rounded-2xl p-6 flex flex-col justify-between overflow-hidden transition-all duration-500 border border-white/10 shadow-2xl"
+                         :class="activeCard === 0 ? 'scale-100 ring-1 ring-emerald-500/50' : 'scale-[0.96] opacity-60 brightness-50'">
                         
-                        <div class="absolute inset-0 bg-gradient-emerald"></div>
-                        <div class="absolute -right-12 -top-12 w-48 h-48 bg-emerald-500/20 blur-3xl rounded-full"></div>
+                        <div class="absolute inset-0 bg-gradient-to-br from-[#064e3b] via-[#022c22] to-black"></div>
+                        <div class="absolute inset-0 holo-sheen animate-shine"></div>
                         
                         <div class="relative z-10 flex justify-between items-start">
-                            <div class="px-2.5 py-1 rounded-md bg-emerald-950/50 border border-emerald-500/20 backdrop-blur-sm">
-                                <span class="text-[10px] font-bold tracking-wider text-emerald-400 uppercase">Entry Level</span>
+                            <div class="px-3 py-1.5 rounded bg-emerald-950/40 border border-emerald-500/20 backdrop-blur-md">
+                                <span class="text-[10px] font-bold tracking-widest text-emerald-400 uppercase">Entry Level</span>
                             </div>
-                            <i data-lucide="gem" class="text-emerald-400 w-6 h-6"></i>
+                            <i data-lucide="gem" class="text-emerald-400/80 w-6 h-6"></i>
                         </div>
 
                         <div class="relative z-10">
-                            <h3 class="text-2xl font-bold text-white mb-1">Emerald</h3>
+                            <h3 class="text-2xl font-bold text-white mb-0.5">Emerald</h3>
                             <div class="flex items-baseline gap-1">
-                                <span class="text-sm text-emerald-200/70 font-medium">LKR</span>
-                                <span class="text-3xl font-bold text-white tracking-tighter">50,000</span>
-                                <span class="text-xs text-emerald-200/50 ml-1">/yr</span>
+                                <span class="text-sm text-emerald-100/60 font-medium">LKR</span>
+                                <span class="text-3xl font-bold text-white tracking-tight tabular-nums">50,000</span>
+                                <span class="text-xs text-emerald-100/40 ml-0.5">/yr</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="snap-center shrink-0 w-[85%] relative group" @click="scrollTo(1)">
-                    <div class="relative h-[230px] rounded-3xl p-6 flex flex-col justify-between overflow-hidden transition-all duration-500 border border-white/10"
-                         :class="activeCard === 1 ? 'scale-105 shadow-glow-ruby ring-1 ring-ruby-500/50' : 'scale-95 opacity-60 grayscale-[0.5]'">
+                <div class="snap-center shrink-0 w-[88%] relative perspective-1000" @click="scrollTo(1)">
+                    <div class="relative w-full aspect-credit-card rounded-2xl p-6 flex flex-col justify-between overflow-hidden transition-all duration-500 border border-white/10 shadow-2xl"
+                         :class="activeCard === 1 ? 'scale-100 ring-1 ring-rose-500/50' : 'scale-[0.96] opacity-60 brightness-50'">
                         
-                        <div class="absolute inset-0 bg-gradient-ruby"></div>
-                        <div class="absolute -right-12 -top-12 w-48 h-48 bg-ruby-500/20 blur-3xl rounded-full"></div>
+                        <div class="absolute inset-0 bg-gradient-to-br from-[#881337] via-[#4c0519] to-black"></div>
+                        <div class="absolute inset-0 holo-sheen animate-shine" style="animation-delay: 2s;"></div>
                         
                         <div class="relative z-10 flex justify-between items-start">
-                            <div class="px-2.5 py-1 rounded-md bg-rose-950/50 border border-rose-500/20 backdrop-blur-sm animate-pulse">
-                                <span class="text-[10px] font-bold tracking-wider text-rose-400 uppercase">Best Value</span>
+                            <div class="px-3 py-1.5 rounded bg-rose-950/40 border border-rose-500/20 backdrop-blur-md">
+                                <span class="text-[10px] font-bold tracking-widest text-rose-400 uppercase">Best Value</span>
                             </div>
-                            <i data-lucide="crown" class="text-rose-400 w-6 h-6"></i>
+                            <i data-lucide="crown" class="text-rose-400/80 w-6 h-6"></i>
                         </div>
 
                         <div class="relative z-10">
-                            <h3 class="text-2xl font-bold text-white mb-1">Ruby</h3>
+                            <h3 class="text-2xl font-bold text-white mb-0.5">Ruby</h3>
                             <div class="flex items-baseline gap-1">
-                                <span class="text-sm text-rose-200/70 font-medium">LKR</span>
-                                <span class="text-3xl font-bold text-white tracking-tighter">125,000</span>
-                                <span class="text-xs text-rose-200/50 ml-1">/yr</span>
+                                <span class="text-sm text-rose-100/60 font-medium">LKR</span>
+                                <span class="text-3xl font-bold text-white tracking-tight tabular-nums">125,000</span>
+                                <span class="text-xs text-rose-100/40 ml-0.5">/yr</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="snap-center shrink-0 w-[85%] relative group" @click="scrollTo(2)">
-                    <div class="relative h-[230px] rounded-3xl p-6 flex flex-col justify-between overflow-hidden transition-all duration-500 border border-white/10"
-                         :class="activeCard === 2 ? 'scale-105 shadow-glow-diamond ring-1 ring-sky-500/50' : 'scale-95 opacity-60 grayscale-[0.5]'">
+                <div class="snap-center shrink-0 w-[88%] relative perspective-1000" @click="scrollTo(2)">
+                    <div class="relative w-full aspect-credit-card rounded-2xl p-6 flex flex-col justify-between overflow-hidden transition-all duration-500 border border-white/10 shadow-2xl"
+                         :class="activeCard === 2 ? 'scale-100 ring-1 ring-sky-500/50' : 'scale-[0.96] opacity-60 brightness-50'">
                         
-                        <div class="absolute inset-0 bg-gradient-diamond"></div>
-                        <div class="absolute -right-12 -top-12 w-48 h-48 bg-sky-500/20 blur-3xl rounded-full"></div>
+                        <div class="absolute inset-0 bg-gradient-to-br from-[#0c4a6e] via-[#082f49] to-black"></div>
+                        <div class="absolute inset-0 holo-sheen animate-shine" style="animation-delay: 4s;"></div>
                         
                         <div class="relative z-10 flex justify-between items-start">
-                            <div class="px-2.5 py-1 rounded-md bg-sky-950/50 border border-sky-500/20 backdrop-blur-sm">
-                                <span class="text-[10px] font-bold tracking-wider text-sky-400 uppercase">Premium</span>
+                            <div class="px-3 py-1.5 rounded bg-sky-950/40 border border-sky-500/20 backdrop-blur-md">
+                                <span class="text-[10px] font-bold tracking-widest text-sky-400 uppercase">Premium</span>
                             </div>
-                            <i data-lucide="sparkles" class="text-sky-400 w-6 h-6"></i>
+                            <i data-lucide="sparkles" class="text-sky-400/80 w-6 h-6"></i>
                         </div>
 
                         <div class="relative z-10">
-                            <h3 class="text-2xl font-bold text-white mb-1">Diamond</h3>
+                            <h3 class="text-2xl font-bold text-white mb-0.5">Diamond</h3>
                             <div class="flex items-baseline gap-1">
-                                <span class="text-sm text-sky-200/70 font-medium">LKR</span>
-                                <span class="text-3xl font-bold text-white tracking-tighter">425,000</span>
-                                <span class="text-xs text-sky-200/50 ml-1">/yr</span>
+                                <span class="text-sm text-sky-100/60 font-medium">LKR</span>
+                                <span class="text-3xl font-bold text-white tracking-tight tabular-nums">425,000</span>
+                                <span class="text-xs text-sky-100/40 ml-0.5">/yr</span>
                             </div>
                         </div>
                     </div>
@@ -168,62 +195,51 @@
             </div>
         </div>
 
-        <div class="flex-1 bg-surface rounded-t-[36px] border-t border-white/5 relative z-20 -mt-2 shadow-[0_-10px_40px_rgba(0,0,0,0.8)] pb-32">
+        <div class="flex-1 px-6 -mt-2">
             
-            <div class="flex justify-center -mt-6 mb-6">
-                <div class="inline-flex bg-zinc-950 p-1.5 rounded-full border border-white/10 shadow-xl">
-                    <button @click="setTab('dining')" class="px-6 py-2.5 rounded-full text-xs font-semibold transition-all duration-300"
-                        :class="activeTab === 'dining' ? 'bg-white text-black shadow-lg scale-105' : 'text-zinc-500 hover:text-zinc-300'">
-                        Dining
-                    </button>
-                    <button @click="setTab('stay')" class="px-6 py-2.5 rounded-full text-xs font-semibold transition-all duration-300"
-                        :class="activeTab === 'stay' ? 'bg-white text-black shadow-lg scale-105' : 'text-zinc-500 hover:text-zinc-300'">
-                        Stay
-                    </button>
-                    <button @click="setTab('wellness')" class="px-6 py-2.5 rounded-full text-xs font-semibold transition-all duration-300"
-                        :class="activeTab === 'wellness' ? 'bg-white text-black shadow-lg scale-105' : 'text-zinc-500 hover:text-zinc-300'">
-                        Wellness
-                    </button>
+            <div class="relative z-20 flex bg-[#1a1a1a] p-1.5 rounded-full border border-white/5 w-full mb-8">
+                <div class="absolute top-1.5 bottom-1.5 rounded-full bg-white transition-all duration-300 ease-spring"
+                     :style="`left: ${tabLeft}%; width: ${tabWidth}%;`"></div>
+
+                <button @click="setTab('dining', 0)" class="relative flex-1 py-2.5 rounded-full text-[13px] font-semibold transition-colors duration-300 text-center z-10"
+                    :class="activeTab === 'dining' ? 'text-black' : 'text-zinc-500'">
+                    Dining
+                </button>
+                <button @click="setTab('stay', 1)" class="relative flex-1 py-2.5 rounded-full text-[13px] font-semibold transition-colors duration-300 text-center z-10"
+                    :class="activeTab === 'stay' ? 'text-black' : 'text-zinc-500'">
+                    Stay
+                </button>
+                <button @click="setTab('wellness', 2)" class="relative flex-1 py-2.5 rounded-full text-[13px] font-semibold transition-colors duration-300 text-center z-10"
+                    :class="activeTab === 'wellness' ? 'text-black' : 'text-zinc-500'">
+                    Wellness
+                </button>
+            </div>
+
+            <div class="flex items-center gap-3 mb-4">
+                <div class="p-3 rounded-2xl bg-zinc-900 border border-white/5 transition-colors duration-300"
+                     :class="getIconColorClass()">
+                    <i :data-lucide="getIcon()" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <span class="text-[10px] uppercase tracking-wider text-zinc-500 font-bold">Includes</span>
+                    <h3 class="text-lg font-bold text-white" x-text="getTitle()"></h3>
                 </div>
             </div>
 
-            <div class="px-6 min-h-[300px]">
-                <div x-show="true" class="transition-all duration-300"
-                     x-transition:enter="opacity-0 translate-y-4"
-                     x-transition:enter-end="opacity-100 translate-y-0"
+            <div class="min-h-[300px] relative">
+                <div x-show="true" 
                      :key="activeCard + activeTab">
-                    
-                    <div class="flex items-center gap-3 mb-5">
-                        <div class="p-2.5 rounded-xl border border-white/5" 
-                             :class="{
-                                'bg-emerald-500/10 text-emerald-400': activeCard === 0,
-                                'bg-rose-500/10 text-rose-400': activeCard === 1,
-                                'bg-sky-500/10 text-sky-400': activeCard === 2
-                             }">
-                            <i :data-lucide="getIcon()" class="w-5 h-5"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-sm font-medium text-zinc-400 uppercase tracking-wide">Includes</h3>
-                            <p class="text-lg font-semibold text-white" x-text="getTitle()"></p>
-                        </div>
-                    </div>
-
                     <ul class="space-y-3">
                         <template x-for="(item, idx) in getData()" :key="idx">
-                            <li class="flex items-start gap-3 p-3.5 rounded-xl bg-zinc-950/50 border border-white/5"
-                                x-transition:enter="transition ease-out duration-300"
-                                x-transition:enter-start="opacity-0 translate-x-2"
-                                x-transition:enter-end="opacity-100 translate-x-0"
-                                :style="`transition-delay: ${idx * 50}ms`">
-                                <div class="mt-0.5">
-                                    <i data-lucide="check" class="w-4 h-4" 
-                                       :class="{
-                                          'text-emerald-500': activeCard === 0,
-                                          'text-rose-500': activeCard === 1,
-                                          'text-sky-500': activeCard === 2
-                                       }"></i>
+                            <li class="flex items-start gap-4 p-4 rounded-2xl bg-[#121212] border border-white/5 shadow-sm transition-all duration-500"
+                                x-transition:enter="opacity-0 translate-y-4"
+                                x-transition:enter-end="opacity-100 translate-y-0"
+                                :style="`transition-delay: ${idx * 70}ms`">
+                                <div class="mt-0.5 shrink-0">
+                                    <i data-lucide="check" class="w-4 h-4 transition-colors duration-300" 
+                                       :class="getCheckColor()"></i>
                                 </div>
-                                <span class="text-[13px] leading-relaxed text-zinc-300 font-medium" x-text="item"></span>
+                                <span class="text-[14px] leading-snug text-zinc-300 font-medium" x-text="item"></span>
                             </li>
                         </template>
                     </ul>
@@ -231,18 +247,13 @@
             </div>
         </div>
 
-        <div class="fixed bottom-0 left-0 right-0 glass-panel z-50 p-6 pb-8 max-w-md mx-auto">
-            <div class="flex items-center justify-between mb-4 px-1">
-                <div class="text-xs text-zinc-400 font-medium">Total Annual Fee</div>
-                <div class="text-lg font-bold text-white tracking-tight" 
-                     x-text="['LKR 50,000', 'LKR 125,000', 'LKR 425,000'][activeCard]"></div>
+        <div class="fixed bottom-0 left-0 right-0 p-6 pt-6 bg-gradient-to-t from-black via-black/95 to-transparent z-50 max-w-[430px] mx-auto">
+            <div class="flex justify-between items-end mb-4 px-1">
+                <span class="text-xs font-medium text-zinc-400">Total Annual Fee</span>
+                <span class="text-lg font-bold text-white tabular-nums tracking-tight" x-text="getPrice()"></span>
             </div>
-            <button class="w-full h-14 rounded-xl font-bold text-base text-zinc-950 shadow-xl transition-transform active:scale-[0.98] flex items-center justify-center gap-2"
-                :class="{
-                    'bg-emerald-400 hover:bg-emerald-300 shadow-emerald-500/20': activeCard === 0,
-                    'bg-rose-400 hover:bg-rose-300 shadow-rose-500/20': activeCard === 1,
-                    'bg-sky-400 hover:bg-sky-300 shadow-sky-500/20': activeCard === 2
-                }"
+            <button class="w-full py-4 rounded-xl font-bold text-[15px] text-zinc-950 shadow-xl transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                :class="getBtnColor()"
                 @click="vibrate">
                 <span>Choose Plan</span>
                 <i data-lucide="arrow-right" class="w-5 h-5"></i>
@@ -254,23 +265,28 @@
     <script>
         function app() {
             return {
-                activeCard: 1, // Default to Ruby (Middle)
+                activeCard: 1, // Ruby Default
                 activeTab: 'dining',
+                tabLeft: 1.5, // Percentage for tab background
+                tabWidth: 32, // Percentage for tab background
                 
                 init() {
                     lucide.createIcons();
-                    // Center the initial card
+                    // Initial Tab Position Calculation
+                    this.setTab('dining', 0);
+                    // Initial Scroll Center
                     setTimeout(() => this.scrollTo(1), 100);
                 },
 
-                // Robust Scroll Handler
+                // Physics-based Scroll Logic
                 onScroll(e) {
                     const slider = e.target;
                     const cardWidth = slider.firstElementChild.offsetWidth;
-                    const gap = 16; // 1rem gap
+                    const gap = 20; // 5rem gap
+                    const scrollPos = slider.scrollLeft;
                     
-                    // Precise index calculation
-                    const index = Math.round(slider.scrollLeft / (cardWidth + gap * 0.5)); 
+                    // Improved index calculation
+                    const index = Math.round(scrollPos / (cardWidth + gap * 0.5));
                     
                     if (this.activeCard !== index && index >= 0 && index <= 2) {
                         this.activeCard = index;
@@ -283,50 +299,72 @@
                     const slider = this.$refs.slider;
                     const card = slider.children[index];
                     
-                    // Center alignment math
+                    // Center Alignment
                     const scrollLeft = card.offsetLeft - (slider.offsetWidth - card.offsetWidth) / 2;
                     
                     slider.scrollTo({ left: scrollLeft, behavior: 'smooth' });
                     this.vibrate();
                 },
 
-                setTab(tab) {
+                setTab(tab, index) {
                     this.activeTab = tab;
+                    // Move the pill background
+                    this.tabWidth = 33; 
+                    this.tabLeft = (index * 33) + 0.5;
+                    
                     this.vibrate();
                     this.$nextTick(() => lucide.createIcons());
                 },
 
                 vibrate() {
-                    if (navigator.vibrate) navigator.vibrate(12);
+                    if (navigator.vibrate) navigator.vibrate(10);
                 },
 
+                // Dynamic Styling Helpers
+                getCheckColor() {
+                    if (this.activeCard === 0) return 'text-emerald-500';
+                    if (this.activeCard === 1) return 'text-rose-500';
+                    return 'text-sky-500';
+                },
+                getBtnColor() {
+                    if (this.activeCard === 0) return 'bg-emerald-500 hover:bg-emerald-400 shadow-[0_0_30px_-10px_rgba(16,185,129,0.5)]';
+                    if (this.activeCard === 1) return 'bg-rose-500 hover:bg-rose-400 shadow-[0_0_30px_-10px_rgba(244,63,94,0.5)]';
+                    return 'bg-sky-500 hover:bg-sky-400 shadow-[0_0_30px_-10px_rgba(56,189,248,0.5)]';
+                },
+                getIconColorClass() {
+                    if (this.activeCard === 0) return 'bg-emerald-500/10 text-emerald-400';
+                    if (this.activeCard === 1) return 'bg-rose-500/10 text-rose-400';
+                    return 'bg-sky-500/10 text-sky-400';
+                },
+
+                // Content Data
                 getIcon() {
-                    return { 'dining': 'utensils-crossed', 'stay': 'bed', 'wellness': 'flower-2' }[this.activeTab];
+                    return { 'dining': 'utensils', 'stay': 'bed-double', 'wellness': 'sparkles' }[this.activeTab];
                 },
-
                 getTitle() {
                     return { 'dining': 'Culinary Perks', 'stay': 'Accommodation', 'wellness': 'Spa & Wellness' }[this.activeTab];
                 },
-
+                getPrice() {
+                    return ['LKR 50,000', 'LKR 125,000', 'LKR 425,000'][this.activeCard];
+                },
                 getData() {
-                    // Data Source of Truth mapped from your PDF
-                    const data = {
-                        // EMERALD
+                     const data = {
+                        [span_0](start_span)// EMERALD[span_0](end_span)
                         0: {
-                            dining: ["50% Off Food (Dining)", "10% Off Weekday Lunch @ Quizine", "20% Off Beverages", "Buffet for Two", "Afternoon Tea for Two", "Exclusive Bottle of Wine", "4,000 F&B Credit"],
-                            stay: ["Stay 2 Nights, Get 3rd Free", "50% Off BAR for Rooms", "Upgrade City to Ocean View"],
-                            wellness: ["20% Off Preferred Rate", "15% Off Treatments", "5% Off Retail", "Comp. Spouse Card"]
+                            [span_1](start_span)dining: ["50% Off Food (Dining)[span_1](end_span)[span_2](start_span)", "10% Off Weekday Lunch @ Quizine[span_2](end_span)[span_3](start_span)", "20% Off Beverages[span_3](end_span)[span_4](start_span)", "Buffet for Two[span_4](end_span)[span_5](start_span)", "Afternoon Tea for Two[span_5](end_span)[span_6](start_span)", "Exclusive Bottle of Wine[span_6](end_span)[span_7](start_span)", "4,000 F&B Credit[span_7](end_span)"],
+                            [span_8](start_span)stay: ["Stay 2 Nights, Get 3rd Free[span_8](end_span)[span_9](start_span)", "50% Off BAR for Rooms[span_9](end_span)[span_10](start_span)", "Upgrade City to Ocean View[span_10](end_span)"],
+                            [span_11](start_span)wellness: ["20% Off Preferred Rate[span_11](end_span)[span_12](start_span)", "15% Off Treatments[span_12](end_span)[span_13](start_span)", "5% Off Retail[span_13](end_span)", "Comp. [span_14](start_span)Spouse Card[span_14](end_span)"]
                         },
-                        // RUBY
+                        [span_15](start_span)// RUBY[span_15](end_span)
                         1: {
-                            dining: ["50% Off Food (Dining)", "10% Off Weekday Lunch @ Quizine", "20% Off Beverages", "Buffet for Two", "Afternoon Tea for Two", "Exclusive Bottle of Wine", "4,000 F&B Credit"],
-                            stay: ["Deluxe Room + Breakfast for Two", "Unlimited Accommodation Upgrades", "Stay 2 Nights, Get 3rd Free", "LKR 10,000 Room Credit", "Pool Access for Two"],
-                            wellness: ["Nature's Symphony 60min Massage", "30% Off Preferred Rate", "20% Off Treatments", "15% Off Retail"]
+                            [span_16](start_span)dining: ["50% Off Food (Dining)[span_16](end_span)[span_17](start_span)", "10% Off Weekday Lunch @ Quizine[span_17](end_span)[span_18](start_span)", "20% Off Beverages[span_18](end_span)[span_19](start_span)", "Buffet for Two[span_19](end_span)[span_20](start_span)", "Afternoon Tea for Two[span_20](end_span)[span_21](start_span)", "Exclusive Bottle of Wine[span_21](end_span)[span_22](start_span)", "4,000 F&B Credit[span_22](end_span)"],
+                            [span_23](start_span)stay: ["Deluxe Room + Breakfast for Two[span_23](end_span)[span_24](start_span)", "Unlimited Accommodation Upgrades[span_24](end_span)[span_25](start_span)", "Stay 2 Nights, Get 3rd Free[span_25](end_span)[span_26](start_span)", "LKR 10,000 Room Credit[span_26](end_span)[span_27](start_span)", "Pool Access for Two[span_27](end_span)"],
+                            [span_28](start_span)wellness: ["Nature's Symphony 60min Massage[span_28](end_span)[span_29](start_span)", "30% Off Preferred Rate[span_29](end_span)[span_30](start_span)", "20% Off Treatments[span_30](end_span)[span_31](start_span)", "15% Off Retail[span_31](end_span)"]
                         },
-                        // DIAMOND
+                        [span_32](start_span)// DIAMOND[span_32](end_span)
                         2: {
-                            dining: ["20% Off Cloud Wine", "50% Off Food (Dining)", "Afternoon Tea @ GATZ", "Party Voucher", "Member for a Day Pass", "Exclusive Bottle of Wine"],
-                            stay: ["Comp. Oceanscape Suite + Breakfast", "Upgrade Premier to Suite", "Stay 2 Nights, Get 3rd Free", "50% Off BAR for Rooms", "Comp. Upgrade to Ocean View"],
+                            [span_33](start_span)dining: ["20% Off Cloud Wine[span_33](end_span)[span_34](start_span)", "50% Off Food (Dining)[span_34](end_span)[span_35](start_span)", "Afternoon Tea @ GATZ[span_35](end_span)[span_36](start_span)", "Party Voucher[span_36](end_span)[span_37](start_span)", "Member for a Day Pass[span_37](end_span)[span_38](start_span)", "Exclusive Bottle of Wine[span_38](end_span)"],
+                            stay: ["Comp. [span_39](start_span)Oceanscape Suite + Breakfast[span_39](end_span)[span_40](start_span)", "Upgrade Premier to Suite[span_40](end_span)[span_41](start_span)", "Stay 2 Nights, Get 3rd Free[span_41](end_span)[span_42](start_span)", "50% Off BAR for Rooms[span_42](end_span)", "Comp. [span_43](start_span)Upgrade to Ocean View[span_43](end_span)"],
                             wellness: ["Priority Booking", "Pool Access Included", "Highest Tier Wellness Discounts", "Comp. Spouse Card"]
                         }
                     };
