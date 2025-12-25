@@ -13,7 +13,7 @@
                 extend: {
                     colors: {
                         background: "#050505", 
-                        surface: "#0D0D0D",
+                        surface: "#0F0F0F",
                         emerald: { DEFAULT: "#10b981", glow: "rgba(16, 185, 129, 0.4)" },
                         ruby: { DEFAULT: "#f43f5e", glow: "rgba(244, 63, 94, 0.4)" },
                         diamond: { DEFAULT: "#38bdf8", glow: "rgba(56, 189, 248, 0.4)" }
@@ -30,12 +30,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* Precision Scroll Engine */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .snap-x-mandatory { scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
         
-        /* 120Hz Optimized Motion */
         .card-container { transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .holo-sheen::after {
             content: ""; position: absolute; inset: 0;
@@ -105,7 +103,7 @@
             </nav>
 
             <div class="flex items-center gap-5 mb-8">
-                <div class="p-4 rounded-2xl bg-zinc-900/50 border border-white/[0.1] transition-colors" :class="getAccentColor()">
+                <div class="p-4 rounded-2xl bg-zinc-900/50 border border-white/[0.1]" :class="getAccentColor()">
                     <i :data-lucide="getTabIcon()" class="w-6 h-6"></i>
                 </div>
                 <div class="space-y-1">
@@ -124,7 +122,7 @@
                     </div>
                 </template>
                 <div class="pt-6 border-t border-white/5 text-center">
-                    [span_4](start_span)[span_5](start_span)<p class="text-[11px] text-zinc-600 font-medium">All tiers include 25% Off Laundry & Complimentary Spouse Card[span_4](end_span)[span_5](end_span)</p>
+                    [span_4](start_span)[span_5](start_span)[span_6](start_span)<p class="text-[11px] text-zinc-600 font-medium">All tiers include 25% Off Laundry & Complimentary Spouse Card[span_4](end_span)[span_5](end_span)[span_6](end_span)</p>
                 </div>
             </div>
         </div>
@@ -155,21 +153,21 @@
                 membershipData: {
                     emerald: {
                         price: "LKR 50,000/-",
-                        [span_6](start_span)dining: ["Up to 50% off food[span_6](end_span)[span_7](start_span)", "10% Off Weekday Lunch @ Quizine[span_7](end_span)[span_8](start_span)", "20% off Beverages[span_8](end_span)[span_9](start_span)", "Buffet Experience for Two[span_9](end_span)[span_10](start_span)", "Afternoon Tea Experience for Two[span_10](end_span)[span_11](start_span)", "Exclusive Bottle of Selected Wine[span_11](end_span)[span_12](start_span)", "LKR 4,000 F&B Wellness Credit[span_12](end_span)"],
-                        [span_13](start_span)stay: ["Stay 2 nights, get the 3rd free[span_13](end_span)[span_14](start_span)", "50% off BAR for Rooms[span_14](end_span)[span_15](start_span)", "Complimentary Upgrade: City View to Ocean View[span_15](end_span)"],
-                        [span_16](start_span)wellness: ["20% off Wellness Preferred Rate[span_16](end_span)[span_17](start_span)", "15% Off Wellness Treatments for Two[span_17](end_span)[span_18](start_span)", "5% off Wellness Retail Purchases[span_18](end_span)"]
+                        [span_7](start_span)dining: ["Up to 50% off food[span_7](end_span)[span_8](start_span)", "10% Off Weekday Lunch @ Quizine[span_8](end_span)[span_9](start_span)", "20% off Beverages[span_9](end_span)[span_10](start_span)", "Buffet Experience for Two[span_10](end_span)[span_11](start_span)", "Afternoon Tea Experience for Two[span_11](end_span)[span_12](start_span)", "One Exclusive Bottle of Selected Wine[span_12](end_span)[span_13](start_span)", "LKR 4,000 F&B Wellness Credit[span_13](end_span)"],
+                        [span_14](start_span)stay: ["Stay 2 nights, get the 3rd free[span_14](end_span)[span_15](start_span)", "50% off BAR for Rooms[span_15](end_span)[span_16](start_span)", "Upgrade: Standard City View to Ocean View[span_16](end_span)"],
+                        [span_17](start_span)wellness: ["20% off Wellness Preferred Rate[span_17](end_span)[span_18](start_span)", "15% Off Wellness Treatments for Two[span_18](end_span)[span_19](start_span)", "5% off Wellness Retail Purchases[span_19](end_span)"]
                     },
                     ruby: {
                         price: "LKR 125,000/-",
-                        [span_19](start_span)dining: ["Up to 50% off food[span_19](end_span)[span_20](start_span)", "10% Off Weekday Lunch @ Quizine[span_20](end_span)[span_21](start_span)", "20% off Beverages[span_21](end_span)", "Buffet for Two | [span_22](start_span)Afternoon Tea for Two[span_22](end_span)[span_23](start_span)", "Exclusive Bottle of Selected Wine[span_23](end_span)[span_24](start_span)", "LKR 4,000 F&B Wellness Credit[span_24](end_span)"],
-                        [span_25](start_span)stay: ["Deluxe Room & Breakfast for Two[span_25](end_span)[span_26](start_span)", "Unlimited Accommodation Upgrade[span_26](end_span)[span_27](start_span)", "Stay 2 nights, get the 3rd free[span_27](end_span)[span_28](start_span)", "LKR 10,000 Room Credit[span_28](end_span)[span_29](start_span)", "Pool access for Two[span_29](end_span)"],
-                        [span_30](start_span)wellness: ["Nature's Symphony 60min massage[span_30](end_span)[span_31](start_span)", "30% off Wellness Preferred Rate[span_31](end_span)[span_32](start_span)", "20% Off Wellness Treatments for Two[span_32](end_span)[span_33](start_span)", "15% off Wellness Retail Purchases[span_33](end_span)"]
+                        [span_20](start_span)dining: ["Up to 50% off food[span_20](end_span)[span_21](start_span)", "10% Off Weekday Lunch @ Quizine[span_21](end_span)[span_22](start_span)", "20% off Beverages[span_22](end_span)", "Buffet for Two | [span_23](start_span)Afternoon Tea for Two[span_23](end_span)[span_24](start_span)", "Exclusive Bottle of Selected Wine[span_24](end_span)[span_25](start_span)", "LKR 4,000 F&B Wellness Credit[span_25](end_span)"],
+                        [span_26](start_span)stay: ["Deluxe Room & Breakfast for Two[span_26](end_span)[span_27](start_span)", "Unlimited Accommodation Upgrade[span_27](end_span)[span_28](start_span)", "Stay 2 nights, get the 3rd free[span_28](end_span)[span_29](start_span)", "LKR 10,000 Room Credit[span_29](end_span)[span_30](start_span)", "Pool access for Two[span_30](end_span)"],
+                        [span_31](start_span)wellness: ["Nature's Symphony 60min massage[span_31](end_span)[span_32](start_span)", "30% off Wellness Preferred Rate[span_32](end_span)[span_33](start_span)", "20% Off Wellness Treatments for Two[span_33](end_span)[span_34](start_span)", "15% off Wellness Retail Purchases[span_34](end_span)"]
                     },
                     diamond: {
                         price: "LKR 425,000/-",
-                        [span_34](start_span)dining: ["Up to 50% off food[span_34](end_span)[span_35](start_span)", "20% Off at Cloud Wine[span_35](end_span)[span_36](start_span)", "Afternoon Tea at GATZ[span_36](end_span)[span_37](start_span)", "Party Voucher Included[span_37](end_span)[span_38](start_span)", "Member for a Day Pass[span_38](end_span)[span_39](start_span)", "Exclusive Bottle of Selected Wine[span_39](end_span)"],
-                        [span_40](start_span)stay: ["Complimentary Oceanscape Suite + Breakfast[span_40](end_span)[span_41](start_span)", "Stay 2 nights, get the 3rd free[span_41](end_span)[span_42](start_span)", "Premier Life Ocean View to Suite Upgrade[span_42](end_span)[span_43](start_span)", "50% off BAR for Rooms[span_43](end_span)[span_44](start_span)", "City View to Ocean View Upgrade[span_44](end_span)"],
-                        [span_45](start_span)wellness: ["Priority Booking Status[span_45](end_span)[span_46](start_span)", "Full Spa Privileges[span_46](end_span)[span_47](start_span)", "Spouse Card Included[span_47](end_span)"]
+                        [span_35](start_span)dining: ["Up to 50% off food[span_35](end_span)[span_36](start_span)", "20% Off at Cloud Wine[span_36](end_span)[span_37](start_span)", "Afternoon Tea at GATZ[span_37](end_span)[span_38](start_span)", "One Exclusive Bottle of Selected Wine[span_38](end_span)[span_39](start_span)", "Party Voucher[span_39](end_span)[span_40](start_span)", "Member for a Day Pass[span_40](end_span)"],
+                        [span_41](start_span)stay: ["Complimentary Oceanscape Suite + Breakfast[span_41](end_span)[span_42](start_span)", "Stay 2 nights, get the 3rd free[span_42](end_span)[span_43](start_span)", "Premier Life Ocean View to Suite Upgrade[span_43](end_span)[span_44](start_span)", "50% off BAR for Rooms[span_44](end_span)[span_45](start_span)", "City View to Ocean View Upgrade[span_45](end_span)"],
+                        [span_46](start_span)wellness: ["Priority Booking Status[span_46](end_span)[span_47](start_span)", "Full Spa Privileges[span_47](end_span)[span_48](start_span)", "Spouse Card Included[span_48](end_span)"]
                     }
                 },
                 init() { lucide.createIcons(); this.updateBenefits(); setTimeout(() => this.scrollTo(1), 200); },
@@ -191,9 +189,9 @@
                 getTabIcon() { return {dining: 'utensils-crossed', stay: 'bed-double', wellness: 'sparkles'}[this.activeTab]; },
                 getAccentColor() { return this.activeIdx === 0 ? 'text-emerald-400' : this.activeIdx === 1 ? 'text-rose-400' : 'text-sky-400'; },
                 getButtonClass() {
-                    if (this.activeIdx === 0) return 'bg-emerald-400 text-black';
-                    if (this.activeIdx === 1) return 'bg-rose-400 text-black shadow-[0_0_30px_rgba(244,63,94,0.3)]';
-                    return 'bg-sky-400 text-black shadow-[0_0_40px_rgba(56,189,248,0.4)]';
+                    if (this.activeIdx === 0) return 'bg-emerald-400 text-black shadow-lg';
+                    if (this.activeIdx === 1) return 'bg-rose-400 text-black shadow-lg';
+                    return 'bg-sky-400 text-black shadow-lg';
                 },
                 vibrate(ms) { if (navigator.vibrate) navigator.vibrate(ms); }
             }
