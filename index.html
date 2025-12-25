@@ -13,27 +13,41 @@
         
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #030303; 
+            background-color: #020202; 
             color: #fff; 
             margin: 0; 
             -webkit-font-smoothing: antialiased;
-            letter-spacing: -0.01em;
             overflow-x: hidden;
         }
         .serif { font-family: 'Cormorant Garamond', serif; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         
+        /* Multi-layered Glass Effect */
         .glass-card {
-            background: linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255,255,255,0.07);
+            background: linear-gradient(165deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Ambient Dynamic Backgrounds */
-        .glow-emerald { background: radial-gradient(circle at 50% -10%, rgba(16, 185, 129, 0.12) 0%, transparent 60%); }
-        .glow-ruby { background: radial-gradient(circle at 50% -10%, rgba(225, 29, 72, 0.12) 0%, transparent 60%); }
-        .glow-diamond { background: radial-gradient(circle at 50% -10%, rgba(186, 155, 100, 0.15) 0%, transparent 60%); }
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
+            transform: skewX(-25deg);
+            transition: 0.75s;
+        }
+
+        .glass-card:active::before { left: 150%; }
+
+        /* Tier Specific Ambient Glows */
+        .glow-emerald { background: radial-gradient(circle at 50% -20%, rgba(16, 185, 129, 0.15) 0%, transparent 70%); }
+        .glow-ruby { background: radial-gradient(circle at 50% -20%, rgba(225, 29, 72, 0.15) 0%, transparent 70%); }
+        .glow-diamond { background: radial-gradient(circle at 50% -20%, rgba(186, 155, 100, 0.18) 0%, transparent 70%); }
 
         .gold-text {
             background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
@@ -41,8 +55,8 @@
             -webkit-text-fill-color: transparent;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-reveal { animation: fadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        @keyframes reveal { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-reveal { animation: reveal 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
 <body>
@@ -59,24 +73,17 @@
                 theme: 'glow-emerald',
                 accent: '#10b981',
                 tagline: 'The Essential Collection',
-                manifesto: 'A sophisticated introduction to the City of Dreams, designed for the frequent guest seeking effortless luxury.',
-                perks: [
-                    { 
-                        cat: 'Epicurean Benefits', 
-                        items: [
-                            { title: 'Culinary Preference', desc: 'Enjoy up to 50% off your dining experiences across our signature venues.' },
-                            { title: 'The Sommelier’s Gift', desc: 'A complimentary bottle of selected wine to toast your arrival.' },
-                            { title: 'Afternoon Tea', desc: 'An elegant tea experience for two, curated by our master pâtissiers.' }
-                        ] 
-                    },
-                    { 
-                        cat: 'Residential Privileges', 
-                        items: [
-                            { title: 'The Gift of Time', desc: 'Stay for two nights and receive the third night with our compliments.' },
-                            { title: 'Vista Enhancement', desc: 'A guaranteed upgrade from our Standard City View to an Ocean View sanctuary.' },
-                            { title: 'Exclusive Rates', desc: '50% off our Best Available Rate for all additional room bookings.' }
-                        ] 
-                    }
+                summary: 'A gateway to the City of Dreams, offering fundamental luxury for the frequent guest.',
+                benefits: [
+                    { cat: 'Culinary Artistry', items: [
+                        { t: 'Dining Preference', d: 'Up to 50% off food and 20% off beverages across signature venues.' },
+                        { t: 'Epicurean Vouchers', d: 'Buffet experience and elegant Afternoon Tea for two guests.' },
+                        { t: 'Sommelier’s Toast', d: 'An exclusive bottle of selected wine to commemorate your visit.' }
+                    ]},
+                    { cat: 'Suite Sanctuaries', items: [
+                        { t: 'The Gift of Time', d: 'Complimentary 3rd night stay upon booking two consecutive evenings.' },
+                        { t: 'Vista Enhancement', d: 'Guaranteed upgrade from Standard City View to an Ocean View sanctuary.' }
+                    ]}
                 ]
             },
             {
@@ -86,31 +93,18 @@
                 theme: 'glow-ruby',
                 accent: '#e11d48',
                 tagline: 'The Signature Collection',
-                manifesto: 'Elevated access for the connoisseur who demands more space, more attention, and deeper relaxation.',
-                perks: [
-                    { 
-                        cat: 'Gastronomic Excellence', 
-                        items: [
-                            { title: 'Chef’s Table Access', desc: 'Priority seating and 10% preference for the celebrated Weekday Lunch at Quizine.' },
-                            { title: 'Wellness Credit', desc: 'LKR 4,000 in credits to be used across our F&B and Wellness portfolio.' },
-                            { title: 'Beverage Distinction', desc: 'A dedicated 20% preference on all beverage selections.' }
-                        ] 
-                    },
-                    { 
-                        cat: 'Sanctuary & Suite Life', 
-                        items: [
-                            { title: 'Signature Stay', desc: 'One complimentary overnight stay in a Deluxe Room inclusive of breakfast for two.' },
-                            { title: 'Limitless Upgrades', desc: 'Move seamlessly into higher room categories upon availability, without limit.' },
-                            { title: 'Residency Credit', desc: 'LKR 10,000 credit to personalize your stay with in-room dining or spa services.' }
-                        ] 
-                    },
-                    { 
-                        cat: 'Vitality & Renewal', 
-                        items: [
-                            { title: 'Nature’s Symphony', desc: 'A complimentary 60-minute therapeutic massage to restore balance.' },
-                            { title: 'Preferred Wellness', desc: '30% off our exclusive Wellness Preferred rates year-round.' }
-                        ] 
-                    }
+                summary: 'Elevated access for those who appreciate more space, deeper wellness, and limitless potential.',
+                benefits: [
+                    { cat: 'Gastronomic Grace', items: [
+                        { t: 'Chef’s Table', d: '10% priority preference for Weekday Lunch at the celebrated Quizine.' },
+                        { t: 'Wellness Credit', d: 'LKR 4,000 credit for your choice of F&B or therapeutic wellness.' },
+                        { t: 'The Member Pass', d: 'A "Member for a Day" invitation for your distinguished guest.' }
+                    ]},
+                    { cat: 'Residency & Renewal', items: [
+                        { t: 'Signature Stay', d: 'Complimentary Deluxe room stay inclusive of an artisan breakfast for two.' },
+                        { t: 'Unlimited Horizon', d: 'Unrestricted accommodation upgrades to the highest available categories.' },
+                        { t: 'Nature’s Symphony', d: 'A 60-minute therapeutic massage and full pool access for two.' }
+                    ]}
                 ]
             },
             {
@@ -120,31 +114,18 @@
                 theme: 'glow-diamond',
                 accent: '#ba9b64',
                 tagline: 'The Masterpiece Collection',
-                manifesto: 'The absolute pinnacle of the Cinnamon Life lifestyle. A membership without boundaries or compromise.',
-                perks: [
-                    { 
-                        cat: 'Masterpiece Dining', 
-                        items: [
-                            { title: 'Cloud Wine Access', desc: 'An exclusive 20% preference at Cloud Wine, our most skyward venue.' },
-                            { title: 'GATZ Tea Service', desc: 'Traditional Afternoon Tea at GATZ, the heart of our social lobby.' },
-                            { title: 'Gala Voucher', desc: 'A dedicated voucher for your private celebrations and parties.' }
-                        ] 
-                    },
-                    { 
-                        cat: 'The Suite Estate', 
-                        items: [
-                            { title: 'The Oceanscape Suite', desc: 'A complimentary annual retreat in our premier Oceanscape Suite.' },
-                            { title: 'Master Suite Transition', desc: 'Guaranteed upgrade from Premier Life rooms to our Master Suites.' },
-                            { title: 'Member for a Day', desc: 'Extend your prestige to a guest with a full-access day pass.' }
-                        ] 
-                    },
-                    { 
-                        cat: 'Exclusive Legacy', 
-                        items: [
-                            { title: 'Spouse Card', desc: 'Shared prestige with a complimentary card for your partner.' },
-                            { title: 'Wardrobe Care', desc: '25% off professional laundry and dry cleaning for your entire residency.' }
-                        ] 
-                    }
+                summary: 'The zenith of prestige. An uncompromising lifestyle designed for those who define the extraordinary.',
+                benefits: [
+                    { cat: 'Masterpiece Dining', items: [
+                        { t: 'Skyward Preference', d: 'Exclusive 20% preference on the curated offerings at Cloud Wine.' },
+                        { t: 'GATZ Tea Service', d: 'Traditional Afternoon Tea experience in the grand setting of GATZ.' },
+                        { t: 'Gala Celebrations', d: 'A dedicated Party Voucher to facilitate your private grand events.' }
+                    ]},
+                    { cat: 'The Suite Estate', items: [
+                        { t: 'Oceanscape Retreat', d: 'An annual complimentary stay in our most prestigious Oceanscape Suite.' },
+                        { t: 'Seamless Transition', d: 'Guaranteed upgrade from Premier Life rooms to our Master Suites.' },
+                        { t: 'Heritage Privileges', d: 'Complimentary Spouse Card and 25% preference on professional wardrobe care.' }
+                    ]}
                 ]
             }
         ];
@@ -155,71 +136,70 @@
 
             const handleScroll = () => {
                 if (scrollRef.current) {
-                    const newIdx = Math.round(scrollRef.current.scrollLeft / (window.innerWidth * 0.88));
+                    const progress = scrollRef.current.scrollLeft / (window.innerWidth * 0.88);
+                    const newIdx = Math.round(progress);
                     if (newIdx !== idx && newIdx < TIERS.length) setIdx(newIdx);
                 }
             };
 
             return (
                 <div className={`min-h-screen transition-all duration-1000 ${TIERS[idx].theme}`}>
-                    {/* Header Section */}
+                    {/* Brand Header */}
                     <div className="pt-20 px-10 text-center animate-reveal">
-                        <p className="text-[9px] tracking-[0.5em] text-white/30 uppercase mb-3 font-bold">Cinnamon Life | City of Dreams</p>
+                        <p className="text-[9px] tracking-[0.5em] text-white/30 uppercase mb-4 font-bold">Cinnamon Life | City of Dreams</p>
                         <h1 className="text-4xl font-light serif italic leading-tight">The Privilege Collection</h1>
                     </div>
 
-                    {/* Tier Swiper */}
+                    {/* Interactive Swiper */}
                     <div 
                         ref={scrollRef}
                         onScroll={handleScroll}
-                        className="flex overflow-x-auto snap-x hide-scrollbar px-6 gap-6 my-16"
+                        className="flex overflow-x-auto snap-x hide-scrollbar px-6 gap-6 my-12"
                     >
                         {TIERS.map((tier, i) => (
                             <div key={tier.id} className="min-w-[85vw] snap-center">
-                                <div className={`glass-card rounded-[45px] p-10 h-[520px] flex flex-col justify-between transition-all duration-700 ${i === idx ? 'scale-100 opacity-100' : 'scale-90 opacity-20'}`}>
-                                    <div>
-                                        <div className="flex justify-between items-center mb-8">
+                                <div className={`glass-card rounded-[48px] p-10 h-[520px] flex flex-col justify-between transition-all duration-700 ${i === idx ? 'scale-100 opacity-100 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.9)]' : 'scale-90 opacity-20'}`}>
+                                    <div className="space-y-6">
+                                        <div className="flex justify-between items-center">
                                             <span className="text-[10px] tracking-[0.3em] uppercase text-white/40">{tier.tagline}</span>
                                             <div className="h-1.5 w-1.5 rounded-full" style={{backgroundColor: tier.accent}} />
                                         </div>
-                                        <h2 className="text-6xl font-light tracking-tighter mb-4 serif italic">{tier.title}</h2>
-                                        <p className="text-[13px] text-white/50 font-light leading-relaxed mb-8">{tier.manifesto}</p>
-                                        
+                                        <h2 className="text-6xl font-light tracking-tighter serif italic leading-none">{tier.title}</h2>
+                                        <p className="text-[13px] text-white/50 font-light leading-relaxed pr-4">{tier.summary}</p>
+                                    </div>
+
+                                    <div className="space-y-8">
                                         <div className="flex items-baseline gap-2">
                                             <span className="text-[10px] text-white/30 tracking-[0.2em]">INVESTMENT</span>
                                             <span className={`text-4xl font-light tracking-tighter ${tier.id === 'diamond' ? 'gold-text' : 'text-white'}`}>LKR {tier.price}</span>
                                         </div>
+                                        <button className="w-full py-6 rounded-full border border-white/10 text-[10px] tracking-[0.3em] uppercase font-bold bg-white text-black active:scale-95 transition-transform shadow-xl">
+                                            Request Private Invitation
+                                        </button>
                                     </div>
-
-                                    <button className="w-full py-6 rounded-full border border-white/10 text-[10px] tracking-[0.3em] uppercase font-bold bg-white text-black active:scale-95 transition-transform">
-                                        Request Private Invitation
-                                    </button>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    {/* Detailed Benefits - The "Understanding" Section */}
+                    {/* Detailed Compendium */}
                     <div className="px-10 pb-40 space-y-16 animate-reveal">
-                        <div className="text-center">
-                            <h3 className="text-[10px] tracking-[0.4em] uppercase text-white/30">Your Membership Compendium</h3>
+                        <div className="flex items-center gap-4">
+                            <div className="h-[1px] flex-grow bg-white/5" />
+                            <h3 className="text-[9px] tracking-[0.4em] uppercase text-white/20">The Compendium</h3>
+                            <div className="h-[1px] flex-grow bg-white/5" />
                         </div>
 
-                        {TIERS[idx].perks.map((section, sIdx) => (
+                        {TIERS[idx].benefits.map((section, sIdx) => (
                             <div key={sIdx} className="space-y-8">
-                                <div className="flex items-center gap-4">
-                                    <h4 className="serif text-2xl font-light italic text-white/90">{section.cat}</h4>
-                                    <div className="h-[1px] flex-grow bg-white/5" />
-                                </div>
-                                <div className="grid gap-8">
+                                <h4 className="serif text-3xl font-light italic text-white/90">{section.cat}</h4>
+                                <div className="grid gap-10">
                                     {section.items.map((item, pIdx) => (
-                                        <div key={pIdx} className="group flex gap-6 items-start">
-                                            <div className="mt-1 h-5 w-5 rounded-full border border-white/10 flex items-center justify-center shrink-0">
-                                                <div className="h-1 w-1 rounded-full bg-white/40" />
-                                            </div>
-                                            <div className="space-y-1">
-                                                <p className="text-[14px] font-semibold text-white tracking-wide uppercase">{item.title}</p>
-                                                <p className="text-[14px] font-light text-white/50 leading-relaxed">{item.desc}</p>
+                                        <div key={pIdx} className="flex gap-6 items-start group">
+                                            <div className="mt-1.5 h-[1px] w-5 bg-white/20 shrink-0 transition-all group-hover:w-8 group-hover:bg-white" />
+                                            <div className="space-y-2">
+                                                <p className="text-[13px] font-bold text-white tracking-[0.1em] uppercase">{item.t}</p>
+                                                <p className="text-[14px] font-light text-white/40 leading-relaxed group-hover:text-white/70 transition-colors">{item.d}</p>
                                             </div>
                                         </div>
                                     ))}
@@ -228,10 +208,10 @@
                         ))}
                     </div>
 
-                    {/* Progress indicator */}
+                    {/* Floating Navigation Dots */}
                     <div className="fixed bottom-10 left-0 right-0 flex justify-center gap-3">
                         {TIERS.map((_, i) => (
-                            <div key={i} className={`h-1 rounded-full transition-all duration-500 ${i === idx ? 'w-10 bg-white' : 'w-2 bg-white/20'}`} />
+                            <div key={i} className={`h-1 rounded-full transition-all duration-700 ${i === idx ? 'w-12 bg-white' : 'w-2 bg-white/10'}`} />
                         ))}
                     </div>
                 </div>
